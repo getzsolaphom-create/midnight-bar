@@ -1,0 +1,227 @@
+/* ==================================================================
+   STYLE-1 · "Velvet Lounge" — ธีมมืดแบบบาร์หรู (เปลี่ยนเฉพาะสี/รูปแบบ)
+   Charcoal #0F0C08 · Burnt Coffee #241B0F · Burgundy #3B2A10
+   Emerald #2E2310 · Antique Gold #E2B04A · Cream #F5F5F5 · Whiskey #F3D27E
+   ================================================================== */
+:root{
+  --charcoal:#0F0C08; --coffee:#241B0F; --burgundy:#3B2A10; --emerald:#2E2310;
+  --antique:#E2B04A; --cream:#F5F5F5; --whiskey:#F3D27E;
+
+  --espresso-900:#0A0A0A; --espresso-800:#0B0907; --espresso-700:#1C150C; --espresso-600:#3A2E1A;
+  --gold-100:rgba(226,176,74,.14); --gold-300:var(--whiskey); --gold-400:#D6A63C; --gold-500:var(--antique); --gold-700:#9A7424;
+  --sage-600:#2F6B50; --sage-100:rgba(46,35,16,.55); --rust-600:#E3826B; --rust-100:rgba(59,42,16,.55);
+  --blue-600:#8FA8D6; --blue-100:rgba(63,111,176,.18);
+
+  --bg:var(--charcoal); --surface:#17120B; --surface-2:#1D170E; --muted:#2A2216;
+  --line:rgba(226,176,74,.20); --line-strong:rgba(226,176,74,.40);
+  --ink:var(--cream); --ink-2:#D0C8B6; --ink-3:#9C927E;
+  --gold-ink:#E8BF68; --accent:var(--antique); --accent-soft:rgba(226,176,74,.14); --on-accent:#16100B;
+  --chrome:#0B0907; --chrome-2:#1C150C; --on-chrome:var(--cream); --on-chrome-2:#B3A98F;
+  --ok:#86BC95; --ok-soft:rgba(46,35,16,.55); --danger:#FF8A7A; --danger-soft:rgba(59,42,16,.5);
+  --bar:#A3B9DE; --bar-soft:rgba(63,111,176,.2); --kitchen:#E6A084; --kitchen-soft:rgba(168,67,44,.22);
+  --ring:0 0 0 3px rgba(226,176,74,.45);
+  --c1:#F3D27E; --c2:#8FA8D6; --c3:#C9655A; --c4:#4FA98A;
+  --radius:16px; --radius-lg:22px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.45),0 1px 3px rgba(0,0,0,.3);
+  --shadow:0 10px 28px rgba(0,0,0,.45),0 2px 6px rgba(0,0,0,.35);
+  --shadow-lg:0 30px 70px rgba(0,0,0,.65);
+  --f-display:"Bodoni Moda","Noto Serif Thai",Georgia,serif;
+  --hair:1px solid rgba(226,176,74,.22);
+  color-scheme:dark;
+}
+html{scrollbar-color:#3A2E1A transparent}
+::selection{background:rgba(226,176,74,.35);color:#fff}
+/* เกรนบางๆ ให้พื้นผิวดูเหมือนกำมะหยี่ — ชั้นนิ่ง ไม่ขยับ */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:400;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.eyebrow{color:var(--gold-ink);letter-spacing:.24em}
+.display,.topbar h1{font-weight:500;letter-spacing:.01em}
+
+/* ---------- Rail ---------- */
+.rail{background:#0A0806;border-right:var(--hair);background-image:linear-gradient(180deg,rgba(59,42,16,.35),transparent 45%)}
+.nav a:hover,.nav button:hover{background:rgba(245,245,245,.05)}
+.nav a[aria-current="page"],.nav .more.on{background:linear-gradient(180deg,rgba(59,42,16,.85),rgba(36,27,15,.85));color:var(--whiskey);box-shadow:inset 0 0 0 1px rgba(226,176,74,.35)}
+.nav a[aria-current="page"]::before{background:var(--whiskey)}
+.nav .badge{background:var(--whiskey)}
+.rail .lock-btn{border-color:rgba(226,176,74,.3)}
+.av-owner{background:linear-gradient(160deg,var(--whiskey),var(--antique));color:#16100B}
+.av-cashier{background:var(--emerald);color:#E8D9B8;box-shadow:inset 0 0 0 1px rgba(134,188,149,.35)}
+.av-waiter{background:var(--burgundy);color:#EAD6B0;box-shadow:inset 0 0 0 1px rgba(226,176,74,.35)}
+
+/* ---------- Controls: ปุ่มทรงพิล เส้นทองบาง ---------- */
+.btn{background:transparent;border-color:var(--line-strong);color:var(--ink);letter-spacing:.02em}
+.btn:hover{background:rgba(226,176,74,.1);border-color:var(--whiskey)}
+.btn-gold{background:linear-gradient(180deg,#EDC25E,var(--antique));border-color:#C29630;color:var(--on-accent);box-shadow:0 6px 18px rgba(226,176,74,.25),inset 0 1px 0 rgba(255,255,255,.3)}
+.btn-gold:hover{background:linear-gradient(180deg,#F5DA95,#CFA03A);border-color:var(--whiskey)}
+.btn-dark{background:var(--burgundy);border-color:rgba(226,176,74,.45);color:var(--cream)}
+.btn-dark:hover{background:#4D3814;border-color:var(--whiskey)}
+.btn-ghost:hover{background:rgba(245,245,245,.06)}
+.btn-danger{border-color:rgba(230,138,115,.45)}
+.chip{background:rgba(245,245,245,.03)}
+.pill-ok{border-color:rgba(134,188,149,.35)} .pill-warn{border-color:rgba(226,176,74,.4)}
+.pill-danger{border-color:rgba(230,138,115,.35)} .pill-bar{border-color:rgba(163,185,222,.3)} .pill-kitchen{border-color:rgba(230,160,132,.3)}
+.pill-dark{background:var(--burgundy);color:var(--whiskey);border-color:rgba(226,176,74,.4)}
+.seg{background:#0C0C0C;box-shadow:inset 0 0 0 1px var(--line)}
+.seg button[aria-pressed="true"]{background:var(--burgundy);color:var(--cream);box-shadow:inset 0 0 0 1px rgba(226,176,74,.45)}
+.field{background:#0C0A07}
+.inp,.count-table input,.custom-display{background:#0C0A07;color:var(--ink)}
+.tog::after{background:var(--cream)}
+.opt{background:transparent}
+.opt:hover{border-color:var(--whiskey)}
+.opt[aria-pressed="true"]{background:var(--burgundy);color:var(--whiskey);border-color:var(--antique)}
+.stepper{background:#0C0A07}
+.link{color:var(--whiskey)}
+.card{background:var(--surface);border:var(--hair);background-image:linear-gradient(180deg,rgba(59,42,16,.22),transparent 160px)}
+.card:nth-of-type(even){background-image:linear-gradient(180deg,rgba(46,35,16,.28),transparent 160px)}
+.card-h h2,.sec-h h2{font-weight:500}
+.switch{background:#16110B}
+.alert.warn{color:#F2B9A8} .alert.good{color:#B3DABF} .alert.info{color:#F6DE9E}
+
+/* ---------- Login: กรอบทรงโค้ง (arch) + ตัวอักษรเงาใหญ่ + แสงข้างแบบไฟบาร์ ---------- */
+.login{background:var(--charcoal)}
+.login-brand{position:relative;isolation:isolate;background:#0A0806;border-right:var(--hair);
+  background-image:radial-gradient(60% 50% at 0% 25%,rgba(59,42,16,.75),transparent 70%),radial-gradient(55% 45% at 100% 85%,rgba(46,35,16,.6),transparent 70%),radial-gradient(70% 50% at 50% 40%,rgba(36,27,15,.9),transparent 75%)}
+.login-brand::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(40% 35% at 50% 32%,rgba(226,176,74,.22),transparent 70%)}
+.login-brand[data-ghost]::before{content:attr(data-ghost);position:absolute;left:0;right:0;bottom:0;height:.82em;display:flex;justify-content:center;align-items:flex-start;overflow:hidden;z-index:-1;pointer-events:none;white-space:nowrap;
+  font:500 clamp(90px,15vw,220px)/1 var(--f-display);letter-spacing:-.02em;color:transparent;-webkit-text-stroke:1px rgba(226,176,74,.28)}
+.login-brand img{width:min(230px,44vw);padding:36px 28px 24px;border:1px solid rgba(226,176,74,.55);border-radius:999px 999px 26px 26px;
+  background:radial-gradient(80% 60% at 50% 30%,rgba(226,176,74,.2),transparent 75%),rgba(36,27,15,.45);
+  box-shadow:0 0 0 7px rgba(11,11,11,.9),0 0 0 8px rgba(226,176,74,.22),0 30px 60px rgba(0,0,0,.55);filter:none}
+.login-brand h1{font-weight:500;letter-spacing:.18em}
+.login-brand .tag{letter-spacing:.42em;color:#C9BFA6}
+.login-brand .clock{color:var(--whiskey);font-weight:200}
+.login-main h2{font-weight:500}
+.staff-card{background:linear-gradient(180deg,#1A140C,#130F09);border:var(--hair);transition:border-color .25s var(--ease),transform .3s var(--ease-spring),box-shadow .25s var(--ease),background .25s}
+.staff-card:hover{border-color:rgba(226,176,74,.6);box-shadow:0 14px 30px rgba(0,0,0,.5)}
+.staff-card[aria-pressed="true"]{background:linear-gradient(180deg,rgba(59,42,16,.95),rgba(36,27,15,.95));border-color:var(--antique);box-shadow:0 0 0 3px rgba(226,176,74,.18),0 14px 30px rgba(0,0,0,.5)}
+.pin-box{background:#16110B;border:var(--hair)}
+.pin-dots i{border-color:var(--whiskey);transition:background .15s,transform .25s var(--ease-spring)}
+.pin-dots i.on{background:var(--whiskey);transform:scale(1.15);box-shadow:0 0 12px rgba(226,176,74,.55)}
+.keypad button{background:#130F09;border:var(--hair);transition:background .15s,border-color .15s,transform .12s}
+.keypad button:hover{background:#241C11;border-color:var(--whiskey)}
+.demo-pins code{background:#241C11;color:var(--whiskey)}
+
+/* ---------- Menu ---------- */
+.tabs{background:var(--charcoal);border-bottom:var(--hair)}
+.tabs button[aria-selected="true"]{color:var(--cream);border-bottom-color:var(--whiskey)}
+.hh{background:rgba(226,176,74,.1)}
+.item{background:linear-gradient(180deg,#1A140C,#131111);border:var(--hair);border-radius:18px}
+.item:hover{border-color:rgba(226,176,74,.6);box-shadow:0 16px 34px rgba(0,0,0,.55),0 0 0 1px rgba(226,176,74,.25)}
+.item .art{background-color:var(--tint);background-image:radial-gradient(70% 80% at 50% 0%,rgba(226,176,74,.18),transparent 70%),linear-gradient(180deg,transparent 55%,rgba(0,0,0,.35));color:var(--tint-ink);border-bottom:var(--hair)}
+.item .art svg.i{transition:transform .35s var(--ease-spring)}
+.item:hover .art svg.i{transform:translateY(-3px) scale(1.08)}
+.item .name{font-weight:500;color:var(--cream)}
+.item .price{color:var(--whiskey)}
+.item .qty{background:#0A0806;color:var(--whiskey);box-shadow:0 0 0 1px rgba(226,176,74,.55),0 4px 10px rgba(0,0,0,.4)}
+.item .sold span{background:#0A0806;color:var(--whiskey);border:1px solid rgba(226,176,74,.5)}
+/* การ์ดสลับเบอร์กันดี / มรกต ตามหมวด */
+.cat-beer{--tint:#3B2A10;--tint-ink:#F4D07C}
+.cat-cocktail{--tint:#2E2310;--tint-ink:#F6DE9E}
+.cat-liquor{--tint:#46330F;--tint-ink:#F3D27E}
+.cat-soft{--tint:#241B0F;--tint-ink:#E8D9B8}
+.cat-food{--tint:#241B0F;--tint-ink:#EFC866}
+.cat-snack{--tint:#3B2A10;--tint-ink:#F6DE9E}
+.cat-x{--tint:#2A2216;--tint-ink:#CDBFA8}
+
+.ticket{background:#140F09;border-left:var(--hair)}
+.ticket-head{background:linear-gradient(160deg,var(--burgundy) 0%,var(--coffee) 65%,#120D06 100%);background-image:radial-gradient(90% 120% at 100% 0,rgba(226,176,74,.28),transparent 55%),linear-gradient(160deg,var(--burgundy) 0%,var(--coffee) 65%,#120D06 100%);border-bottom:var(--hair)}
+.ticket-head .eyebrow{color:var(--whiskey)}
+.ticket-head h2{font-weight:500}
+.ticket-foot{background:#0E0B07;border-top:var(--hair)}
+.sum-row.total .v{color:var(--cream)}
+.state.new{color:var(--whiskey)}
+
+/* ---------- Bill / Split ---------- */
+.bill-pick{background:#17120B;border:var(--hair)}
+.bill-pick[aria-current="true"]{background:linear-gradient(90deg,rgba(59,42,16,.85),rgba(36,27,15,.6));border-color:var(--antique);box-shadow:inset 3px 0 0 var(--whiskey)}
+.bill-pick .tno{color:var(--whiskey);font-family:var(--f-display);font-weight:500}
+.bill-totals{background:#16110B}
+.split{background:rgba(226,176,74,.05);border-color:rgba(226,176,74,.5)}
+.pool{background:#130F09}
+.pool-item{background:#1E1710}
+.pool-item:hover{background:var(--muted)}
+.part{background:#17120B}
+.part.active{border-color:var(--whiskey);box-shadow:0 0 0 3px rgba(226,176,74,.16)}
+.part.paid{background:linear-gradient(180deg,rgba(46,35,16,.55),rgba(46,35,16,.2));border-color:rgba(134,188,149,.4)}
+.part-h .pl,.method .mi{background:var(--burgundy);color:var(--whiskey);box-shadow:inset 0 0 0 1px rgba(226,176,74,.4)}
+.part-items .pi{background:#1D170E}
+.receipt{box-shadow:0 20px 50px rgba(0,0,0,.6);border-color:transparent}
+
+/* ---------- Payment ---------- */
+.due .amt{font-weight:500;color:var(--cream)}
+.due .amt span{color:var(--whiskey)}
+.method{background:#17120B;border:var(--hair)}
+.method:hover{border-color:var(--whiskey)}
+.method[aria-pressed="true"]{background:linear-gradient(135deg,rgba(59,42,16,.9),rgba(36,27,15,.8));border-color:var(--antique);box-shadow:0 0 0 3px rgba(226,176,74,.16)}
+.method b{font-weight:500}
+.pay-panel{background:#16110B;border:var(--hair);background-image:linear-gradient(180deg,rgba(46,35,16,.25),transparent 180px)}
+.change{border-top:var(--hair)}
+
+/* ---------- Summary ---------- */
+.kpi{background:#17120B;border:var(--hair)}
+.kpi:nth-child(odd):not(.hero){background-image:linear-gradient(160deg,rgba(59,42,16,.45),transparent 70%)}
+.kpi:nth-child(even):not(.hero){background-image:linear-gradient(160deg,rgba(46,35,16,.5),transparent 70%)}
+.kpi.hero{background:linear-gradient(150deg,var(--burgundy),var(--coffee) 70%);background-image:radial-gradient(120% 140% at 100% 0,rgba(226,176,74,.3),transparent 55%),linear-gradient(150deg,var(--burgundy),var(--coffee) 70%);border-color:rgba(226,176,74,.45)}
+.kpi.hero .v{color:var(--whiskey)}
+.chart .bar{fill:#6B5430}
+.chart .bar.peak{fill:var(--whiskey)}
+.chart .hit:hover+.bar,.chart .hit:focus+.bar{fill:#F8E2A8}
+.chart .grid{stroke:rgba(226,176,74,.14)}
+.tip{background:#1E1710;border:var(--hair)}
+.stack{background:#0C0A07}
+
+/* ---------- Bottles / Settings / Access ---------- */
+.bk-card{background:#17120B;border:var(--hair)}
+.bk-card.exp{border-color:rgba(230,138,115,.55);background:linear-gradient(180deg,rgba(59,42,16,.55),#17120B)}
+.bk-photo{background:#221D15}
+.bk-form,.set-nav{background:#140F09;border-color:rgba(226,176,74,.22)}
+.photo-drop{background:rgba(226,176,74,.06)}
+.set-nav button[aria-current="true"]{background:var(--burgundy);color:var(--whiskey)}
+.role-card{background:#17120B;border:var(--hair)}
+.role-card:nth-child(3){background-image:linear-gradient(160deg,rgba(46,35,16,.45),transparent 70%)}
+.role-card.owner{background:linear-gradient(150deg,var(--burgundy),var(--coffee) 70%);background-image:radial-gradient(120% 140% at 100% 0,rgba(226,176,74,.28),transparent 55%),linear-gradient(150deg,var(--burgundy),var(--coffee) 70%);border-color:rgba(226,176,74,.45)}
+.og{background:#16110B}
+.perm-cell{background:transparent}
+.perm-cell.yes{border-color:rgba(134,188,149,.4)} .perm-cell.pin{border-color:rgba(226,176,74,.45)}
+
+/* ---------- Dialogs & toasts ---------- */
+dialog{background:#17120B;border:var(--hair);background-image:linear-gradient(180deg,rgba(59,42,16,.3),transparent 180px)}
+dialog::backdrop{background:rgba(5,5,5,.7);backdrop-filter:blur(4px)}
+.choice,.check,.tbl,.more-list button{background:#16110B;border-color:var(--line)}
+.choice[aria-pressed="true"],.check:has(input:checked),.tbl[aria-current="true"]{background:linear-gradient(135deg,rgba(59,42,16,.85),rgba(36,27,15,.7));border-color:var(--antique)}
+.success-ic{background:var(--emerald);box-shadow:0 0 0 6px rgba(46,35,16,.35)}
+.approve-ic{background:var(--burgundy);color:var(--whiskey)}
+.toast{background:#19130C;border:1px solid rgba(226,176,74,.35);box-shadow:inset 3px 0 0 var(--whiskey),var(--shadow-lg)}
+.toast.err{border-color:rgba(230,138,115,.45);box-shadow:inset 3px 0 0 var(--danger),var(--shadow-lg)}
+
+/* ---------- Motion (style-1) ---------- */
+@keyframes mbPage{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.page.active{animation:mbPage .38s var(--ease-out)}
+@keyframes mbDlg{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes mbFadeIn{from{opacity:0}to{opacity:1}}
+dialog[open]{animation:mbDlg .34s var(--ease-out)}
+dialog[open]::backdrop{animation:mbFadeIn .3s var(--ease)}
+/* แสงกลางกรอบโค้ง "หายใจ" ช้าๆ (opacity อย่างเดียว) */
+@keyframes mbBreath{from{opacity:.55}to{opacity:1}}
+.login:not([hidden]) .login-brand::after{animation:mbBreath 6s ease-in-out infinite alternate}
+@keyframes mbGhost{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.login:not([hidden]) .login-brand[data-ghost]::before{animation:mbGhost .45s var(--ease-out) .3s both}
+.staff-card.mb-in{animation:mbRise .4s var(--ease-out) both;animation-delay:calc(.15s + var(--i,0) * 60ms)}
+.login:not([hidden]) .login-main>div:first-child{animation:mbRise .45s var(--ease-out) .08s both}
+
+@media (max-width:1023px){
+  .rail{background:#0A0806;border-right:0;border-top:var(--hair);box-shadow:0 -8px 24px rgba(0,0,0,.5)}
+  .login-brand{border-right:0;border-bottom:var(--hair)}
+  .login-brand .tag{letter-spacing:.22em;font-size:11px}
+  .login-brand img{width:112px;padding:16px 12px 10px;box-shadow:0 0 0 5px rgba(11,11,11,.9),0 0 0 6px rgba(226,176,74,.22)}
+  .login-brand[data-ghost]::before{font-size:96px}
+  .ticket-bar{background:linear-gradient(135deg,var(--burgundy),var(--coffee));border:1px solid rgba(226,176,74,.4)}
+  .ticket-bar .tb-amt{background:var(--whiskey)}
+}
+@media (prefers-reduced-motion:reduce){
+  .page.active,dialog[open],dialog[open]::backdrop,.login .login-brand::after,.login .login-brand[data-ghost]::before,.staff-card.mb-in,.login .login-main>div:first-child{animation:none!important}
+  .item .art svg.i,.staff-card,.pin-dots i{transition:none}
+  .item:hover .art svg.i{transform:none}
+}
+

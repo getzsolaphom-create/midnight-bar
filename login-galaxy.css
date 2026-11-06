@@ -1,0 +1,86 @@
+/* ==================================================================
+   STYLE-1B · หน้าเข้าสู่ระบบแบบรวมพื้นหลังเดียว + ดาวกาแล็กซี่ระยิบระยับ
+   (CSS ล้วน — ซ่อนองค์ประกอบด้วย display:none ไม่ลบออก เพื่อไม่ให้ลอจิกเดิมพัง)
+   ================================================================== */
+.login{display:flex;flex-direction:column;align-items:center;gap:22px;padding:28px 20px;isolation:isolate;
+  background-color:#0C0A07;
+  background-image:
+    radial-gradient(38% 30% at 50% 14%,rgba(226,176,74,.16),transparent 70%),
+    linear-gradient(115deg,transparent 28%,rgba(226,176,74,.05) 42%,rgba(59,42,16,.16) 50%,rgba(46,35,16,.12) 58%,transparent 72%),
+    radial-gradient(45% 55% at 0% 30%,rgba(59,42,16,.55),transparent 70%),
+    radial-gradient(45% 55% at 100% 85%,rgba(46,35,16,.45),transparent 70%),
+    radial-gradient(60% 50% at 50% 60%,rgba(36,27,15,.55),transparent 75%)}
+/* ดาว 3 ชั้น กระพริบคนละจังหวะ (opacity อย่างเดียว) */
+.login::before,.login::after,.login-brand::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1}
+.login::before{background-image:radial-gradient(1.2px 1.2px at 33.1% 16.5%,rgba(255,255,255,0.74),transparent),radial-gradient(1.2px 1.2px at 9.0% 53.4%,rgba(255,255,255,0.61),transparent),radial-gradient(1.2px 1.2px at 7.6% 50.7%,rgba(255,255,255,0.47),transparent),radial-gradient(1.2px 1.2px at 43.6% 8.7%,rgba(255,255,255,0.49),transparent),radial-gradient(1.2px 1.2px at 42.8% 81.4%,rgba(255,255,255,0.51),transparent),radial-gradient(1.2px 1.2px at 23.4% 62.2%,rgba(255,255,255,0.88),transparent),radial-gradient(1.2px 1.2px at 57.4% 40.1%,rgba(255,255,255,0.89),transparent),radial-gradient(1.2px 1.2px at 6.5% 84.4%,rgba(255,255,255,0.58),transparent),radial-gradient(1.2px 1.2px at 15.8% 13.3%,rgba(255,255,255,0.59),transparent),radial-gradient(1.2px 1.2px at 80.3% 19.3%,rgba(255,255,255,0.71),transparent),radial-gradient(1.2px 1.2px at 63.3% 37.8%,rgba(255,255,255,0.70),transparent),radial-gradient(1.2px 1.2px at 8.0% 7.7%,rgba(255,255,255,0.54),transparent),radial-gradient(1.2px 1.2px at 67.3% 43.0%,rgba(255,255,255,0.59),transparent),radial-gradient(1.2px 1.2px at 58.2% 45.5%,rgba(255,255,255,0.58),transparent),radial-gradient(1.2px 1.2px at 78.3% 69.1%,rgba(255,255,255,0.56),transparent),radial-gradient(1.2px 1.2px at 57.1% 52.4%,rgba(255,255,255,0.84),transparent),radial-gradient(1.2px 1.2px at 72.0% 29.6%,rgba(255,255,255,0.89),transparent),radial-gradient(1.2px 1.2px at 13.3% 42.1%,rgba(255,255,255,0.79),transparent),radial-gradient(1.2px 1.2px at 16.6% 48.9%,rgba(255,255,255,0.47),transparent),radial-gradient(1.2px 1.2px at 66.1% 75.4%,rgba(255,255,255,0.71),transparent),radial-gradient(1.2px 1.2px at 86.0% 32.1%,rgba(255,255,255,0.76),transparent),radial-gradient(1.2px 1.2px at 59.1% 57.7%,rgba(255,255,255,0.66),transparent);background-size:280px 280px;opacity:.8}
+.login::after{background-image:radial-gradient(1.8px 1.8px at 82.6% 92.7%,rgba(255,255,255,0.76),transparent),radial-gradient(1.8px 1.8px at 7.8% 69.3%,rgba(255,255,255,0.84),transparent),radial-gradient(1.8px 1.8px at 80.9% 29.3%,rgba(255,255,255,0.72),transparent),radial-gradient(1.8px 1.8px at 4.2% 46.3%,rgba(255,236,205,0.63),transparent),radial-gradient(1.8px 1.8px at 7.7% 75.8%,rgba(255,236,205,0.61),transparent),radial-gradient(1.8px 1.8px at 39.5% 85.7%,rgba(255,236,205,0.59),transparent),radial-gradient(1.8px 1.8px at 54.7% 86.8%,rgba(255,255,255,0.92),transparent),radial-gradient(1.8px 1.8px at 28.7% 41.9%,rgba(255,255,255,0.71),transparent),radial-gradient(1.8px 1.8px at 93.9% 16.5%,rgba(255,236,205,0.63),transparent),radial-gradient(1.8px 1.8px at 24.4% 48.6%,rgba(255,236,205,0.82),transparent),radial-gradient(1.8px 1.8px at 2.4% 42.2%,rgba(255,255,255,0.72),transparent),radial-gradient(1.8px 1.8px at 93.5% 68.3%,rgba(255,255,255,0.78),transparent),radial-gradient(1.8px 1.8px at 66.9% 7.2%,rgba(255,255,255,0.95),transparent),radial-gradient(1.8px 1.8px at 86.0% 78.6%,rgba(255,236,205,0.73),transparent);background-size:430px 430px;opacity:.9}
+.login-brand::after{background:none;background-image:radial-gradient(2.2px 2.2px at 14.3% 62.1%,#fff,transparent),radial-gradient(9px 9px at 14.3% 62.1%,rgba(255,226,180,.35),transparent),radial-gradient(2.2px 2.2px at 10.6% 11.1%,#fff,transparent),radial-gradient(9px 9px at 10.6% 11.1%,rgba(255,226,180,.35),transparent),radial-gradient(2.2px 2.2px at 23.8% 19.6%,#fff,transparent),radial-gradient(9px 9px at 23.8% 19.6%,rgba(255,226,180,.35),transparent),radial-gradient(2.2px 2.2px at 35.6% 9.7%,#fff,transparent),radial-gradient(9px 9px at 35.6% 9.7%,rgba(255,226,180,.35),transparent),radial-gradient(2.2px 2.2px at 5.0% 18.6%,#fff,transparent),radial-gradient(9px 9px at 5.0% 18.6%,rgba(255,226,180,.35),transparent);background-size:640px 520px}
+@keyframes mbTwA{from{opacity:.35}to{opacity:.95}}
+@keyframes mbTwB{from{opacity:1}to{opacity:.25}}
+@keyframes mbTwC{0%,100%{opacity:.2}50%{opacity:1}}
+.login:not([hidden])::before{animation:mbTwA 3.2s ease-in-out infinite alternate}
+.login:not([hidden])::after{animation:mbTwB 4.6s ease-in-out .8s infinite alternate}
+.login:not([hidden]) .login-brand::after{animation:mbTwC 2.8s ease-in-out infinite}
+
+/* โลโก้เล็กลง ไม่มีกรอบ · ชื่อร้าน · ซ่อนสโลแกน/เวลา/วันที่/ตัวอักษรเงา */
+.login-brand{background:none;border:0;padding:0;gap:10px;margin-top:auto;flex:none}
+.login-brand img{width:104px;padding:0;border:0;border-radius:0;background:none;box-shadow:none;filter:drop-shadow(0 10px 26px rgba(0,0,0,.6)) drop-shadow(0 0 22px rgba(226,176,74,.18))}
+.login-brand h1{font-size:40px}
+.login-brand .tag,.login-brand .clock,.login-brand>.small,.login-brand[data-ghost]::before{display:none}
+
+/* ส่วนเลือกคน + PIN */
+.login-main{padding:0;gap:18px;max-width:820px;margin:0 auto auto;flex:none;align-items:center}
+.login-main>div:first-child,.demo-pins{display:none}
+.staff-grid{display:flex;flex-wrap:nowrap;gap:12px;width:100%}
+.staff-card{flex:1 1 0;min-width:0;min-height:0;padding:14px 8px;gap:4px;background:rgba(20,17,16,.72)}
+.staff-card .avatar{width:48px;height:48px;font-size:19px}
+.staff-card b{font-size:16px}
+.staff-card .small{font-size:12px;line-height:1.3;text-align:center}
+.pin-box{width:min(380px,100%);padding:16px 18px;gap:10px;background:rgba(20,17,16,.82)}
+.pin-box:not([hidden]){animation:mbRise .35s var(--ease-out) both}
+.keypad{gap:8px}
+.keypad button{min-height:52px}
+#loginMsg{min-height:18px!important}
+
+/* จอเตี้ย (แล็ปท็อป / แท็บเล็ตแนวนอน) — บีบให้แป้นรหัสเห็นครบโดยไม่ต้องเลื่อน */
+@media (max-height:820px){
+  .login{gap:14px;padding:18px 20px}
+  .login-brand{gap:6px}
+  .login-brand img{width:72px}
+  .login-brand h1{font-size:30px}
+  .login-main{gap:12px}
+  .staff-card{padding:10px 8px}
+  .staff-card .avatar{width:40px;height:40px;font-size:16px}
+  .keypad{gap:6px}
+  .keypad button{min-height:44px;font-size:19px}
+  .pin-box{padding:12px 16px;gap:8px}
+  .pin-dots{margin:0}
+}
+@media (max-height:640px){
+  .login{gap:10px;padding:12px 20px}
+  .login-brand{flex-direction:row;gap:12px}
+  .login-brand img{width:46px}
+  .login-brand h1{font-size:24px}
+  .login-main{gap:10px}
+  .staff-card{flex-direction:row;justify-content:center;gap:10px;padding:8px 10px;text-align:left}
+  .staff-card .avatar{width:34px;height:34px;font-size:14px}
+  .staff-card b{font-size:14px}
+  .staff-card .small{text-align:left;font-size:11px}
+  .keypad button{min-height:40px;font-size:18px;border-radius:12px}
+  .pin-box{padding:10px 14px;gap:6px}
+  .pin-dots i{width:13px;height:13px}
+}
+/* มือถือ: 4 คนยังอยู่แถวเดียว */
+@media (max-width:560px){
+  .login{padding:20px 12px}
+  .staff-grid{gap:8px}
+  .login-brand h1{font-size:26px;letter-spacing:.12em;white-space:nowrap}
+  .staff-card{padding:10px 4px}
+  .staff-card .avatar{width:38px;height:38px;font-size:15px}
+  .staff-card b{font-size:13.5px}
+  .staff-card .small{font-size:10.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  .login::before,.login::after,.login .login-brand::after,.pin-box{animation:none!important}
+}
+

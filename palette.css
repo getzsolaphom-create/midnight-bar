@@ -1,0 +1,33 @@
+/* ==================================================================
+   STYLE-1C · พาเลตใหม่: Blackish Purple #241B0F · Very Dark Red #3B2A10
+   Sanguine #7A5A1C · Gold #E2B04A · Smoky White #F5F5F5
+   ================================================================== */
+:root{--sanguine:#7A5A1C;--oxblood:#3B2A10;--plum:#241B0F;--gold:#E2B04A;--smoke:#F5F5F5}
+.nav a[aria-current="page"],.nav .more.on{background:linear-gradient(180deg,var(--sanguine),var(--oxblood))}
+.opt[aria-pressed="true"],.set-nav button[aria-current="true"],.btn-dark{background:linear-gradient(180deg,var(--sanguine),var(--oxblood))}
+.seg button[aria-pressed="true"]{background:linear-gradient(180deg,var(--sanguine),var(--oxblood))}
+.staff-card[aria-pressed="true"],.method[aria-pressed="true"],.choice[aria-pressed="true"],.check:has(input:checked),.tbl[aria-current="true"]{background:linear-gradient(135deg,rgba(122,90,28,.9),rgba(59,42,16,.85) 60%,rgba(36,27,15,.9))}
+.bill-pick[aria-current="true"]{background:linear-gradient(90deg,rgba(122,90,28,.75),rgba(59,42,16,.55))}
+.ticket-head{background-image:radial-gradient(90% 120% at 100% 0,rgba(122,90,28,.55),transparent 60%),linear-gradient(160deg,var(--oxblood) 0%,var(--plum) 70%,#100C06 100%)}
+.kpi.hero,.role-card.owner{background-image:radial-gradient(120% 140% at 100% 0,rgba(226,176,74,.22),transparent 55%),linear-gradient(150deg,var(--sanguine),var(--oxblood) 55%,var(--plum))}
+.part-h .pl,.method .mi,.pill-dark{background:var(--oxblood)}
+.cat-food{--tint:#4A3714}
+.av-waiter{background:var(--oxblood)}
+.av-cashier{background:#3A2E14}
+.login{background-image:
+    radial-gradient(38% 30% at 50% 14%,rgba(226,176,74,.14),transparent 70%),
+    radial-gradient(45% 55% at 0% 30%,rgba(122,90,28,.42),transparent 70%),
+    radial-gradient(45% 55% at 100% 85%,rgba(59,42,16,.55),transparent 70%),
+    radial-gradient(60% 50% at 50% 60%,rgba(36,27,15,.75),transparent 75%)}
+
+/* ตัวอักษรชื่อร้านใหญ่ โปร่ง กลับมาที่ขอบล่างของหน้าเข้าสู่ระบบ */
+.login-brand[data-ghost]::before{display:flex;position:fixed;left:0;right:0;bottom:0;height:.8em;justify-content:center;align-items:flex-start;overflow:hidden;
+  font:500 clamp(96px,16vw,260px)/1 var(--f-display);-webkit-text-stroke:1px rgba(226,176,74,.3)}
+
+/* ดาวเล็กๆ ระยิบระยับในหน้าระบบด้านใน (ดาวอย่างเดียว ไม่มีแสงอื่น) */
+.app::before,.app::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1}
+.app::before{background-image:radial-gradient(1.2px 1.2px at 45.4% 55.7%,rgba(255,255,255,0.82),transparent),radial-gradient(1.2px 1.2px at 46.7% 50.8%,rgba(255,255,255,0.66),transparent),radial-gradient(1.2px 1.2px at 19.7% 51.1%,rgba(255,255,255,0.68),transparent),radial-gradient(1.2px 1.2px at 78.1% 11.0%,rgba(255,255,255,0.54),transparent),radial-gradient(1.2px 1.2px at 10.7% 79.7%,rgba(255,255,255,0.71),transparent),radial-gradient(1.2px 1.2px at 6.0% 96.3%,rgba(255,255,255,0.83),transparent),radial-gradient(1.2px 1.2px at 64.8% 61.1%,rgba(255,255,255,0.47),transparent),radial-gradient(1.2px 1.2px at 3.4% 52.7%,rgba(255,255,255,0.43),transparent),radial-gradient(1.2px 1.2px at 20.3% 25.2%,rgba(255,255,255,0.41),transparent),radial-gradient(1.2px 1.2px at 46.5% 44.3%,rgba(255,255,255,0.78),transparent),radial-gradient(1.2px 1.2px at 51.8% 63.5%,rgba(255,255,255,0.62),transparent),radial-gradient(1.2px 1.2px at 65.6% 45.9%,rgba(255,255,255,0.53),transparent),radial-gradient(1.2px 1.2px at 97.8% 97.6%,rgba(255,255,255,0.78),transparent),radial-gradient(1.2px 1.2px at 69.9% 32.3%,rgba(255,255,255,0.50),transparent),radial-gradient(1.2px 1.2px at 29.7% 8.7%,rgba(255,255,255,0.74),transparent),radial-gradient(1.2px 1.2px at 40.4% 83.3%,rgba(255,255,255,0.57),transparent);background-size:300px 300px;animation:mbTwA 3.6s ease-in-out infinite alternate}
+.app::after{background-image:radial-gradient(1.7px 1.7px at 94.0% 83.3%,rgba(255,226,150,0.50),transparent),radial-gradient(1.7px 1.7px at 89.4% 47.1%,rgba(255,226,150,0.94),transparent),radial-gradient(1.7px 1.7px at 9.0% 62.4%,rgba(255,226,150,0.85),transparent),radial-gradient(1.7px 1.7px at 10.4% 33.9%,rgba(255,255,255,0.93),transparent),radial-gradient(1.7px 1.7px at 13.3% 25.7%,rgba(255,226,150,0.55),transparent),radial-gradient(1.7px 1.7px at 78.5% 19.1%,rgba(255,226,150,0.75),transparent),radial-gradient(1.7px 1.7px at 20.3% 72.3%,rgba(255,255,255,0.56),transparent),radial-gradient(1.7px 1.7px at 13.2% 42.4%,rgba(255,226,150,0.60),transparent),radial-gradient(1.7px 1.7px at 95.2% 79.1%,rgba(255,255,255,0.64),transparent);background-size:470px 470px;animation:mbTwB 5s ease-in-out 1s infinite alternate}
+.login:not([hidden])~.app::before,.login:not([hidden])~.app::after{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){ .app::before,.app::after{animation:none!important} }
+

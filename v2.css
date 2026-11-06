@@ -1,0 +1,40 @@
+/* ==================================================================
+   V2 · ໂທນເຫຼືອງຕາມໂລໂກ້ + ບິນນ້ອຍ/ເລກອໍເດີ + ເງິນທຶນເປີດກະ + ໃບສະຫຼຸບປິດກະ
+   ================================================================== */
+:root{--logo-gold:#E2B04A;--logo-gold-hi:#F3D27E;--logo-gold-deep:#A9782A}
+.btn-gold{background:linear-gradient(180deg,#F5CD70,var(--logo-gold) 55%,#C2902F);border-color:#E8BC62;box-shadow:0 8px 22px rgba(226,176,74,.28),inset 0 1px 0 rgba(255,255,255,.4)}
+.btn-gold:hover{background:linear-gradient(180deg,#F8D684,#E8B955 55%,#CD9B34);border-color:#F3D27E}
+.login-brand h1{background-image:linear-gradient(100deg,var(--on-chrome) 0 40%,var(--logo-gold-hi) 47%,#FFF1C9 50%,var(--logo-gold-hi) 53%,var(--on-chrome) 60% 100%)}
+
+/* ---- print: only the slip / receipt / report is printed ---- */
+#print-area{display:none}
+@media print{
+  @page{margin:4mm}
+  html,body{background:#fff!important;height:auto!important}
+  body::after{display:none!important}
+  body>*:not(#print-area){display:none!important}
+  #print-area{display:block!important;width:80mm;margin:0 auto;color:#000}
+  #print-area .receipt{box-shadow:none;border:0;margin:0;max-width:none;width:100%;padding:0}
+  #print-area .receipt.p58{width:58mm}
+  #print-area .receipt::after{display:none}
+}
+
+/* ---- slip / receipt extras ---- */
+.receipt .ordno{text-align:center;padding:2px 0 0}
+.receipt .ordno .ol{font-size:11px;color:#6B5747;letter-spacing:.04em}
+.receipt .ordno .ov{font:700 28px/1.25 var(--f-mono);letter-spacing:.04em}
+.receipt .ordno .ov.multi{font-size:15px;letter-spacing:.02em}
+.receipt .rs.l{text-align:left;padding-left:14px}
+.receipt .grp{font-weight:700;margin-top:8px;border-bottom:1px solid #BFAE97}
+.receipt .rr.sub{color:#6B5747}
+.receipt .sig{display:flex;justify-content:space-between;gap:16px;margin-top:22px;text-align:center;font-size:11px}
+.receipt .sig span{flex:1;border-top:1px solid #8B7A66;padding-top:4px}
+.slip-list{display:flex;flex-direction:column;gap:8px}
+.slip-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:8px 8px 8px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.slip-row b{font:600 17px var(--f-mono);color:var(--gold-ink)}
+.float-box{margin-top:14px;display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:14px;border:1px dashed var(--line-strong);background:rgba(226,176,74,.06)}
+.float-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14px}
+.float-row small{display:block;font-size:12px;color:var(--ink-3)}
+.float-row b{font-weight:600}
+.float-row.total{margin-top:2px;padding-top:8px;border-top:1px solid var(--line);color:var(--gold-ink)}
+.float-row.total b{font-size:20px}

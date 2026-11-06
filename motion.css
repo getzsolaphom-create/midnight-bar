@@ -1,0 +1,41 @@
+/* ============ Motion layer · แบบที่ 1 (เพิ่มเฉพาะ CSS — ไม่แตะลอจิกเดิม) ============ */
+:root{--ease-out:cubic-bezier(.22,1,.36,1);--ease-spring:cubic-bezier(.34,1.56,.64,1)}
+
+/* หน้าเข้าสู่ระบบ: โลโก้ ชื่อร้าน สโลแกน นาฬิกา ค่อยๆ ปรากฏ */
+@keyframes mbRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.login:not([hidden]) .login-brand>*{animation:mbRise .45s var(--ease-out) both}
+.login:not([hidden]) .login-brand>img{animation-duration:.45s}
+.login:not([hidden]) .login-brand>h1{animation-delay:.09s}
+.login:not([hidden]) .login-brand>.tag{animation-delay:.18s}
+.login:not([hidden]) .login-brand>.clock{animation-delay:.27s}
+.login:not([hidden]) .login-brand>.small{animation-delay:.33s}
+
+/* แสงทองวิ่งช้าๆ บนชื่อร้าน — กวาดผ่าน 1 รอบแล้วพักยาว */
+@keyframes mbSheen{0%{background-position:120% 0}38%,100%{background-position:-20% 0}}
+.login-brand h1{
+  background:linear-gradient(100deg,var(--on-chrome) 0 40%,var(--gold-300) 47%,#FFF3D6 50%,var(--gold-300) 53%,var(--on-chrome) 60% 100%);
+  background-size:250% 100%;background-position:120% 0;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.login:not([hidden]) .login-brand>h1{animation:mbRise .45s var(--ease-out) .09s both,mbSheen 7s ease-in-out 1s infinite}
+
+/* การ์ดเมนู: ทยอยปรากฏแบบ stagger */
+@keyframes mbCardIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.item.mb-in{animation:mbCardIn .38s var(--ease-out) both;animation-delay:calc(var(--i,0) * 35ms)}
+
+/* แตะการ์ด: ยุบเล็กน้อยแล้วเด้งกลับ */
+.item{transition:transform .32s var(--ease-spring),box-shadow .2s var(--ease),border-color .2s var(--ease)}
+.item:active:not(.soldout){transform:scale(.95);transition-duration:.15s;transition-timing-function:var(--ease-out)}
+@keyframes mbTapBack{from{transform:scale(.95)}to{transform:none}}
+.item.mb-pop{animation:mbTapBack .34s var(--ease-spring)}
+
+/* Toast: เด้งขึ้นจากล่าง แล้วจางหายนุ่มๆ ก่อนถูกลบ (ระบบเดิมลบที่ 2.8 วินาที) */
+@keyframes mbToastIn{0%{opacity:0;transform:translateY(24px) scale(.96)}100%{opacity:1;transform:none}}
+@keyframes mbToastOut{to{opacity:0;transform:translateY(8px) scale(.98)}}
+.toast{animation:mbToastIn .42s var(--ease-spring) both,mbToastOut .35s var(--ease) 2.4s forwards}
+
+@media (prefers-reduced-motion:reduce){
+  .login .login-brand>*,.login .login-brand>h1,.item.mb-in,.item.mb-pop,.toast{animation:none!important}
+  .login-brand h1{background:none;color:var(--on-chrome)}
+  .item,.item:active:not(.soldout){transition:none;transform:none}
+}

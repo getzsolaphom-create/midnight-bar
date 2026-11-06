@@ -1,0 +1,13 @@
+/* ==================================================================
+   ພາສາ: ລາວ (ຫຼັກ) + English — ຟອນລາວ ແລະ ປຸ່ມສະຫຼັບພາສາ
+   ================================================================== */
+:root{--f-ui:"Prompt","Noto Sans Lao",system-ui,-apple-system,"Segoe UI",sans-serif;--f-display:"Bodoni Moda","Noto Serif Lao",Georgia,serif}
+.lang-switch{display:inline-flex;padding:3px;gap:2px;border-radius:999px;background:rgba(10,8,6,.75);box-shadow:inset 0 0 0 1px rgba(226,176,74,.35)}
+.lang-switch button{min-height:32px;min-width:44px;padding:0 12px;border:0;border-radius:999px;background:transparent;color:var(--ink-2);font-size:13px;font-weight:500;transition:background .2s var(--ease),color .2s var(--ease)}
+.lang-switch button[aria-pressed="true"]{background:linear-gradient(180deg,var(--sanguine),var(--oxblood));color:var(--smoke);box-shadow:inset 0 0 0 1px rgba(226,176,74,.45)}
+.login-lang{position:fixed;top:max(14px,env(safe-area-inset-top));right:16px;z-index:5}
+.rail-lang{margin-top:8px}
+.rail-lang button{min-width:34px;padding:0 6px;font-size:12px}
+@media (max-width:1023px){ .rail-lang{display:none} }
+.foot-actions .btn{min-width:0;padding:0 14px}
+

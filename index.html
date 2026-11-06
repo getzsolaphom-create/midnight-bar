@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Midnight Bar POS</title>
+<meta name="theme-color" content="#0F0C08">
+<meta name="application-name" content="Midnight Bar POS">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Midnight Bar">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;600;700&family=Noto+Serif+Lao:wght@500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=Cormorant+Garamond:wght@500;600;700&family=Noto+Serif+Thai:wght@500;600;700&family=Prompt:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/login.css">
+<link rel="stylesheet" href="css/menu.css">
+<link rel="stylesheet" href="css/bill.css">
+<link rel="stylesheet" href="css/payment.css">
+<link rel="stylesheet" href="css/summary.css">
+<link rel="stylesheet" href="css/bottles.css">
+<link rel="stylesheet" href="css/settings.css">
+<link rel="stylesheet" href="css/dialogs.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/motion.css">
+<link rel="stylesheet" href="css/theme-velvet.css">
+<link rel="stylesheet" href="css/login-galaxy.css">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/lang.css">
+<link rel="stylesheet" href="css/v2.css">
+<link rel="stylesheet" href="css/stars.css">
+<link rel="stylesheet" href="css/login-final.css">
+<link rel="stylesheet" href="css/saved.css">
+<link rel="stylesheet" href="css/theme-holst.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M5 4h14l-7 8z"/><path d="M12 12v8"/><path d="M8 20h8"/></symbol>
+  <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M5 3h14v18l-2.5-1.5L14 21l-2-1.5L10 21l-2.5-1.5L5 21z"/><path d="M9 8h6M9 12h6M9 16h4"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M16 14.5h2"/><path d="M6 6l9-3 1 3"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16"/><rect x="6" y="11" width="3" height="6" rx=".5"/><rect x="11" y="6" width="3" height="11" rx=".5"/><rect x="16" y="9" width="3" height="8" rx=".5"/></symbol>
+  <symbol id="i-beer" viewBox="0 0 24 24"><path d="M6 8h9v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2z"/><path d="M15 10h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M9 12v6M12 12v6"/><path d="M6 8a2.5 2.5 0 0 1 2-4 3 3 0 0 1 5 0 2.5 2.5 0 0 1 2 4"/></symbol>
+  <symbol id="i-cocktail" viewBox="0 0 24 24"><path d="M4 4h16l-8 9z"/><path d="M12 13v7"/><path d="M8 20h8"/><path d="M7.5 7.5h9"/></symbol>
+  <symbol id="i-bottle" viewBox="0 0 24 24"><path d="M10 2h4v4l1.5 2.5A3 3 0 0 1 16 10v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V10a3 3 0 0 1 .5-1.5L10 6z"/><path d="M8 13h8"/></symbol>
+  <symbol id="i-cup" viewBox="0 0 24 24"><path d="M6 4h12l-1.5 16a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1z"/><path d="M6.5 9h11"/><path d="M14 4l1.5-2.5"/></symbol>
+  <symbol id="i-food" viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M7 8c0-2 2-2 2-4M12 8c0-2 2-2 2-4M17 8c0-2-2-2-2-4" opacity=".7"/></symbol>
+  <symbol id="i-snack" viewBox="0 0 24 24"><ellipse cx="12" cy="15" rx="9" ry="4"/><path d="M3 15v1c0 2.2 4 4 9 4s9-1.8 9-4v-1"/><circle cx="9" cy="11" r="1.6"/><circle cx="13" cy="10" r="1.6"/><circle cx="15.5" cy="12.3" r="1.6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l2 2M14 9l2 2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></symbol>
+  <symbol id="i-cash" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></symbol>
+  <symbol id="i-split" viewBox="0 0 24 24"><path d="M12 3v6"/><path d="M12 9l-6 6v6M12 9l6 6v6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/></symbol>
+  <symbol id="i-table" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l2 5.5L19.5 10 14 12l-2 5.5L10 12 4.5 10 10 8.5z"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17.5v.01"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 10v10h16V10"/><path d="M3 4h18l-1 6H4z"/><path d="M10 20v-5h4v5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/></symbol>
+  <symbol id="i-coins" viewBox="0 0 24 24"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v4c0 1.7 2.7 3 6 3s6-1.3 6-3V7"/><path d="M9 14v3c0 1.7 2.7 3 6 3s6-1.3 6-3v-4c0-1.7-2.7-3-6-3"/></symbol>
+  <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 9l9-5 9 5"/><path d="M5 9v9M10 9v9M14 9v9M19 9v9M3 20h18"/></symbol>
+  <symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/></symbol>
+  <symbol id="i-chef" viewBox="0 0 24 24"><path d="M7 14v6h10v-6"/><path d="M7 14a4 4 0 0 1-1-7.9A5 5 0 0 1 15.5 5 4 4 0 0 1 17 14z"/><path d="M7 17h10"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V4M7 9l5-5 5 5"/><path d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-archive" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></symbol>
+</svg>
+
+<!-- ======================= LOGIN ======================= -->
+<div class="login" id="login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+  <div class="lang-switch login-lang" role="group" aria-label="ພາສາ / Language"><button type="button" data-lang="lo">ລາວ</button><button type="button" data-lang="en">EN</button></div>
+  <div class="login-brand">
+    <div class="logo-stage"><span class="logo-rays" aria-hidden="true"></span><span class="logo-halo" aria-hidden="true"></span><img data-logo alt=""><span class="logo-shine" aria-hidden="true"></span></div>
+    <h1 data-shopname>MIDNIGHT BAR</h1>
+    <div class="tag">GOOD BEER · GOOD FOOD · GOOD NIGHT</div>
+    <div class="clock num" id="loginClock">--:--</div>
+    <div class="small" style="color:var(--on-chrome-2)" id="loginDate"></div>
+  </div>
+  <div class="login-main">
+    <div>
+      <div class="eyebrow">ເຂົ້າກະ</div>
+      <h2 id="loginTitle">ໃຜກຳລັງເຂົ້າໃຊ້ງານ?</h2>
+      <p class="muted" style="margin:6px 0 0">ເລືອກຊື່ຂອງທ່ານ ແລ້ວໃສ່ລະຫັດ PIN ສ່ວນຕົວ · ທຸກການເຮັດວຽກຈະຖືກບັນທຶກ</p>
+    </div>
+    <div class="staff-grid" id="loginStaff"></div>
+    <div class="pin-box" id="loginPinBox" hidden>
+      <div class="small muted" id="loginWho">ລະຫັດ PIN</div>
+      <div class="pin-dots" id="loginDots" aria-live="polite"></div>
+      <div class="keypad" id="loginPad"></div>
+      <div class="small" id="loginMsg" aria-live="assertive" style="min-height:20px;color:var(--danger)"></div>
+    </div>
+    <div class="demo-pins" id="demoPins"></div>
+  </div>
+</div>
+
+<div class="app" id="app">
+  <nav class="rail" aria-label="ເມນູຫຼັກ">
+    <img class="logo" data-logo alt="">
+    <div class="nav" id="nav"></div>
+    <div class="who" id="who"></div>
+    <div class="lang-switch rail-lang" role="group" aria-label="ພາສາ / Language"><button type="button" data-lang="lo">ລາວ</button><button type="button" data-lang="en">EN</button></div>
+  </nav>
+
+  <main class="view" id="main">
+
+    <!-- ======================= MENU ======================= -->
+    <section class="page" id="page-menu" aria-labelledby="h-menu">
+      <div class="menu-layout">
+        <div class="menu-main">
+          <div class="topbar">
+            <div>
+              <div class="mobile-brand"><img data-logo alt=""><span class="eyebrow" data-shopname>Midnight Bar</span></div>
+              <div class="eyebrow" id="menuEyebrow">ສັ່ງອາຫານ</div>
+              <h1 id="h-menu">ເມນູ</h1>
+            </div>
+            <div class="menu-tools">
+              <span class="hh" id="hhChip"></span>
+              <label class="field"><svg class="i muted"><use href="#i-search"/></svg><span class="sr-only">ຊອກຫາເມນູ</span><input id="menuSearch" type="search" placeholder="ຊອກຫາເມນູ (ລາວ / EN)" autocomplete="off"></label>
+            </div>
+          </div>
+          <div class="tabs" role="tablist" aria-label="ໝວດເມນູ" id="catTabs"></div>
+          <div class="grid-menu" id="menuGrid" role="tabpanel" aria-labelledby="h-menu"></div>
+        </div>
+        <aside class="ticket" id="ticket" aria-label="ລາຍການອໍເດີ">
+          <div class="ticket-head">
+            <div class="row">
+              <span class="eyebrow" id="tkNo">Ticket</span>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-sm" id="pickTableBtn"><svg class="i sm"><use href="#i-table"/></svg>ປ່ຽນໂຕະ</button>
+                <button class="btn icon-btn sm ticket-close" id="ticketClose" aria-label="ປິດລາຍການ"><svg class="i"><use href="#i-x"/></svg></button>
+              </div>
+            </div>
+            <h2 id="tkTable">ໂຕະ</h2>
+            <div class="meta" id="tkMeta"></div>
+          </div>
+          <div class="lines" id="tkLines" aria-live="polite"></div>
+          <div class="ticket-foot">
+            <div id="tkSums"></div>
+            <div class="foot-actions">
+              <button class="btn btn-lg" id="sendBtn"><svg class="i"><use href="#i-check"/></svg><span>ຢືນຢັນອໍເດີ</span></button>
+              <a class="btn btn-gold btn-lg" href="#/bill" id="toBillBtn">ໄປທີ່ບິນ<svg class="i"><use href="#i-right"/></svg></a>
+            </div>
+          </div>
+        </aside>
+        <div class="sheet-scrim" id="sheetScrim"></div>
+        <button class="ticket-bar" id="ticketBar" aria-controls="ticket" aria-expanded="false">
+          <span id="tbLabel"></span>
+          <span class="tb-amt"><span id="tbAmt">0 ₭</span><svg class="i"><use href="#i-chev"/></svg></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ======================= BILL ======================= -->
+    <section class="page" id="page-bill" aria-labelledby="h-bill">
+      <div class="topbar">
+        <div><div class="eyebrow" id="billEyebrow">ບິນທີ່ເປີດຢູ່</div><h1 id="h-bill">ບິນ</h1></div>
+        <div class="meta"><span class="chip" id="openCount"></span></div>
+      </div>
+      <div class="bill-layout">
+        <div class="bills-list" id="billsList" aria-label="ບິນທີ່ເປີດຢູ່"></div>
+        <div class="card">
+          <div class="card-h">
+            <div><h2 id="bdTitle">ໂຕະ</h2><div class="muted small" id="bdMeta"></div></div>
+            <span id="bdStatus"></span>
+          </div>
+          <div class="card-b">
+            <div class="scroll-x">
+              <table class="bill-table">
+                <thead><tr><th>ຈຳນວນ</th><th>ລາຍການ</th><th class="r unit">ລາຄາ/ໜ່ວຍ</th><th class="r">ລວມ</th><th class="act"><span class="sr-only">ຈັດການ</span></th></tr></thead>
+                <tbody id="bdRows"></tbody>
+              </table>
+            </div>
+            <div class="adjust">
+              <div><p class="label">ສ່ວນຫຼຸດ</p><div class="opt-group" id="discOpts"></div></div>
+              <div><p class="label">ຄ່າໃຊ້ຈ່າຍເພີ່ມ</p><label class="switch"><span id="svcLabel">ຄ່າບໍລິການ 10%</span><input type="checkbox" class="tog" id="svcToggle"></label></div>
+            </div>
+            <div class="bill-totals" id="bdTotals"></div>
+            <div id="splitArea"></div>
+            <div id="orderSlips"></div>
+            <div class="bill-actions">
+              <a class="btn" href="#/menu"><svg class="i"><use href="#i-plus"/></svg>ເພີ່ມລາຍການ</a>
+              <button class="btn" id="splitBtn"><svg class="i"><use href="#i-split"/></svg><span>ແຍກບິນ</span></button>
+              <button class="btn" id="printBillBtn"><svg class="i"><use href="#i-print"/></svg>ພິມບິນ</button>
+              <button class="btn btn-gold btn-lg" id="goPayBtn">ຊຳລະເງິນ</button>
+            </div>
+          </div>
+        </div>
+        <div class="receipt-wrap"><p class="label">ຕົວຢ່າງໃບຮັບເງິນ · <span data-paper>80</span> ມມ.</p><div class="receipt" id="billReceipt"></div></div>
+      </div>
+    </section>
+
+    <!-- ======================= PAYMENT ======================= -->
+    <section class="page" id="page-pay" aria-labelledby="h-pay">
+      <div class="topbar">
+        <div>
+          <a href="#/bill" class="link" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:14px;margin-bottom:6px"><svg class="i sm"><use href="#i-left"/></svg>ກັບໄປທີ່ບິນ</a>
+          <div class="eyebrow" id="payEyebrow">ຊຳລະເງິນ</div>
+          <h1 id="h-pay">ຊຳລະເງິນ</h1>
+        </div>
+        <div class="meta"><span class="chip" id="payCashier"></span></div>
+      </div>
+      <div class="pay-layout">
+        <div>
+          <div class="due">
+            <div><div class="muted" id="dueLabel">ຍອດທີ່ຕ້ອງຊຳລະ</div><div class="amt num" id="dueAmt" aria-live="polite">0 <span>₭</span></div></div>
+            <div class="muted small" id="dueSplit"></div>
+          </div>
+          <div class="part-switch" id="partSwitch"></div>
+          <div class="methods" role="group" aria-label="ວິທີຊຳລະເງິນ" id="methods"></div>
+          <div class="pay-panel" id="cashPanel">
+            <p class="label">ລູກຄ້າຈ່າຍດ້ວຍສະກຸນ</p>
+            <div class="opt-group" id="curOpts"></div>
+            <p class="muted small" style="margin:8px 0 0" id="rateNote"></p>
+            <div class="pay-row" style="margin-top:18px"><span class="muted" id="dueInLabel">ຍອດເປັນກີບ</span><span class="big num" id="dueIn">0</span></div>
+            <p class="label" style="margin-top:18px">ຮັບເງິນມາ</p>
+            <div class="quick" id="quickAmts"></div>
+            <div id="keypadWrap" hidden>
+              <div class="custom-display"><span class="num" id="customVal">0</span><span class="muted" id="customCur">₭</span></div>
+              <div class="keypad" id="keypad" style="margin-top:10px"></div>
+            </div>
+            <div class="change">
+              <span><span class="muted">ເງິນທອນ (ກີບ)</span><br><small class="muted" id="changeNote"></small></span>
+              <span class="v num" id="changeAmt" aria-live="polite">—</span>
+            </div>
+          </div>
+          <div class="pay-panel" id="transferPanel" hidden>
+            <p class="label">ທະນາຄານ</p>
+            <div class="opt-group" id="bankOpts"></div>
+            <div class="transfer" style="margin-top:18px">
+              <svg class="qr" id="qrSvg" viewBox="0 0 29 29" role="img" aria-label="QR ໂຄດສຳລັບໂອນເງິນ (ຕົວຢ່າງ)"></svg>
+              <div>
+                <div class="muted">ສະແກນເພື່ອໂອນ</div>
+                <div style="font-size:36px;font-weight:600;line-height:1.15" id="qrAmt">0 ₭</div>
+                <div class="muted small" style="margin-top:6px;line-height:1.6" id="qrBank"></div>
+                <label class="check" style="margin-top:14px"><input type="checkbox" id="transferOk"><span>ກວດສອບແລ້ວ ໄດ້ຮັບເງິນຄົບ</span></label>
+              </div>
+            </div>
+          </div>
+          <div class="pay-cta">
+            <a class="btn btn-lg" href="#/bill"><svg class="i"><use href="#i-split"/></svg>ແຍກບິນ</a>
+            <button class="btn btn-gold btn-lg" id="confirmPay" disabled><svg class="i"><use href="#i-check"/></svg><span id="confirmLabel">ຢືນຢັນຮັບຊຳລະ</span></button>
+          </div>
+        </div>
+        <div class="receipt-wrap"><p class="label">ຕົວຢ່າງໃບຮັບເງິນ · <span data-paper>80</span> ມມ.</p><div class="receipt" id="payReceipt"></div></div>
+      </div>
+    </section>
+
+    <!-- ======================= SAVED BILLS ======================= -->
+    <section class="page" id="page-saved" aria-labelledby="h-saved">
+      <div class="topbar">
+        <div><div class="eyebrow" id="sbEyebrow">ບັນທຶກໄວ້ໃນເຄື່ອງນີ້</div><h1 id="h-saved">ບິນທີ່ບັນທຶກ</h1></div>
+        <div class="meta">
+          <span class="chip" id="sbStat"></span>
+          <button class="btn" id="sbCsv"><svg class="i"><use href="#i-send"/></svg>ສົ່ງອອກ CSV</button>
+        </div>
+      </div>
+      <div class="sb-wrap">
+        <p class="sb-note"><svg class="i"><use href="#i-archive"/></svg><span>ຮ້ານຍັງບໍ່ມີເຄື່ອງພິມ — ບິນທຸກໃບຈຶ່ງຖືກບັນທຶກໄວ້ໃນເຄື່ອງນີ້ແທນການພິມ. ເປີດບິນໃບໃດກໍ່ໄດ້ເພື່ອໃຫ້ລູກຄ້າເບິ່ງ, ສຳເນົາເປັນຂໍ້ຄວາມສົ່ງໃຫ້ລູກຄ້າ ຫຼື ດາວໂຫຼດເກັບໄວ້.</span></p>
+        <div class="sb-bar">
+          <div class="opt-group" id="sbRange" role="group" aria-label="ຊ່ວງວັນ"></div>
+          <div class="opt-group" id="sbOnly" role="group" aria-label="ສະຖານະ"></div>
+          <label class="sb-search"><svg class="i"><use href="#i-search"/></svg><input id="sbSearch" type="search" placeholder="ຊອກຫາ: ເລກບິນ ໂຕະ ພະນັກງານ ວັນທີ ລາຍການ" aria-label="ຊອກຫາບິນ"></label>
+        </div>
+        <div class="sb-list" id="sbList"></div>
+      </div>
+    </section>
+
+    <!-- ======================= SUMMARY ======================= -->
+    <section class="page" id="page-summary" aria-labelledby="h-sum">
+      <div class="topbar">
+        <div><div class="eyebrow" id="sumEyebrow">ກະ #0001</div><h1 id="h-sum">ສະຫຼຸບຍອດ</h1></div>
+        <div class="meta">
+          <span class="chip" id="floatChip"></span>
+          <button class="btn" id="sendSheetsBtn"><svg class="i"><use href="#i-send"/></svg>ສົ່ງເຂົ້າ Google Sheets</button>
+          <button class="btn" id="printReport"><svg class="i"><use href="#i-print"/></svg>ພິມລາຍງານ</button>
+        </div>
+      </div>
+      <div class="sum-wrap">
+        <div class="kpis" id="kpis"></div>
+        <div class="sum-grid">
+          <div class="card">
+            <div class="card-h"><h2>ຍອດຂາຍລາຍຊົ່ວໂມງ</h2><button class="link" id="hourTableBtn" aria-expanded="false">ເບິ່ງເປັນຕາຕະລາງ</button></div>
+            <div class="card-b"><div class="chart" id="hourChart"></div><div id="hourTable" hidden></div><p class="muted small" style="margin:10px 0 0" id="peakNote"></p></div>
+          </div>
+          <div class="card"><div class="card-h"><h2>ເມນູຂາຍດີ</h2></div><div class="card-b"><div class="bars-list" id="topItems"></div></div></div>
+        </div>
+        <div class="sum-grid-2">
+          <div class="card">
+            <div class="card-h"><h2>ແຍກຕາມວິທີຊຳລະ</h2></div>
+            <div class="card-b"><div class="stack" id="payStack" role="img"></div><div class="legend" id="payLegend"></div><table class="data-table" id="payTable" style="margin-top:12px"></table></div>
+          </div>
+          <div class="card">
+            <div class="card-h"><h2>ນັບເງິນສົດປິດກະ</h2></div>
+            <div class="card-b">
+              <div class="scroll-x"><table class="count-table"><thead><tr><th>ສະກຸນເງິນ</th><th>ທີ່ຄວນມີ</th><th>ນັບໄດ້</th><th>ສ່ວນຕ່າງ</th></tr></thead><tbody id="countRows"></tbody></table></div>
+              <div id="countAlert" style="margin-top:14px"></div>
+              <div class="float-box" id="floatBox"></div><p class="muted small" style="margin:12px 0 0" id="floatNote"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sum-foot">
+          <span class="muted" id="voidNote"></span>
+          <button class="btn btn-gold btn-lg" id="closeShiftBtn">ປິດກະ</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= BOTTLE KEEP ======================= -->
+    <section class="page" id="page-bottles" aria-labelledby="h-bk">
+      <div class="bk-layout">
+        <div class="bk-main">
+          <div class="topbar">
+            <div><div class="eyebrow" id="bkEyebrow">ຝາກເຫຼົ້າ / ເບຍ</div><h1 id="h-bk">ຝາກຂວດ</h1></div>
+            <div class="menu-tools">
+              <div class="seg" role="group" aria-label="ກັ່ນຕອງ" id="bkFilter">
+                <button aria-pressed="true" data-f="all">ທັງໝົດ</button><button aria-pressed="false" data-f="exp">ໃກ້ໝົດອາຍຸ</button>
+              </div>
+              <button class="btn btn-gold mobile-only" id="bkJump"><svg class="i"><use href="#i-plus"/></svg>ຝາກຂວດໃໝ່</button>
+              <label class="field"><svg class="i muted"><use href="#i-search"/></svg><span class="sr-only">ຊອກຫາ</span><input id="bkSearch" type="search" placeholder="ຊື່ ຫຼື ເບີໂທ 4 ຕົວທ້າຍ" autocomplete="off"></label>
+            </div>
+          </div>
+          <div class="bk-grid" id="bkGrid"></div>
+        </div>
+        <aside class="bk-form" aria-labelledby="bkFormTitle">
+          <div><div class="eyebrow">ຮັບຝາກຂວດໃໝ່</div><h2 id="bkFormTitle">ຝາກຂວດໃໝ່</h2></div>
+          <div><label class="label" for="bkName">ຊື່ລູກຄ້າ</label><input class="inp" id="bkName" placeholder="ເຊັ່ນ ທ່ານ ສົມພອນ" autocomplete="off"></div>
+          <div><label class="label" for="bkPhone">ເບີໂທ</label><input class="inp" id="bkPhone" inputmode="tel" placeholder="020 …" autocomplete="off"></div>
+          <div><label class="label" for="bkItem">ຂວດ (ຈາກລາຍການສິນຄ້າ)</label><select class="inp" id="bkItem"></select></div>
+          <div>
+            <span class="label" id="bkLvlLbl">ເຫຼືອໃນຂວດປະມານ</span>
+            <div class="lvl-btns" role="group" aria-labelledby="bkLvlLbl" id="bkLvl"></div>
+            <input type="range" min="5" max="100" step="5" value="50" id="bkRange" aria-label="ລະດັບທີ່ເຫຼືອ (ເປີເຊັນ)" style="width:100%;margin-top:10px;accent-color:var(--gold-500)">
+            <div class="help" id="bkRangeOut">ເຫຼືອ 50%</div>
+          </div>
+          <div class="form-grid">
+            <div><label class="label" for="bkLocker">ຕູ້/ຊ່ອງເກັບ</label><input class="inp" id="bkLocker" placeholder="B-07"></div>
+            <div><label class="label" for="bkDays">ຝາກໄດ້</label><select class="inp" id="bkDays"><option value="30">30 ມື້</option><option value="60" selected>60 ມື້</option><option value="90">90 ມື້</option></select></div>
+          </div>
+          <div>
+            <span class="label">ຮູບຖ່າຍຂວດ (ຫຼັກຖານ · ຈຳເປັນ)</span>
+            <div class="photo-drop" id="bkPhotoBox"></div>
+            <input type="file" accept="image/*" capture="environment" id="bkFile" hidden>
+          </div>
+          <div><label class="label" for="bkNote">ໝາຍເຫດ</label><input class="inp" id="bkNote" placeholder="ເຊັ່ນ ຕິດສະຕິກເກີຊື່ທີ່ຄໍຂວດ"></div>
+          <button class="btn btn-gold btn-lg btn-block" id="bkSave" style="margin-top:auto"><svg class="i"><use href="#i-print"/></svg>ບັນທຶກ & ພິມປ້າຍຂວດ</button>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ======================= ACCESS ======================= -->
+    <section class="page" id="page-access" aria-labelledby="h-acc">
+      <div class="topbar">
+        <div><div class="eyebrow">ໃຜເຂົ້າຫຍັງໄດ້ແດ່</div><h1 id="h-acc">ສິດການໃຊ້ງານ</h1></div>
+        <div class="meta" id="accMeta"></div>
+      </div>
+      <div class="acc-wrap" id="accBody"></div>
+    </section>
+
+    <!-- ======================= SETTINGS ======================= -->
+    <section class="page" id="page-settings" aria-labelledby="h-set">
+      <div class="topbar">
+        <div><div class="eyebrow">ຫຼັງບ້ານ · ສະເພາະເຈົ້າຂອງຮ້ານ</div><h1 id="h-set">ຕັ້ງຄ່າ</h1></div>
+        <div class="meta"><span class="saved" id="savedFlag"><svg class="i xs"><use href="#i-check"/></svg>ບັນທຶກອັດຕະໂນມັດແລ້ວ</span></div>
+      </div>
+      <div class="set-layout">
+        <nav class="set-nav" id="setNav" aria-label="ໝວດການຕັ້ງຄ່າ"></nav>
+        <div class="set-body" id="setBody"></div>
+      </div>
+      <input type="file" accept="image/*" id="logoFile" hidden>
+    </section>
+  </main>
+</div>
+
+<!-- Item options -->
+<dialog id="optDlg" aria-labelledby="optTitle">
+  <form method="dialog" class="dlg">
+    <div class="dlg-h" id="optHead">
+      <span class="art" id="optArt"></span>
+      <div><h2 id="optTitle">Item</h2><div class="muted" id="optSub"></div><div id="optHH"></div></div>
+      <button class="btn icon-btn x" value="cancel" aria-label="ປິດ"><svg class="i"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="dlg-b" id="optBody"></div>
+    <div class="dlg-f" style="justify-content:space-between">
+      <div class="stepper" aria-label="ຈຳນວນ"><button type="button" id="optMinus" aria-label="ຫຼຸດຈຳນວນ"><svg class="i"><use href="#i-minus"/></svg></button><output id="optQty">1</output><button type="button" id="optPlus" aria-label="ເພີ່ມຈຳນວນ"><svg class="i"><use href="#i-plus"/></svg></button></div>
+      <div style="display:flex;align-items:center;gap:16px;margin-left:auto">
+        <div class="dlg-price" id="optPrice"></div>
+        <button class="btn btn-gold btn-lg" value="add" id="optAdd">ເພີ່ມລົງບິນ</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<!-- Generic dynamic dialog -->
+<dialog id="dyn"><form method="dialog" class="dlg" id="dynForm"></form></dialog>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+<div id="print-area"></div>
+
+<script src="js/i18n.js"></script>
+<script src="js/logo.js"></script>
+<script src="js/core.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/bill.js"></script>
+<script src="js/payment.js"></script>
+<script src="js/summary.js"></script>
+<script src="js/bottles.js"></script>
+<script src="js/access.js"></script>
+<script src="js/saved.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/sheets.js"></script>
+<script src="js/main.js"></script>
+<script src="js/motion.js"></script>
+<script src="js/login-ghost.js"></script>
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
+</body>
+</html>

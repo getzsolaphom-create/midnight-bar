@@ -1,0 +1,440 @@
+/* ==================================================================
+   THEME HOLST · "Sage & Cream" — เขียวเซจ + ครีมอบอุ่น (โทนที่ลูกค้าเลือก)
+   ไฟล์นี้โหลดท้ายสุด: เปลี่ยนเฉพาะสี/ฟอนต์/ความมน ไม่แตะโครงสร้างระบบ
+   ธีมเดิม (Velvet/Galaxy/Stars/A2) เป็นธีมมืด ไฟล์นี้พลิกพื้นผิวทึบทุกจุดให้เป็นสว่าง
+   ย้อนกลับ: เปลี่ยน index.html ให้โหลด css/theme-a2.css แทนไฟล์นี้
+   ================================================================== */
+:root{
+  --hs-ink:#35534A; --hs-sage:#4F7568; --hs-sage-hi:#6F9988; --hs-sage-deep:#3E5D52;
+  --hs-cream:#F7F0E7; --hs-cream-hi:#FFFBF3; --hs-tan:#E6D8C9; --hs-tan-2:#CBBEAD; --hs-panel:#EFE6D8;
+  --hs-line:rgba(53,83,74,.18); --hs-line-strong:rgba(53,83,74,.32);
+
+  --charcoal:var(--hs-tan-2); --coffee:#DCE8E1; --burgundy:#F2ECE1; --emerald:#DCE8E1;
+  --antique:var(--hs-sage); --cream:var(--hs-cream); --whiskey:var(--hs-sage-hi);
+  --sanguine:#B9CBC1; --oxblood:#E6D8C9; --plum:#FFFFFF;
+  --gold:var(--hs-sage); --logo-gold:var(--hs-sage); --logo-gold-hi:var(--hs-sage-hi); --logo-gold-deep:var(--hs-sage-deep);
+
+  --espresso-900:#FFFBF3; --espresso-800:#FFFFFF; --espresso-700:#EFE6D8; --espresso-600:#CBBEAD;
+  --gold-100:rgba(79,117,104,.10); --gold-300:var(--hs-sage-hi); --gold-400:var(--hs-sage); --gold-500:var(--hs-sage); --gold-700:var(--hs-sage-deep);
+
+  --bg:var(--hs-cream); --surface:#FFFFFF; --surface-2:var(--hs-panel); --muted:var(--hs-tan);
+  --line:var(--hs-line); --line-strong:var(--hs-line-strong);
+  --ink:var(--hs-ink); --ink-2:#4A6158; --ink-3:var(--hs-sage-hi);
+  --gold-ink:var(--hs-sage-deep); --accent:var(--hs-sage); --accent-soft:rgba(79,117,104,.12); --on-accent:var(--hs-cream);
+  --chrome:#FFFFFF; --chrome-2:var(--hs-panel); --on-chrome:var(--hs-ink); --on-chrome-2:var(--hs-sage-hi);
+  /* สีบอกสถานะ: กลับมาเป็นชุดพื้นสว่าง (ธีมเดิมเป็นธีมมืด ค่าพวกนี้จึงเข้มเกินไป) */
+  --sage-600:#3F7A4A; --sage-100:#E4EFE2; --rust-600:#A8432C; --rust-100:#F6DFD6;
+  --blue-600:#3F6FB0; --blue-100:#DFE8F5;
+  --ok:#3F7A4A; --ok-soft:#E4EFE2; --danger:#A8432C; --danger-soft:#F6DFD6;
+  --bar:#3F6FB0; --bar-soft:#E3EAF5; --kitchen:#A8432C; --kitchen-soft:#F6E1D8;
+  /* เงา: เบาลงให้เข้ากับพื้นครีม */
+  --shadow-sm:0 1px 2px rgba(53,83,74,.06),0 1px 3px rgba(53,83,74,.07);
+  --shadow:0 8px 20px rgba(53,83,74,.08),0 2px 6px rgba(53,83,74,.06);
+  --shadow-lg:0 24px 60px rgba(53,83,74,.20);
+  --ring:0 0 0 3px rgba(79,117,104,.30);
+  --c1:var(--hs-sage-hi); --c2:#3F6FB0; --c3:#C2553A; --c4:#2F8E74;
+  --radius:18px; --radius-lg:26px;
+  --f-display:"Cormorant Garamond","Noto Serif Lao","Noto Serif Thai",Georgia,serif;
+  --hair:1px solid var(--hs-line);
+  color-scheme:light;
+}
+html{scrollbar-color:var(--hs-tan-2) transparent}
+::selection{background:rgba(79,117,104,.25);color:var(--hs-ink)}
+body{background:var(--hs-cream)}
+/* เกรนพื้นผิว: ปิด ให้ครีมสะอาดใส */
+body::after{opacity:0}
+
+/* ---------- ปิดดาวจุด (โทนนี้พื้นสว่าง ดาวขาวจะมองไม่เห็น/ขัดตา) ---------- */
+.login::before,.login::after,.login-brand::after,.app::before,.app::after{background-image:none!important;opacity:0!important}
+
+/* ---------- Rail / Nav ---------- */
+.rail{background:#FFFFFF;background-image:none;border-right:var(--hair);box-shadow:2px 0 14px rgba(53,83,74,.06)}
+.nav a:hover,.nav button:hover{background:rgba(79,117,104,.08);color:var(--hs-ink)}
+.nav a[aria-current="page"],.nav .more.on{background:var(--hs-sage);color:var(--hs-cream);box-shadow:none}
+.nav a[aria-current="page"]::before{display:none}
+.nav .badge{background:var(--hs-sage);color:var(--hs-cream)}
+.rail .lock-btn{border-color:var(--hs-line-strong);color:var(--hs-sage-hi)}
+.rail .lock-btn:hover{border-color:var(--hs-sage);color:var(--hs-sage)}
+.av-owner{background:var(--hs-sage);color:var(--hs-cream)}
+.av-cashier{background:#DCE8E1;color:var(--hs-ink);box-shadow:inset 0 0 0 1px rgba(53,83,74,.2)}
+.av-waiter{background:#E8EEE7;color:var(--hs-ink);box-shadow:inset 0 0 0 1px rgba(53,83,74,.16)}
+
+/* ---------- Controls ---------- */
+.btn{background:#FFFFFF;border-color:var(--hs-line-strong);color:var(--hs-ink)}
+.btn:hover{background:rgba(79,117,104,.08);border-color:var(--hs-sage)}
+.btn-gold{background:var(--hs-sage);border-color:var(--hs-sage);color:var(--hs-cream);
+  box-shadow:0 10px 22px rgba(79,117,104,.28),inset 0 1px 0 rgba(255,255,255,.2)}
+.btn-gold:hover{background:var(--hs-sage-deep);border-color:var(--hs-sage-deep)}
+.btn-dark{background:var(--hs-sage);border-color:var(--hs-sage);color:var(--hs-cream)}
+.btn-dark:hover{background:var(--hs-sage-deep);border-color:var(--hs-sage-deep)}
+.btn-ghost:hover{background:rgba(79,117,104,.07)}
+.btn-danger{border-color:#E3B8AA}
+.chip{background:#FFFFFF}
+.pill-ok{border-color:#BCD5BC} .pill-warn{background:rgba(79,117,104,.1);color:var(--hs-sage-deep);border-color:var(--hs-line-strong)}
+.pill-danger{border-color:#E9C2B5} .pill-bar{border-color:#C5D3EA} .pill-kitchen{border-color:#EBC6B8}
+.pill-dark{background:var(--hs-panel);color:var(--hs-ink);border-color:var(--hs-line-strong)}
+.seg{background:var(--hs-tan);box-shadow:inset 0 0 0 1px var(--hs-line)}
+.seg button[aria-pressed="true"]{background:#FFFFFF;color:var(--hs-ink);box-shadow:0 0 0 1px var(--hs-line-strong)}
+.field{background:#FFFFFF;border-color:var(--hs-line)}
+.field:focus-within{border-color:var(--hs-sage)}
+.inp,.count-table input,.custom-display{background:#FFFFFF;color:var(--hs-ink);border-color:var(--hs-line-strong)}
+.inp:focus{border-color:var(--hs-sage)}
+.tog::after{background:#FFFFFF}
+.opt{background:transparent;border-color:var(--hs-line-strong)}
+.opt:hover{border-color:var(--hs-sage)}
+.opt[aria-pressed="true"]{background:var(--hs-sage);color:var(--hs-cream);border-color:var(--hs-sage)}
+.stepper{background:var(--hs-panel)}
+.link{color:var(--hs-sage)}
+.card{background:#FFFFFF;border:var(--hair);background-image:none}
+.card:nth-of-type(even){background-image:none}
+.switch{background:var(--hs-panel)}
+.alert.warn{color:#8A5A3A} .alert.good{color:var(--hs-sage-deep)} .alert.info{color:var(--hs-sage)}
+
+/* ---------- Login ---------- */
+.login{background:var(--hs-cream);background-image:
+    radial-gradient(70% 55% at 50% 0%,rgba(230,216,201,.9),transparent 70%),
+    radial-gradient(60% 45% at 100% 100%,rgba(203,190,173,.55),transparent 70%),
+    linear-gradient(180deg,var(--hs-cream-hi),var(--hs-tan-2))}
+/* หน้าเข้าสู่ระบบจัดกลางแบบ galaxy: ไม่ใส่พื้นหลังทึบให้กล่องโลโก้ */
+.login-brand{background:none;background-image:none;border-right:0}
+.login-brand::after{background:none;background-image:none}
+.login-brand[data-ghost]::before{color:transparent;
+  background:linear-gradient(100deg,rgba(53,83,74,.05) 0 38%,rgba(111,153,136,.22) 50%,rgba(53,83,74,.05) 62% 100%);
+  background-size:260% 100%;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-stroke:.7px rgba(53,83,74,.13);
+  filter:drop-shadow(0 0 10px rgba(53,83,74,.08))}
+.login-brand img{background:none;border:0;box-shadow:none;
+  filter:drop-shadow(0 10px 24px rgba(53,83,74,.26)) drop-shadow(0 0 18px rgba(79,117,104,.14))}
+.login-brand .tag{color:var(--hs-sage-hi)}
+.login-brand .clock{color:var(--hs-sage)}
+.login-brand h1{background-image:linear-gradient(100deg,var(--hs-ink) 0 40%,var(--hs-sage) 47%,var(--hs-sage-hi) 50%,var(--hs-sage) 53%,var(--hs-ink) 60% 100%)}
+.staff-card{background:#FFFFFF;border:1.5px solid var(--hs-line)}
+.staff-card:hover{border-color:var(--hs-sage);box-shadow:0 10px 22px rgba(53,83,74,.1)}
+.staff-card[aria-pressed="true"]{background:#FFFFFF;border-color:var(--hs-sage);box-shadow:0 0 0 3px rgba(79,117,104,.16),0 10px 22px rgba(53,83,74,.1)}
+.pin-box{background:#FFFFFF;border:var(--hair)}
+.pin-dots i{border-color:var(--hs-sage)}
+.pin-dots i.on{background:var(--hs-sage);box-shadow:0 0 10px rgba(79,117,104,.35)}
+.keypad button{background:#FFFFFF;border:1px solid var(--hs-line);color:var(--hs-ink)}
+.keypad button:hover{background:rgba(79,117,104,.08);border-color:var(--hs-sage)}
+.demo-pins code{background:var(--hs-panel);color:var(--hs-sage-deep)}
+
+/* ---------- ปุ่มสลับภาษา ลາວ / EN ---------- */
+.lang-switch{background:rgba(255,255,255,.85);box-shadow:inset 0 0 0 1px var(--hs-line-strong)}
+.lang-switch button{color:var(--hs-sage)}
+.lang-switch button[aria-pressed="true"]{background:var(--hs-sage);color:var(--hs-cream);box-shadow:none}
+
+/* ---------- ชื่อร้าน / หัวเรื่อง ---------- */
+.topbar h1,.ticket-head h2{background:linear-gradient(180deg,var(--hs-ink),var(--hs-sage) 72%,var(--hs-sage-deep));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- Menu ---------- */
+.tabs{background:var(--hs-cream);border-bottom:0;gap:8px;padding-top:4px;padding-bottom:10px}
+.tabs button{min-height:42px;padding:0 16px;border:1px solid var(--hs-line);border-radius:999px;background:#FFFFFF;color:var(--hs-sage)}
+.tabs button[aria-selected="true"]{color:var(--hs-cream);background:var(--hs-sage);border-color:var(--hs-sage)}
+.hh{background:rgba(79,117,104,.1);color:var(--hs-sage-deep)}
+.item,.prod{background:#FFFFFF;border:var(--hair);border-radius:var(--radius-lg);box-shadow:0 8px 20px rgba(53,83,74,.07)}
+.item:hover,.prod:hover{border-color:var(--hs-sage);box-shadow:0 14px 26px rgba(53,83,74,.12)}
+.item .art{background-color:var(--tint,#DCE8E1);background-image:radial-gradient(70% 80% at 50% 0%,rgba(79,117,104,.1),transparent 70%);color:var(--tint-ink,#4F7568);border-bottom:var(--hair)}
+.item .name{font-weight:500;color:var(--hs-ink)}
+.item .price{color:var(--hs-sage)}
+.item .qty{background:var(--hs-sage);color:var(--hs-cream);box-shadow:0 4px 10px rgba(53,83,74,.25)}
+.item .sold span{background:var(--hs-panel);color:var(--hs-sage-deep);border:1px solid var(--hs-line-strong)}
+.prod[aria-pressed="true"],.prod.sel{border-color:var(--hs-sage);box-shadow:0 0 0 3px rgba(79,117,104,.16),0 14px 26px rgba(53,83,74,.14)}
+.cat-beer,.cat-cocktail,.cat-liquor,.cat-soft,.cat-food,.cat-snack,.cat-x{--tint:#DCE8E1;--tint-ink:#4F7568}
+
+.ticket{background:#FFFFFF;border-left:var(--hair)}
+.ticket-head{background:linear-gradient(160deg,#DCE8E1 0%,#FFFFFF 70%);background-image:linear-gradient(160deg,#DCE8E1 0%,#FFFFFF 70%);border-bottom:var(--hair)}
+.ticket-head .eyebrow{color:var(--hs-sage)}
+.ticket-head .btn{background:rgba(53,83,74,.06);border-color:var(--hs-line-strong);color:var(--hs-ink)}
+.ticket-head .btn:hover{background:rgba(53,83,74,.12);border-color:var(--hs-sage)}
+.ticket-foot{background:var(--hs-panel);border-top:var(--hair)}
+.sum-row.total .v{color:var(--hs-ink)}
+.state.new{color:var(--hs-sage)}
+
+/* ---------- Bill / Split ---------- */
+.bill-pick{background:#FFFFFF;border:var(--hair)}
+.bill-pick[aria-current="true"]{background:rgba(79,117,104,.08);border-color:var(--hs-sage);box-shadow:inset 3px 0 0 var(--hs-sage)}
+.bill-pick .tno{color:var(--hs-sage);font-family:var(--f-display);font-weight:500}
+.bill-totals{background:var(--hs-panel)}
+.split{background:rgba(79,117,104,.06);border-color:var(--hs-sage)}
+.pool{background:var(--hs-panel)}
+.pool-item{background:#FFFFFF}
+.pool-item:hover{background:var(--hs-tan)}
+.part{background:#FFFFFF}
+.part.active{border-color:var(--hs-sage);box-shadow:0 0 0 3px rgba(79,117,104,.16)}
+.part.paid{background:#E8EEE7;border-color:#B9CBC1}
+.part-h .pl,.method .mi,.pill-dark{background:var(--hs-panel);color:var(--hs-sage-deep);box-shadow:inset 0 0 0 1px var(--hs-line)}
+.part-items .pi{background:var(--hs-panel)}
+.receipt{box-shadow:0 20px 50px rgba(53,83,74,.18);border-color:transparent}
+
+/* ---------- Payment ---------- */
+.due .amt{font-weight:500;color:var(--hs-ink)}
+.due .amt span{color:var(--hs-sage)}
+.method{background:#FFFFFF;border:var(--hair)}
+.method:hover{border-color:var(--hs-sage)}
+.method[aria-pressed="true"]{background:rgba(79,117,104,.1);border-color:var(--hs-sage);box-shadow:0 0 0 3px rgba(79,117,104,.16)}
+.pay-panel{background:var(--hs-panel);border:var(--hair);background-image:none}
+.change{border-top:var(--hair)}
+
+/* ---------- Summary ---------- */
+.kpi{background:#FFFFFF;border:var(--hair)}
+.kpi:nth-child(odd):not(.hero){background-image:none}
+.kpi:nth-child(even):not(.hero){background-image:none}
+.kpi.hero{background:linear-gradient(160deg,#DCE8E1,#FFFFFF 70%);background-image:linear-gradient(160deg,#DCE8E1,#FFFFFF 70%);border-color:var(--hs-line-strong)}
+.kpi.hero .v{color:var(--hs-sage-deep)}
+.chart .bar{fill:var(--hs-tan-2)}
+.chart .bar.peak{fill:var(--hs-sage)}
+.chart .hit:hover+.bar,.chart .hit:focus+.bar{fill:var(--hs-sage-hi)}
+.chart .grid{stroke:var(--hs-line)}
+.tip{background:var(--hs-panel);border:var(--hair)}
+.stack{background:var(--hs-panel)}
+
+/* ---------- Bottles / Settings / Access ---------- */
+.bk-card{background:#FFFFFF;border:var(--hair)}
+.bk-card.exp{border-color:#E3B8AA;background:linear-gradient(180deg,#F6E1D8,#FFFFFF)}
+.bk-photo{background:var(--hs-tan)}
+.bk-form,.set-nav{background:#FFFFFF;border-color:var(--hs-line)}
+.photo-drop{background:rgba(79,117,104,.06)}
+.set-nav button[aria-current="true"]{background:var(--hs-sage);color:var(--hs-cream)}
+.role-card{background:#FFFFFF;border:var(--hair)}
+.role-card:nth-child(3){background-image:none}
+.role-card.owner{background:linear-gradient(160deg,#DCE8E1,#FFFFFF 70%);background-image:linear-gradient(160deg,#DCE8E1,#FFFFFF 70%);border-color:var(--hs-line-strong)}
+.og{background:var(--hs-panel)}
+.perm-cell{background:transparent}
+.perm-cell.yes{border-color:#B9CBC1} .perm-cell.pin{border-color:var(--hs-line-strong)}
+
+/* ---------- Dialogs & toasts ---------- */
+dialog{background:#FFFFFF;border:var(--hair);background-image:none}
+dialog::backdrop{background:rgba(53,83,74,.28);backdrop-filter:blur(4px)}
+.choice,.check,.tbl,.more-list button{background:#FFFFFF;border-color:var(--hs-line)}
+.choice[aria-pressed="true"],.check:has(input:checked),.tbl[aria-current="true"]{background:rgba(79,117,104,.1);border-color:var(--hs-sage)}
+.success-ic{background:#DCE8E1;box-shadow:0 0 0 6px rgba(79,117,104,.14)}
+.approve-ic{background:var(--hs-panel);color:var(--hs-sage-deep)}
+.toast{background:#FFFFFF;border:1px solid var(--hs-line-strong);box-shadow:inset 3px 0 0 var(--hs-sage),0 24px 60px rgba(53,83,74,.2)}
+.toast.err{border-color:#E3B8AA;box-shadow:inset 3px 0 0 #C2553A,0 24px 60px rgba(53,83,74,.2)}
+
+/* ---------- ตัวเลือกธนาคาร (สีประจำธนาคารคงเดิม พื้นเป็นสีอ่อน) ---------- */
+/* ທະນາຄານ: ຄົງຈຸດສີປະຈຳເຈົ້າໄວ້ · ແຕ່ຕອນເລືອກ = ຂອບຂຽວ (ບໍ່ແມ່ນສີທະນາຄານ) */
+.opt[data-bank][aria-pressed="true"]{background:#FFFFFF!important;border-color:var(--hs-sage)!important;color:var(--hs-ink);box-shadow:0 0 0 3px rgba(79,117,104,.16)}
+.float-box{background:rgba(79,117,104,.07);border-color:var(--hs-line-strong)}
+
+/* ---------- ບິນທີ່ບັນທຶກ (saved bills) ---------- */
+.sb-search{background:#FFFFFF;border-color:var(--hs-line)}
+.sb-card{background:#FFFFFF;background-image:none;border-color:var(--hs-line);box-shadow:0 8px 20px rgba(53,83,74,.07)}
+.sb-card:hover{border-color:var(--hs-sage);box-shadow:0 14px 28px rgba(53,83,74,.12)}
+.sb-no,.sb-amt,.sb-note svg{color:var(--hs-sage-deep)}
+.sb-tag.paid{color:var(--hs-sage-deep);border-color:#B9CBC1;background:#E8EEE7}
+.sb-tag.open{color:var(--hs-sage);background:rgba(79,117,104,.1);border-color:var(--hs-line-strong)}
+.sb-note{background:rgba(79,117,104,.06);border-color:var(--hs-line-strong)}
+.sb-view{background:#FFFFFF;border-color:var(--hs-line)}
+
+@media (max-width:1023px){
+  .rail{background:#FFFFFF;border-right:0;border-top:var(--hair);box-shadow:0 -8px 24px rgba(53,83,74,.08)}
+  .login-brand{border-right:0;border-bottom:var(--hair)}
+  .login-brand img{box-shadow:none;border:0;background:none}
+  .ticket-bar{background:linear-gradient(135deg,#DCE8E1,#FFFFFF);border:1px solid var(--hs-line-strong)}
+  .ticket-bar .tb-amt{background:var(--hs-sage);color:var(--hs-cream)}
+}
+
+/* ==================================================================
+   ສ່ວນປັບປຸງ v2 — ແກ້ຫົວຂໍ້ພາສາລາວຊ້ອນກັນ + ໜ້າລ໋ອກອິນ/ເມນູຕາມແບບທີ່ຕົກລົງ
+   + ໃບບິນເປັນສີຂາວແບບໃບບິນຈິງ
+   ================================================================== */
+
+/* ---------- 1) ຕົວໜັງສືລາວ: ໃຫ້ບ່ອນພໍສຳລັບໄມ້ວັນນະຍຸດຊ້ອນກັນ (ເຊັ່ນ ຂໍ້ ຕັ້ງ ຫຼື ້ໍ) ---------- */
+h1,h2,h3,.topbar h1,.login-main h2,.login-brand h1,.card-h h2,.sec-h h2,
+.ticket-head h2,.kpi .v,.due .amt,.tot .tv,.sb-amt,.bill-pick .tno,.role-card h2{
+  line-height:1.5;padding-top:.06em;overflow:visible}
+.topbar h1{padding-bottom:.08em}
+.eyebrow{line-height:1.7}
+.item .name,.lnm,.pn,.sb-no,.chip,.tb,.tabs button,.btn,.nav a,.nav button{line-height:1.6}
+/* หัวข้อที่ไล่สีด้วย background-clip ต้องมีที่ว่างบน-ล่าง ไม่งั้นไม้เอกไม้โทโดนตัด */
+.topbar h1,.ticket-head h2{display:inline-block;padding:.06em 0 .12em}
+
+/* ---------- 2) ໜ້າເຂົ້າສູ່ລະບົບ ---------- */
+.login{background-image:
+    radial-gradient(70% 55% at 50% 0%,#E6D8C9,transparent 70%),
+    linear-gradient(180deg,#F7F0E7,#CBBEAD)}
+/* ບໍ່ມີກອບຮອບຈໍ · ຈັດເນື້ອຫາໃຫ້ພໍດີໜ້າຈໍ ບໍ່ຕ້ອງເລື່ອນ */
+.login::before,.login::after{display:none!important}
+.login{justify-content:flex-start;gap:14px;padding:clamp(14px,3vh,34px) 20px 20px;overflow-y:auto}
+.login-brand::after{opacity:0!important}
+.login-brand h1{font-size:42px;letter-spacing:.3em;padding-left:.3em;font-weight:600;
+  background:none;-webkit-text-fill-color:currentColor;color:#35534A;line-height:1.45}
+/* ເສັ້ນຂີດ + ຈຸດ ກາງລະຫວ່າງຊື່ຮ້ານກັບສະໂລແກນ */
+.login-brand .tag{display:block!important;font-size:10.5px;letter-spacing:.42em;padding-left:.42em;
+  color:#6F9988;margin-top:16px;line-height:1.8}
+.login-brand .tag::before{content:"";display:block;width:168px;height:7px;margin:0 auto 12px;
+  background:
+    radial-gradient(circle at 50% 50%,#4F7568 0 3px,transparent 3.6px),
+    linear-gradient(90deg,transparent,rgba(79,117,104,.55) 26%,rgba(79,117,104,.55) 74%,transparent) 0 50%/100% 1px no-repeat}
+.logo-stage{width:clamp(80px,11vh,120px)}
+.logo-stage img{filter:drop-shadow(0 10px 24px rgba(53,83,74,.26))!important}
+.logo-halo,.logo-rays,.logo-shine{display:none}
+/* ---- ບີບແນວຕັ້ງ ໃຫ້ແປ້ນ PIN ຢູ່ໃນໜ້າຈໍພໍດີ ---- */
+.login-brand{gap:4px}
+.login-main{gap:14px}
+.pin-box{margin-top:0}
+.pin-dots{margin:10px 0 12px}
+.login-brand h1{margin:6px 0 0}
+/* ແຖວເລືອກພະນັກງານ: ຢູ່ໃນແຄັບຊູນມົນ */
+.staff-grid{padding:10px;border:1px solid rgba(53,83,74,.28);border-radius:32px;
+  background:rgba(255,255,255,.4);gap:10px}
+.staff-card{border-radius:22px;border:1px solid rgba(53,83,74,.14);background:#FFFFFF;box-shadow:none}
+.staff-card[aria-pressed="true"]{border:1px solid #4F7568;
+  background:linear-gradient(180deg,#FFFFFF,#E6D8C9);
+  box-shadow:0 0 0 3px rgba(79,117,104,.16),0 14px 28px rgba(53,83,74,.12)}
+.staff-card .avatar{background:#FFFFFF;color:#4F7568;box-shadow:inset 0 0 0 1px rgba(53,83,74,.4);
+  font-family:var(--f-display);font-weight:600}
+.staff-card[aria-pressed="true"] .avatar{background:#4F7568;color:#F7F0E7;box-shadow:none}
+/* ກ່ອງ PIN: ບໍ່ມີກາດ ວາງລອຍເທິງພື້ນຄຣີມ */
+.pin-box{background:transparent;border:0;box-shadow:none;backdrop-filter:none;padding:4px 0 0}
+#loginWho{font-size:11.5px;letter-spacing:.28em;color:#4F7568;text-transform:uppercase}
+.pin-dots i{width:12px;height:12px;border:1.5px solid #4F7568;background:transparent}
+.pin-dots i.on{background:#4F7568;box-shadow:0 0 10px rgba(79,117,104,.35);transform:none}
+.keypad{gap:10px;max-width:none;grid-template-columns:repeat(3,58px);justify-content:center}
+.keypad button{width:58px;height:58px;min-height:58px;padding:0;border-radius:50%;background:rgba(255,255,255,.62);
+  border:1px solid rgba(53,83,74,.26);color:#35534A;font-family:var(--f-display);font-size:24px;
+  box-shadow:0 2px 8px rgba(53,83,74,.06)}
+.keypad button:hover{background:#FFFFFF;border-color:#4F7568}
+.keypad button[data-k="C"],.keypad button[data-k="⌫"]{background:transparent;border-color:transparent;
+  box-shadow:none;font-family:var(--f-ui);font-size:13px;color:#6F9988}
+.login-lang{top:34px;right:48px}
+
+/* ---------- 3) ໜ້າເມນູ ---------- */
+@media (min-width:901px){
+  .rail{margin:14px 0 14px 14px;width:88px;padding:20px 10px 18px;border-radius:30px;
+        background:linear-gradient(180deg,#FFFFFF,#EFE6D8);border:1px solid rgba(53,83,74,.22);
+        box-shadow:0 14px 34px rgba(53,83,74,.12)}
+  .app{grid-template-columns:116px 1fr}
+  .ticket{margin:14px 14px 14px 0;border-radius:30px;border:1px solid rgba(53,83,74,.22);
+          box-shadow:0 14px 34px rgba(53,83,74,.12)}
+}
+.rail .logo{width:52px;filter:drop-shadow(0 0 12px rgba(79,117,104,.3))}
+.nav a,.nav .more{border-radius:16px;padding:9px 4px 8px;gap:4px;font-size:10.5px}
+.nav a[aria-current="page"],.nav .more.on{background:#4F7568;color:#F7F0E7}
+/* ບັດສິນຄ້າ */
+.item{border-radius:26px;padding:8px;border:1px solid rgba(53,83,74,.12);background:#FFFFFF;
+  box-shadow:0 8px 20px rgba(53,83,74,.07)}
+.item{min-height:238px}
+.item .art{flex:1;min-height:92px;height:auto;border-radius:18px;border:1px solid rgba(53,83,74,.12);border-bottom:1px solid rgba(53,83,74,.12);
+  background-color:transparent;background-image:radial-gradient(80% 100% at 50% 0%,#D7E5DD,#F2ECE1 70%);color:#4F7568}
+.item .name{font-family:var(--f-display);font-size:20px;font-weight:600;color:#35534A}
+.item .price{font-size:19px;font-weight:600;color:#4F7568}
+.item .qty{background:#4F7568;color:#F7F0E7;border-radius:999px;box-shadow:none;font-weight:700}
+.item:hover{border-color:#4F7568;box-shadow:0 14px 26px rgba(53,83,74,.14)}
+/* ແຜງບິນຂວາ */
+.ticket-head{padding:26px 26px 18px;background-image:linear-gradient(160deg,#DCE8E1,#FFFFFF 70%);
+  border-bottom:1px solid rgba(53,83,74,.12)}
+.ticket-head h2{font-family:var(--f-display);font-size:40px;font-weight:600;
+  background:none;-webkit-text-fill-color:currentColor;color:#35534A}
+.ticket-foot{background:#F2ECE1;border-top:1px solid rgba(53,83,74,.22)}
+.lines .ln,.lines .line{border-bottom:1px dashed rgba(53,83,74,.22)}
+
+/* ---------- 4) ໃບບິນ: ຂາວລ້ວນ + ເງົາຮອບຂອບ ---------- */
+.receipt{background:#FFFFFF;border:1px solid rgba(53,83,74,.1);border-radius:14px;
+  box-shadow:0 18px 44px rgba(53,83,74,.18),0 2px 6px rgba(53,83,74,.08);color:#2A433B}
+.receipt::after{background:radial-gradient(circle at 6px 0,transparent 6px,#FFFFFF 6.5px) 0 0/12px 10px repeat-x}
+.receipt hr{border-top:1px dashed rgba(53,83,74,.3)}
+.receipt .rs,.receipt .thanks{color:#6F9988}
+
+/* ---------- 5) ນ້ຳໜັກຕົວອັກສອນລາວ: ບໍ່ໃຫ້ໄມ້ວັນນະຍຸດຊ້ອນກັນຈົນຕິດກັນ ----------
+   ທີ່ນ້ຳໜັກ 600–700 ໄມ້ໂທ+ນິກຄະຫິດ (ເຊັ່ນ ຂໍ້ ເຊື່ອ ຫຼື ້ໍ) ຈະຕິດເປັນກ້ອນດຽວ
+   ຫຼຸດມາ 500 ແລ້ວເສັ້ນແຍກກັນຊັດ ອ່ານງ່າຍຂຶ້ນ ໂດຍຮູບແບບຍັງຄືເກົ່າ */
+h2,h3,h4,.card-h h2,.sec-h h2,.login-main h2,.dlg h2,.set-body h2,.set-body h3,
+.role-card h2,.kpi .v,.due .amt,.tot .tv,.ticket-head h2,.bill-pick .tno{font-weight:500}
+b,strong,.item .name,.sb-card b,.part-h b,.method b,th{font-weight:600}
+.topbar h1,h1{font-weight:500}
+/* ຂໍ້ຄວາມລາວນ້ອຍໆ ທີ່ເປັນຕົວໜາ ໃຫ້ບາງລົງອີກໜ້ອຍ ເພື່ອບໍ່ໃຫ້ໄມ້ຕິດກັນ */
+.chip,.pill-ok,.pill-warn,.pill-danger,.pill-bar,.pill-kitchen,.pill-dark,.tag,.badge,
+.sb-tag,.state,.st,.wy{font-weight:500}
+
+/* ---------- 6) ໜ້າເຂົ້າສູ່ລະບົບ ເທິງມືຖື/ແທັບເລັດ ---------- */
+@media (max-width:1023px){
+  .login::before{inset:12px;border-radius:30px}
+  .login::after{inset:19px;border-radius:24px}
+  .logo-stage{width:104px}
+  .login-brand h1{font-size:26px;letter-spacing:.14em;padding-left:.14em;white-space:nowrap}
+  .login-brand .tag{font-size:9px;letter-spacing:.26em;padding-left:.26em;margin-top:10px}
+  .login-brand .tag::before{width:120px;margin-bottom:8px}
+  .staff-grid{padding:7px;border-radius:24px;gap:7px}
+  .keypad{grid-template-columns:repeat(3,52px);gap:8px}
+  .keypad button{width:52px;height:52px;min-height:52px;font-size:21px}
+  .login-lang{top:max(12px,env(safe-area-inset-top));right:14px}
+}
+@media (max-width:560px){
+  .logo-stage{width:86px}
+  .login-brand h1{font-size:21px;letter-spacing:.1em;padding-left:.1em}
+  .login-brand .tag{font-size:8.5px;letter-spacing:.2em;padding-left:.2em;margin-top:8px}
+  .login-brand .tag::before{width:96px;margin-bottom:6px}
+  .keypad{grid-template-columns:repeat(3,48px);gap:7px}
+  .keypad button{width:48px;height:48px;min-height:48px;font-size:19px}
+}
+@media (max-height:740px){ .logo-stage{width:84px} }
+
+/* ==================================================================
+   ສ່ວນປັບປຸງ v3 — ສີຄຣີມໃຊ້ແຕ່ພື້ນຫຼັງ · ກ່ອງສະຖານະທຸກອັນເປັນສີຂາວ
+   ເລືອກ = ຂອບຂຽວ (ບໍ່ແມ່ນຄຣີມ) · ກຳລັງເລືອກ/active = ຂຽວເຂັ້ມທຶບ
+   ================================================================== */
+
+/* ---------- ກ່ອງ/ແຜງທີ່ເຄີຍເປັນຄຣີມ → ຂາວ ---------- */
+.ticket-foot{background:#FFFFFF;border-top:1px solid var(--hs-line)}
+.bill-totals,.pay-panel,.tip,.pool,.part,.float-box,.og,.part-items .pi,.pool-item,.set-nav,.bk-form,.bill-totals *{background-color:transparent}
+.bill-totals,.pay-panel,.tip,.pool,.part,.float-box,.og{background:#FFFFFF;border:1px solid var(--hs-line)}
+.stepper,.custom-display{background:#FFFFFF;border:1px solid var(--hs-line-strong)}
+.switch{background:#FFFFFF;border:1px solid var(--hs-line)}
+.seg{background:#FFFFFF;box-shadow:inset 0 0 0 1px var(--hs-line-strong)}
+.set-nav,.bk-form{background:#FFFFFF}
+.pool-item{background:#FFFFFF;border:1px solid var(--hs-line)}
+.part-items .pi{background:#FFFFFF}
+/* ໄອຄອນ tile → ຂຽວອ່ອນ (ບໍ່ແມ່ນຄຣີມ) */
+.method .mi,.part-h .pl{background:#EAF1EC;color:var(--hs-sage-deep);box-shadow:none}
+.pill-dark{background:#FFFFFF;color:var(--hs-sage-deep);border:1px solid var(--hs-line-strong)}
+
+/* ---------- ບັດທີ່ "ເລືອກ" → ຂາວ + ຂອບຂຽວ (ບໍ່ມີຄຣີມ) ---------- */
+.staff-card[aria-pressed="true"]{background:#FFFFFF;border:1px solid var(--hs-sage);
+  box-shadow:0 0 0 3px rgba(79,117,104,.16),0 10px 22px rgba(53,83,74,.1)}
+.bill-pick[aria-current="true"]{background:#FFFFFF;border-color:var(--hs-sage);box-shadow:inset 3px 0 0 var(--hs-sage)}
+.method[aria-pressed="true"]{background:#FFFFFF;border-color:var(--hs-sage);
+  box-shadow:0 0 0 3px rgba(79,117,104,.16),0 10px 22px rgba(53,83,74,.1)}
+.method[aria-pressed="true"] .mi{background:var(--hs-sage);color:#FFFFFF}
+.prod[aria-pressed="true"],.item[aria-pressed="true"],.item.sel{background:#FFFFFF;border:1px solid var(--hs-sage);
+  box-shadow:0 0 0 3px rgba(79,117,104,.16),0 14px 26px rgba(53,83,74,.14)}
+
+/* ---------- toggle / pill / segment ທີ່ "active" → ຂຽວເຂັ້ມທຶບ ---------- */
+.seg button[aria-pressed="true"]{background:var(--hs-sage);color:#FFFFFF;box-shadow:none}
+.choice[aria-pressed="true"],.tbl[aria-current="true"],.check:has(input:checked){
+  background:var(--hs-sage);border-color:var(--hs-sage);color:#FFFFFF}
+.choice[aria-pressed="true"] *,.tbl[aria-current="true"] *,.check:has(input:checked) span{color:#FFFFFF}
+.opt[aria-pressed="true"],.set-nav button[aria-current="true"],.seg button[aria-pressed="true"]{
+  background:var(--hs-sage);color:#FFFFFF;border-color:var(--hs-sage)}
+.quick button[aria-pressed="true"],.quick button.sel,.cur button[aria-pressed="true"]{
+  background:var(--hs-sage);color:#FFFFFF;border-color:var(--hs-sage)}
+
+/* ---------- ໃບບິນ: ຂາວ + ເງົາຮອບຂອບ (ຢ້ຳອີກຄັ້ງ ໃຫ້ແນ່ໃຈ) ---------- */
+.receipt{background:#FFFFFF;border:1px solid rgba(53,83,74,.1);border-radius:14px;
+  box-shadow:0 18px 44px rgba(53,83,74,.18),0 2px 6px rgba(53,83,74,.08)}
+.receipt::after{background:radial-gradient(circle at 6px 0,transparent 6px,#FFFFFF 6.5px) 0 0/12px 10px repeat-x}
+
+/* ---------- ໜ້າ PIN: ບີບຕາມຄວາມສູງຈໍ ໃຫ້ເຫັນແປ້ນຄົບທຸກແຖວ ---------- */
+@media (max-height:860px){
+  .login{gap:10px;padding-top:14px}
+  .logo-stage{width:clamp(70px,9vh,96px)}
+  .login-brand h1{font-size:clamp(22px,3.2vh,34px);letter-spacing:.24em;padding-left:.24em}
+  .login-brand .tag{margin-top:8px;font-size:9px}
+  .login-brand .tag::before{margin-bottom:7px;width:130px}
+  .login-main{gap:10px}
+  .staff-grid{padding:7px;gap:7px}
+  .staff-card{padding:12px 10px;min-height:0}
+  .keypad{gap:8px;grid-template-columns:repeat(3,52px)}
+  .keypad button{width:52px;height:52px;min-height:52px;font-size:22px}
+  .pin-dots{margin:8px 0 10px}
+  #loginWho{font-size:11px}
+}
+@media (max-height:720px){
+  .logo-stage{width:66px}
+  .login-brand h1{font-size:24px}
+  .keypad{grid-template-columns:repeat(3,46px);gap:7px}
+  .keypad button{width:46px;height:46px;min-height:46px;font-size:19px}
+  .staff-card{padding:9px 8px}
+  .staff-card .avatar{width:42px;height:42px;font-size:17px}
+}

@@ -1,0 +1,108 @@
+/* ============ Responsive (desktop first) ============ */
+@media (max-width:1366px){
+  :root{--aside:360px;--gutter:24px}
+  .bill-layout{grid-template-columns:250px minmax(0,1fr) 290px}
+  .bk-layout{grid-template-columns:minmax(0,1fr) 340px}
+}
+@media (max-width:1180px){
+  .bill-layout{grid-template-columns:230px minmax(0,1fr)}
+  .bill-layout .receipt-wrap{grid-column:2}
+  .pay-layout{grid-template-columns:minmax(0,1fr) 290px}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sum-grid{grid-template-columns:1fr}
+  .due .amt{font-size:56px}
+  .role-cards{grid-template-columns:1fr}
+  .set-layout{grid-template-columns:210px minmax(0,1fr)}
+  .split-body{grid-template-columns:1fr}
+}
+@media (max-width:1023px){
+  :root{--rail:0px;--gutter:20px}
+  .app{grid-template-columns:1fr}
+  .rail{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;flex-direction:row;padding:6px 8px calc(6px + env(safe-area-inset-bottom));background-image:none;box-shadow:0 -4px 20px rgba(42,29,21,.18);overflow:visible}
+  .rail .logo,.rail .who{display:none}
+  .nav{flex-direction:row;justify-content:space-around}
+  .nav a,.nav button{flex:1;min-height:56px;padding:6px 2px;font-size:12px}
+  .nav a[data-more]{display:none}
+  .nav .more{display:flex}
+  .nav a[aria-current="page"]::before{left:30%;right:30%;top:-6px;bottom:auto;width:auto;height:3px;border-radius:0 0 3px 3px}
+  .nav .badge{right:calc(50% - 26px);top:2px}
+  .nav .lk{right:calc(50% - 22px)}
+  .view{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+  .topbar h1{font-size:38px}
+  .mobile-brand{display:flex}
+  .mobile-only{display:inline-flex!important}
+  .menu-layout{grid-template-columns:1fr}
+  .menu-main{padding-bottom:90px}
+  .ticket{position:fixed;left:0;right:0;bottom:0;top:auto;height:min(86dvh,760px);border-left:0;border-radius:24px 24px 0 0;box-shadow:var(--shadow-lg);transform:translateY(105%);transition:transform .3s var(--ease);z-index:60;overflow:hidden}
+  .ticket.open{transform:none}
+  .ticket-close{display:inline-flex}
+  .sheet-scrim{position:fixed;inset:0;background:rgba(42,29,21,.45);z-index:55;opacity:0;pointer-events:none;transition:opacity .25s}
+  .sheet-scrim.on{opacity:1;pointer-events:auto}
+  .ticket-bar{display:flex;position:fixed;left:12px;right:12px;bottom:calc(80px + env(safe-area-inset-bottom));z-index:40;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:0 10px 0 20px;border:0;border-radius:18px;background:var(--chrome);color:var(--on-chrome);box-shadow:var(--shadow-lg);font-weight:500}
+  .ticket-bar .tb-amt{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:12px;background:var(--gold-400);color:var(--on-accent);font-weight:600}
+  .bill-layout{grid-template-columns:1fr}
+  .bill-layout .receipt-wrap{grid-column:auto;position:static}
+  .bills-list{position:static;flex-direction:row;overflow-x:auto;max-height:none;padding-bottom:6px;scroll-snap-type:x mandatory}
+  .bill-pick{min-width:260px;scroll-snap-align:start}
+  .pay-layout{grid-template-columns:1fr}
+  .receipt-wrap{position:static;max-width:420px}
+  .toasts{left:16px;right:16px;bottom:calc(150px + env(safe-area-inset-bottom));align-items:center}
+  .bk-layout{grid-template-columns:1fr}
+  .bk-form{position:static;height:auto;border-left:0;border-top:1px solid var(--line);margin-top:20px}
+  .set-layout{grid-template-columns:1fr}
+  .set-nav{position:static;flex-direction:row;overflow-x:auto;scrollbar-width:none}
+  .set-nav button{white-space:nowrap;flex:none}
+  .login{grid-template-columns:1fr}
+  .login-brand{padding:28px 20px;gap:6px}
+  .login-brand img{width:96px}
+  .login-brand h1{font-size:30px}
+  .login-brand .clock{font-size:32px;margin-top:6px}
+}
+@media (max-width:720px){
+  .sum-grid-2{grid-template-columns:1fr}
+  .adjust{grid-template-columns:1fr}
+  .method{padding:14px;gap:12px}
+  .method b{font-size:20px}
+  .method small{display:none}
+  .due .amt{font-size:46px}
+  .change .v{font-size:36px}
+  .menu-tools,.menu-tools .field{width:100%}
+  .form-grid{grid-template-columns:1fr}
+  .og-row{grid-template-columns:1fr 100px 40px}
+}
+@media (max-width:560px){
+  :root{--gutter:16px}
+  body{font-size:14.5px}
+  .topbar{padding-top:18px}
+  .topbar h1{font-size:34px}
+  .grid-menu{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .item .art,.item .sold{height:78px}
+  .item .name{font-size:19px}
+  .kpis{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi{padding:14px 16px}
+  .kpi .v{font-size:24px}
+  .bill-table .unit{display:none}
+  .legend{grid-template-columns:1fr}
+  .quick .opt{min-width:calc(50% - 5px);flex:1}
+  .keypad,.custom-display{max-width:none}
+  .qr{width:160px;height:160px}
+  .dlg-h,.dlg-b,.dlg-f{padding-left:18px;padding-right:18px}
+  .card-h,.card-b{padding-left:16px;padding-right:16px}
+  .bill-actions .btn{flex:1}
+  .bill-actions .btn-gold{flex-basis:100%}
+  .bk-grid{grid-template-columns:1fr}
+  .bk-card{grid-template-columns:84px 1fr}
+  .bk-photo{width:84px;height:110px}
+  .login-main{padding:24px 16px}
+  .login-main h2{font-size:30px}
+  .staff-grid{grid-template-columns:repeat(2,1fr)}
+  .bk-detail{grid-template-columns:1fr!important}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+@media print{
+  body *{visibility:hidden}
+  #print-area,#print-area *{visibility:visible}
+  #print-area{position:fixed;left:0;top:0;width:80mm}
+}

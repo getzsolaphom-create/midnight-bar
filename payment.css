@@ -1,0 +1,28 @@
+/* ============ PAYMENT ============ */
+.pay-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:28px;padding:0 var(--gutter) 40px;align-items:start}
+.due{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.due .amt{font-size:66px;font-weight:600;letter-spacing:-1.5px;line-height:1;color:var(--ink)}
+.due .amt span{color:var(--gold-ink)}
+.methods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:20px}
+.method{display:flex;align-items:center;gap:16px;text-align:left;padding:16px 20px;border-radius:var(--radius-lg);border:1.5px solid var(--line);background:var(--surface);min-height:80px;transition:border-color .18s,background .18s,box-shadow .18s}
+.method:hover{border-color:var(--gold-400)}
+.method[aria-pressed="true"]{border-color:var(--gold-500);background:var(--accent-soft);box-shadow:0 0 0 3px rgba(184,134,43,.18)}
+.method .mi{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--chrome);color:var(--gold-300)}
+.method b{display:block;font-family:var(--f-display);font-size:24px;font-weight:600;line-height:1.1}
+.method small{color:var(--ink-3);font-size:13px}
+.pay-panel{margin-top:20px;padding:22px;border-radius:var(--radius-lg);border:1px solid var(--line);background:var(--surface)}
+.pay-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.pay-row .big{font-size:30px;font-weight:600}
+.quick{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.quick .opt{min-width:110px;font-size:15px}
+.custom-display{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:320px;margin-top:14px;min-height:56px;padding:0 18px;border-radius:14px;border:1.5px solid var(--gold-500);background:#fff;font-size:24px;font-weight:600}
+.change{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line);flex-wrap:wrap}
+.change .v{font-size:46px;font-weight:600;letter-spacing:-1px;color:var(--ok);line-height:1}
+.change .v.short{color:var(--danger)}
+.change .v.empty{color:var(--line-strong)}
+.qr{width:200px;height:200px;padding:12px;background:#fff;border:1px solid var(--line);border-radius:14px;flex:none}
+.transfer{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.pay-cta{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+.pay-cta .btn-gold{flex:1;min-width:240px}
+.part-switch{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+

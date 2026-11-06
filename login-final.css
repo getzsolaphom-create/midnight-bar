@@ -1,0 +1,45 @@
+/* ==================================================================
+   LOGIN · FINAL — การ์ดเลือกพนักงาน + กล่อง PIN (ทรงเดิม โทนทอง)
+   + ชื่อร้านตัวใหญ่ทองเรืองแสงบางๆ ด้านล่าง (ทั้งตอนเลือกคนและตอนใส่ PIN)
+   ================================================================== */
+.login-brand h1{font-size:44px;letter-spacing:.2em;
+  background-image:linear-gradient(100deg,rgba(246,226,168,.74) 0 40%,rgba(255,236,176,.95) 50%,rgba(246,226,168,.74) 60% 100%)}
+
+/* ชื่อร้านตัวใหญ่ — ไล่เฉดทอง + แสงเรืองบางๆ + ประกายวิ่งผ่านช้าๆ */
+.login-brand[data-ghost]::before{
+  display:flex!important;position:fixed;left:0;right:0;bottom:0;height:.8em;z-index:-1;pointer-events:none;
+  justify-content:center;align-items:flex-start;overflow:hidden;white-space:nowrap;
+  font:400 clamp(110px,19vw,300px)/1 var(--f-display);letter-spacing:-.01em;
+  color:transparent;
+  background:linear-gradient(100deg,rgba(226,176,74,.08) 0 38%,rgba(255,232,160,.34) 50%,rgba(226,176,74,.08) 62% 100%);
+  background-size:260% 100%;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-stroke:.7px rgba(240,200,110,.5);
+  filter:drop-shadow(0 0 14px rgba(226,176,74,.22)) drop-shadow(0 0 44px rgba(226,176,74,.12));
+  animation:mbGoldSweep 9s ease-in-out infinite alternate,mbGoldBreath 5s ease-in-out infinite alternate}
+@keyframes mbGoldSweep{from{background-position:100% 0}to{background-position:0 0}}
+@keyframes mbGoldBreath{from{opacity:.72}to{opacity:1}}
+/* กล่อง/การ์ดให้ทึบพอ อ่านชัดเหนือตัวอักษรใหญ่ */
+.staff-card{background:rgba(22,17,10,.82)}
+.pin-box{background:rgba(20,15,9,.88);backdrop-filter:blur(2px)}
+@media (max-width:1023px){ .login-brand[data-ghost]::before{font-size:clamp(70px,24vw,130px)} }
+@media (max-width:560px){ .logo-stage{width:150px} .login-brand h1{font-size:26px;letter-spacing:.12em} }
+@media (prefers-reduced-motion:reduce){ .login-brand[data-ghost]::before{animation:none!important} }
+
+/* ---------- โลโก้: แสงรอบตัว + ลำแสงหมุนช้า + ประกายวิ่งผ่าน ---------- */
+.logo-stage{position:relative;width:230px;isolation:isolate;display:grid;place-items:center}
+.logo-stage img{position:relative;z-index:2;width:100%!important;height:auto;filter:drop-shadow(0 14px 24px rgba(0,0,0,.65)) drop-shadow(0 0 18px rgba(226,176,74,.35));animation:mbLogoBreath 5.5s ease-in-out infinite alternate}
+@keyframes mbLogoBreath{from{filter:drop-shadow(0 14px 24px rgba(0,0,0,.65)) drop-shadow(0 0 10px rgba(226,176,74,.22))}to{filter:drop-shadow(0 14px 24px rgba(0,0,0,.65)) drop-shadow(0 0 30px rgba(255,200,90,.55))}}
+.logo-halo{position:absolute;z-index:0;left:50%;top:50%;width:190%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(255,196,84,.34),rgba(226,150,50,.16) 45%,transparent 72%);filter:blur(10px);animation:mbHalo 6s ease-in-out infinite alternate}
+@keyframes mbHalo{from{opacity:.55;scale:.9}to{opacity:1;scale:1.08}}
+.logo-rays{position:absolute;z-index:1;left:50%;top:50%;width:260%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;pointer-events:none;opacity:.5;
+  background:repeating-conic-gradient(from 0deg,rgba(255,214,120,.16) 0 3deg,transparent 3deg 15deg);
+  -webkit-mask-image:radial-gradient(closest-side,#000 8%,transparent 70%);mask-image:radial-gradient(closest-side,#000 8%,transparent 70%);animation:mbRays 60s linear infinite}
+@keyframes mbRays{to{rotate:360deg}}
+.logo-shine{position:absolute;inset:0;z-index:3;pointer-events:none;mix-blend-mode:screen;
+  -webkit-mask-image:var(--logo-url);mask-image:var(--logo-url);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  background:linear-gradient(112deg,transparent 40%,rgba(255,244,205,.85) 50%,transparent 60%) 140% 0/260% 100% no-repeat;animation:mbShine 7s ease-in-out infinite}
+@keyframes mbShine{0%{background-position:140% 0}38%,100%{background-position:-40% 0}}
+@media (max-height:900px){ .logo-stage{width:160px} }
+@media (max-height:640px){ .logo-stage{width:62px} .logo-halo,.logo-rays{display:none} }
+@media (prefers-reduced-motion:reduce){ .logo-stage img,.logo-halo,.logo-rays,.logo-shine{animation:none!important} }

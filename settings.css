@@ -1,0 +1,40 @@
+/* ============ SETTINGS ============ */
+.set-layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px;padding:0 var(--gutter) 48px;align-items:start}
+.set-nav{position:sticky;top:20px;display:flex;flex-direction:column;gap:4px;padding:8px;border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--line)}
+.set-nav button{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border:0;border-radius:12px;background:transparent;color:var(--ink-2);font-size:14px;text-align:left}
+.set-nav button:hover{background:var(--muted);color:var(--ink)}
+.set-nav button[aria-current="true"]{background:var(--chrome);color:var(--gold-300)}
+.set-body{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.sec-h h2{font-family:var(--f-display);font-size:32px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.form-grid .full{grid-column:1/-1}
+.logo-edit{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.logo-edit img{width:84px;height:84px;object-fit:contain;border-radius:14px;background:var(--chrome);padding:8px}
+.perm-cell{min-width:84px;min-height:38px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:0 10px}
+.perm-cell.yes{color:var(--ok);background:var(--ok-soft);border-color:#C3DAC0}
+.perm-cell.pin{color:var(--gold-ink);background:var(--accent-soft);border-color:#E8D3A4}
+.perm-cell.no{color:var(--ink-3)}
+button.perm-cell:hover{border-color:var(--gold-500)}
+.saved{font-size:12.5px;color:var(--ok);display:inline-flex;align-items:center;gap:4px;opacity:0;transition:opacity .2s}
+.saved.on{opacity:1}
+.og{border:1px solid var(--line);border-radius:var(--radius);padding:12px;background:var(--surface-2);display:flex;flex-direction:column;gap:8px}
+.og-row{display:grid;grid-template-columns:1fr 130px 40px;gap:8px;align-items:center}
+.prod-name{display:flex;align-items:center;gap:10px}
+.prod-name .sw{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--tint);color:var(--tint-ink);flex:none}
+.prod-name .sw svg.i{width:18px;height:18px}
+tr.hidden-row td{opacity:.55}
+
+/* ============ ACCESS page ============ */
+.acc-wrap{padding:0 var(--gutter) 48px;display:flex;flex-direction:column;gap:20px}
+.role-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.role-card{padding:22px;border-radius:var(--radius-lg);border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;gap:10px}
+.role-card.owner{background:var(--chrome);color:var(--on-chrome);border-color:var(--chrome);background-image:radial-gradient(120% 140% at 100% 0,rgba(217,166,70,.25),transparent 55%)}
+.role-card.owner .muted{color:var(--on-chrome-2)}
+.role-card h3{font-family:var(--f-display);font-size:28px}
+.role-card ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14px}
+.role-card li{display:flex;gap:8px;align-items:flex-start}
+.role-card li svg.i{width:18px;height:18px;margin-top:2px}
+.role-card .me{align-self:flex-start}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+
