@@ -41,23 +41,11 @@ function doLogin(s){
   toast(`${T("ສະບາຍດີ","Hello")} ${s.name} · ${ROLES[s.role]}`,"i-user");
   ensureShiftOpen();
 }
-/* Opening the shift: ask for the opening change (owner's float). It is NOT part of sales. */
-async function ensureShiftOpen(){
-  if(state.shift||state.opening) return; state.opening=true;
-  let fl=null;
-  while(fl==null){
-    const r=await openDyn({cls:"w-sm",eyebrow:`${T("ເປີດກະ","Open shift")} #0001`,title:T("ໃສ່ເງິນທອນເລີ່ມຕົ້ນ","Enter the opening change"),
-      sub:T("ເງິນທຶນຂອງເຈົ້າຂອງຮ້ານ ສຳລັບທອນໃຫ້ລູກຄ້າ","The owner's capital, used to give customers change"),
-      body:`<div><label class="label" for="ofl">${T("ເງິນທອນເລີ່ມຕົ້ນ (ກີບ)","Opening change (kip)")}</label><input class="inp num" id="ofl" name="float" inputmode="numeric" autocomplete="off" required value="${fmt(Number(cfg.shift?.float??300000))}" style="font-size:30px;min-height:64px"></div>
-      <div class="alert info">${icon("i-alert","sm")}<span>${T("ເງິນນີ້ບໍ່ລວມໃນຍອດຂາຍ ແລະ ຕອນປິດກະລະບົບຈະຫັກອອກ ເພື່ອເກັບໄວ້ເປັນເງິນທອນມື້ຕໍ່ໄປ","This money is not part of sales. When the shift closes it is deducted and kept as tomorrow's change")}</span></div>`,
-      actions:[{label:T("ເປີດກະ","Open shift"),value:"ok",cls:"btn-gold btn-block",icon:"i-check"}],
-      mount(el){ const i=el.querySelector("#ofl"); setTimeout(()=>{ i.focus(); i.select(); },60); i.addEventListener("input",()=>{ const d=i.value.replace(/[^\d]/g,""); i.value=d?fmt(+d):""; }); }});
-    const raw=String(r.data.float||"").replace(/[^\d]/g,"");
-    if(r.value==="ok"&&raw!=="") fl=+raw;
-  }
-  state.shift={at:Date.now(),by:state.user?.name||"",float:fl}; state.opening=false;
-  log("shift",`${T("ເປີດກະ","Opened shift")} #0001 · ${T("ເງິນທອນເລີ່ມຕົ້ນ","opening change")} ${fmt(fl)} ₭ (${T("ບໍ່ລວມໃນຍອດຂາຍ","not part of sales")})`);
-  toast(`${T("ເປີດກະແລ້ວ · ເງິນທອນ","Shift opened · change")} ${kip(fl)}`,"i-check"); render();
+/* ເປີດກະອັດຕະໂນມັດຕອນເຂົ້າສູ່ລະບົບ — ຮ້ານບໍ່ໃຊ້ເງິນທອນເລີ່ມຕົ້ນແລ້ວ */
+function ensureShiftOpen(){
+  if(state.shift) return;
+  state.shift={at:Date.now(),by:state.user?.name||""};
+  log("shift",`${T("ເປີດກະ","Opened shift")} #0001`);
 }
 function lock(reason){
   if(!state.user) return;

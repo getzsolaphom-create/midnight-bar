@@ -12,7 +12,7 @@ const SYNC_URL_DEFAULT = "";
 const SYNC_READ_KEY    = "mb-read";
 
 /* ຄ່າທີ່ຊິງຄ໌ — ບໍ່ລວມ printer (ຕິດກັບເຄື່ອງ) ແລະ sheets (ລິງກ໌+token ຂອງເຈົ້າຂອງ) */
-const SYNC_KEYS = ["v","menuV","shop","perms","staff","cats","products","hh","cur","pay","zones","tables","security","shift"];
+const SYNC_KEYS = ["v","menuV","shop","perms","staff","cats","products","hh","cur","pay","zones","tables","security"];
 
 const syncUrl = () => (cfg.sheets && cfg.sheets.url) || SYNC_URL_DEFAULT;
 const syncPick = () => { const o={}; SYNC_KEYS.forEach(k=>{ if(cfg[k]!==undefined) o[k]=cfg[k]; }); return o; };
@@ -46,7 +46,6 @@ function applyRemoteConfig(rc, at){
   SYNC_KEYS.forEach(k=>{ if(rc[k]!==undefined) cfg[k]=rc[k]; });
   cfg.cfgAt = at || Date.now();
   /* ຄ່າທີ່ອາດຂາດ ຖ້າຊີດເກັບມາຈາກລຸ້ນເກົ່າ */
-  cfg.shift   = cfg.shift   || {float:300000};
   cfg.sheets  = cfg.sheets  || {url:"",token:""};
   cfg.printer = cfg.printer || {};
   cfg.printer.mode = cfg.printer.mode || "save";

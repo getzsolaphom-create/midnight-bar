@@ -150,7 +150,6 @@ function defaults(){
             {id:"t13",name:"B1",zone:"z3",seats:2,on:true},{id:"t14",name:"B2",zone:"z3",seats:2,on:true}],
     printer:{paper:80,copies:1,auto:false,receipt:("EPSON TM-T82 · "+T("ແຄັດເຊຍ","Cashier")),bar:("Xprinter XP-80 · "+T("ບາ","Bar")),kitchen:("Xprinter XP-80 · "+T("ເຮືອນຄົວ","Kitchen"))},
     security:{diffThreshold:10000,lockMin:5,pinLen:4,maxTries:3},
-    shift:{float:300000},
   };
 }
 const SEED_AUDIT=()=>[];
@@ -168,7 +167,7 @@ function save(){
   saveT=setTimeout(()=>{ try{ localStorage.setItem(KEY,JSON.stringify({cfg,bottles,audit})); }catch(e){ toast(T("ພື້ນທີ່ເກັບໃນບຣາວເຊີເຕັມ — ຂໍ້ມູນບາງສ່ວນອາດບໍ່ຖືກບັນທຶກ","Browser storage is full — some data may not be saved"),"i-alert",true); } if(typeof afterSave==="function"){ try{ afterSave(); }catch(e){} } },200);
   const f=$("#savedFlag"); if(f){ f.classList.add("on"); clearTimeout(f._t); f._t=setTimeout(()=>f.classList.remove("on"),1600); }
 }
-load(); cfg.shift=cfg.shift||{float:300000}; cfg.sheets=cfg.sheets||{url:"",token:""}; cfg.printer.mode=cfg.printer.mode||"save"; relang([cfg,bottles,audit],I18N.lang);
+load(); cfg.sheets=cfg.sheets||{url:"",token:""}; cfg.printer.mode=cfg.printer.mode||"save"; relang([cfg,bottles,audit],I18N.lang);
 
 /* สีตามทะนาคาร — BCEL แดง · JDB น้ำเงิน · LDB เขียวอมฟ้า */
 const bankColor = name => { const n=String(name||""); return /bcel/i.test(n)?"#E5383B":/jdb/i.test(n)?"#1FA2B8":/ldb|trust/i.test(n)?"#3B82D6":null; };
@@ -188,8 +187,8 @@ function mkBill(no,table,guests,waiter,minsAgo,lines,status="open"){ return {no,
 const state={
   user:null, route:null, cat:"all", q:"", tries:0, lockUntil:0, lastAct:Date.now(), grants:{},
   bills:[],
-  current:null, billSeq:1, payPart:null, orderSeq:1, closeInfo:null, shift:null, opening:false,
-  pay:{method:"cash",cur:"LAK",recv:null,custom:"",bank:null,ok:false},
+  current:null, billSeq:1, payPart:null, orderSeq:1, closeInfo:null, shift:null,
+  pay:{method:"cash",cur:"LAK",bank:null,ok:false},
   sales:[], counted:{LAK:null,THB:null,USD:null}, shiftClosed:false,
   setTab:"shop", auditFilter:"all", pf:"all", bkFilter:"all", bkQ:"",
   sbQ:"", sbRange:"today", sbOnly:"all",

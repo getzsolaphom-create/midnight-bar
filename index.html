@@ -236,16 +236,6 @@
             <div class="opt-group" id="curOpts"></div>
             <p class="muted small" style="margin:8px 0 0" id="rateNote"></p>
             <div class="pay-row" style="margin-top:18px"><span class="muted" id="dueInLabel">ຍອດເປັນກີບ</span><span class="big num" id="dueIn">0</span></div>
-            <p class="label" style="margin-top:18px">ຮັບເງິນມາ</p>
-            <div class="quick" id="quickAmts"></div>
-            <div id="keypadWrap" hidden>
-              <div class="custom-display"><span class="num" id="customVal">0</span><span class="muted" id="customCur">₭</span></div>
-              <div class="keypad" id="keypad" style="margin-top:10px"></div>
-            </div>
-            <div class="change">
-              <span><span class="muted">ເງິນທອນ (ກີບ)</span><br><small class="muted" id="changeNote"></small></span>
-              <span class="v num" id="changeAmt" aria-live="polite">—</span>
-            </div>
           </div>
           <div class="pay-panel" id="transferPanel" hidden>
             <p class="label">ທະນາຄານ</p>
@@ -294,7 +284,6 @@
       <div class="topbar">
         <div><div class="eyebrow" id="sumEyebrow">ກະ #0001</div><h1 id="h-sum">ສະຫຼຸບຍອດ</h1></div>
         <div class="meta">
-          <span class="chip" id="floatChip"></span>
           <button class="btn" id="sendSheetsBtn"><svg class="i"><use href="#i-send"/></svg>ສົ່ງເຂົ້າ Google Sheets</button>
           <button class="btn" id="printReport"><svg class="i"><use href="#i-print"/></svg>ພິມລາຍງານ</button>
         </div>
@@ -318,7 +307,6 @@
             <div class="card-b">
               <div class="scroll-x"><table class="count-table"><thead><tr><th>ສະກຸນເງິນ</th><th>ທີ່ຄວນມີ</th><th>ນັບໄດ້</th><th>ສ່ວນຕ່າງ</th></tr></thead><tbody id="countRows"></tbody></table></div>
               <div id="countAlert" style="margin-top:14px"></div>
-              <div class="float-box" id="floatBox"></div><p class="muted small" style="margin:12px 0 0" id="floatNote"></p>
             </div>
           </div>
         </div>

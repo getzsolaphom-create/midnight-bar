@@ -1,6 +1,5 @@
 "use strict";
 /* ===================== SUMMARY ===================== */
-const FLOAT=()=>Number(state.shift?.float??cfg.shift?.float??300000);
 const cntOf=(c,s)=>state.counted[c]??s.expected[c];
 const BASE={bills:0,net:0,disc:0,
   hours:["17:00","18:00","19:00","20:00","21:00","22:00","23:00","00:00","01:00"].map(h=>[h,0]),
@@ -14,17 +13,18 @@ function summary(){
     const hr=String(x.at.getHours()).padStart(2,"0")+":00"; let slot=s.hours.find(h=>h[0]===hr); if(!slot){ slot=[hr,0]; s.hours.push(slot); const o=h=>(+h[0].slice(0,2)+12)%24; s.hours.sort((a,b)=>o(a)-o(b)); } slot[1]+=x.total/1000;
     s.svc+=x.svc||0;
     x.items.forEach(i=>{ const k=i.pid||("n:"+i.name); const c=s.items[k]||(s.items[k]=[0,0]); c[0]+=i.qty; c[1]+=i.amt||0; });
-    if(x.method.startsWith("cash")){ s.cashIn[x.cur]+=x.recv; s.cashIn.LAK-=x.change; }
+    if(x.method.startsWith("cash")) s.cashIn[x.cur]+=x.recv;
   });
   s.gross=Object.values(s.items).reduce((a,c)=>a+c[1],0);
   s.top={}; Object.entries(s.items).forEach(([k,c])=>{ const nm=k.startsWith("n:")?k.slice(2):(prod(k)?.name||k); s.top[nm]=(s.top[nm]||0)+c[0]; });
   s.voids=audit.filter(a=>a.type==="void").length;
   s.cash=s.methods["cash-LAK"]+s.methods["cash-THB"]+s.methods["cash-USD"];
-  s.expected={LAK:FLOAT()+s.cashIn.LAK,THB:s.cashIn.THB,USD:s.cashIn.USD};
+  s.expected={LAK:s.cashIn.LAK,THB:s.cashIn.THB,USD:s.cashIn.USD};
   return s;
 }
 function renderSummary(){
   const s=summary();
+  $("#sumEyebrow").textContent=state.shift?`${T("ກະ","Shift")} #0001 · ${T("ເປີດ","opened")} ${hhmm(state.shift.at)} ${T("ໂດຍ","by")} ${state.shift.by}`:`${T("ກະ","Shift")} #0001`;
   $("#kpis").innerHTML=`
     <div class="kpi hero"><div class="k">${T("ຍອດຂາຍສຸດທິ","Net sales")}</div><div class="v num">${fmt(s.net)} ₭</div><div class="d">${T("ຫຼັງຫັກສ່ວນຫຼຸດ","after discounts of")} ${kip(s.disc)}</div></div>
     <div class="kpi"><div class="k">${T("ຈຳນວນບິນ","Number of bills")}</div><div class="v num">${s.bills}</div><div class="d">${T("ບິນທີ່ຊຳລະແລ້ວ","paid bills")}</div></div>
@@ -70,7 +70,6 @@ function renderSummary(){
   const ccs=can("closeShift");
   $("#closeShiftBtn").disabled=state.shiftClosed||ccs==="no";
   $("#closeShiftBtn").innerHTML=`${icon(ccs==="pin"?"i-key":"i-lock")}${state.shiftClosed?T("ປິດກະແລ້ວ","Shift closed"):T("ປິດກະ","Close shift")}${ccs==="pin"&&!state.shiftClosed?(" · "+T("ຕ້ອງໃຊ້ PIN ເຈົ້າຂອງ","owner PIN required")):""}`;
-  renderFloat(s);
 }
 $("#voidNote").addEventListener("click",e=>{ if(e.target.closest("[data-goaudit]")){ e.preventDefault(); state.setTab="audit"; navTo("settings"); } });
 $("#hourTableBtn").onclick=e=>{const t=$("#hourTable"); t.hidden=!t.hidden; $("#hourChart").hidden=!t.hidden; e.target.textContent=t.hidden?T("ເບິ່ງເປັນຕາຕະລາງ","View as table"):T("ເບິ່ງເປັນກຣາຟ","View as chart"); e.target.setAttribute("aria-expanded",!t.hidden);};
@@ -88,7 +87,7 @@ $("#closeShiftBtn").onclick=async()=>{
   } else if(!(await confirmBox(T("ປິດກະ #0001?","Close shift #0001?"),T("ຫຼັງປິດກະຈະແກ້ໄຂຍອດນັບເງິນສົດບໍ່ໄດ້","After closing, the cash count can't be edited"),T("ປິດກະ","Close shift")))) return;
   { const s0=summary(); ["LAK","THB","USD"].forEach(c=>{ if(state.counted[c]==null) state.counted[c]=s0.expected[c]; }); }
   state.shiftClosed=true; state.closeInfo={at:Date.now(),by:state.user.name,reason};
-  log("shift",`${T("ປິດກະ","Close shift")} #0001 · ${T("ຫັກເງິນທຶນ","float set aside")} ${fmt(FLOAT())} ₭${state.offNote.length?` · ${state.offNote.join(" · ")}`:(" · "+T("ຍອດຕົງ","cash matches"))}${reason?` · ${T("ເຫດຜົນ:","reason:")} ${reason}`:""}`,g.by);
+  log("shift",`${T("ປິດກະ","Close shift")} #0001${state.offNote.length?` · ${state.offNote.join(" · ")}`:(" · "+T("ຍອດຕົງ","cash matches"))}${reason?` · ${T("ເຫດຜົນ:","reason:")} ${reason}`:""}`,g.by);
   pushDayToSheets();
   renderSummary(); toast(T("ປິດກະ #0001 ຮຽບຮ້ອຍ","Shift #0001 closed"),"i-lock");
   await showReport();

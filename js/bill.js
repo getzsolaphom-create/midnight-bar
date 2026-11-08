@@ -60,7 +60,7 @@ $("#orderSlips").addEventListener("click",e=>{ const x=e.target.closest("[data-s
 
 /* ===================== SHIFT REPORT ===================== */
 function shiftReportHTML(){
-  const s=summary(), fl=FLOAT(), ci=state.closeInfo, now=Date.now(), ex=s.expected, c={LAK:cntOf("LAK",s),THB:cntOf("THB",s),USD:cntOf("USD",s)};
+  const s=summary(), ci=state.closeInfo, now=Date.now(), ex=s.expected, c={LAK:cntOf("LAK",s),THB:cntOf("THB",s),USD:cntOf("USD",s)};
   const R=(a,b,cls="")=>`<div class="rr ${cls}"><span>${a}</span><span>${b}</span></div>`;
   const other=s.net-s.gross+s.disc;
   const transfers=Object.entries(s.methods).filter(([k])=>!k.startsWith("cash")).sort((a,b)=>b[1]-a[1]);
@@ -74,7 +74,7 @@ function shiftReportHTML(){
   ${R(`${T("ກະ","Shift")} #0001`,dmy(now))}
   ${R(T("ເປີດກະ","Opened"),state.shift?`${hhmm(state.shift.at)} · ${esc(state.shift.by)}`:"—")}
   ${R(T("ປິດກະ","Closed"),ci?`${hhmm(ci.at)} · ${esc(ci.by)}`:"—")}<hr>
-  <div class="grp">${T("ຍອດຂາຍ (ບໍ່ລວມເງິນທອນ)","Sales (excl. float)")}</div>
+  <div class="grp">${T("ຍອດຂາຍ","Sales")}</div>
   ${R(T("ຈຳນວນບິນ","Bills"),s.bills)}
   ${R(T("ຍອດຂາຍກ່ອນຫຼຸດ","Gross sales"),fmt(s.gross))}
   ${R(T("ສ່ວນຫຼຸດ","Discounts"),"-"+fmt(s.disc))}
@@ -88,13 +88,11 @@ function shiftReportHTML(){
   ${transfers.map(([k,v])=>R(`${T("ໂອນ","Transfer")} · ${esc(k)}`,fmt(v))).join("")}
   ${R(T("ລວມໂອນ","Total transfer"),fmt(tSum),"sub")}<hr>
   <div class="grp">${T("ເງິນສົດກີບໃນລິ້ນຊັກ","Kip cash in drawer")}</div>
-  ${R(T("ເງິນເປີດກະ (ບໍ່ລວມຍອດຂາຍ)","Opening float (not sales)"),fmt(fl))}
-  ${R(T("+ ຂາຍເງິນສົດກີບ","+ Kip cash sales"),fmt(s.cashIn.LAK))}
+  ${R(T("ຂາຍເງິນສົດກີບ","Kip cash sales"),fmt(s.cashIn.LAK))}
   ${R(T("ຄວນມີ","Expected"),fmt(ex.LAK))}
   ${R(T("ນັບໄດ້","Counted"),fmt(c.LAK))}
   ${R(T("ສ່ວນຕ່າງ","Difference"),(diff>0?"+":"")+fmt(diff))}
-  ${R(T("ຫັກເງິນທອນ (ເກັບໄວ້ໃຊ້ມື້ຕໍ່ໄປ)","Less float (kept for tomorrow)"),"-"+fmt(fl))}
-  ${R(T("ເງິນສົດຂາຍກີບທີ່ນຳສົ່ງ","Kip cash to hand over"),fmt(c.LAK-fl)+" ₭","big")}
+  ${R(T("ເງິນສົດຂາຍກີບທີ່ນຳສົ່ງ","Kip cash to hand over"),fmt(c.LAK)+" ₭","big")}
   ${R(`${T("ບາດ ຄວນມີ/ນັບໄດ້","Baht expected/counted")}`,`฿${fmt(ex.THB)} / ฿${fmt(c.THB)}`)}
   ${R(`${T("ໂດລາ ຄວນມີ/ນັບໄດ້","Dollar expected/counted")}`,`$${fmt(ex.USD)} / $${fmt(c.USD)}`)}
   ${ci&&ci.reason?`<div class="rs l">${T("ເຫດຜົນ:","Reason:")} ${esc(ci.reason)}</div>`:""}<hr>
@@ -110,15 +108,6 @@ async function showReport(){
     body:`<div class="receipt-wrap" style="position:static"><div class="receipt report ${+cfg.printer.paper===58?"p58":""}" id="reportPreview">${shiftReportHTML()}</div></div>`,
     actions:[{label:T("ປິດ","Close"),value:"cancel"},{label:T("ພິມລາຍງານ","Print report"),value:"print",cls:"btn-gold",icon:"i-print",id:"reportPrintBtn"}]});
   if(r.value==="print"){ printHTML(shiftReportHTML(),"report"); log("shift",`${T("ພິມໃບສະຫຼຸບປິດກະ","Printed shift summary")} #0001`); toast(`${T("ພິມໃບສະຫຼຸບປິດກະ","Shift summary printed")} → ${cfg.printer.receipt}`,"i-print"); }
-}
-function renderFloat(s){
-  const fl=FLOAT();
-  $("#sumEyebrow").textContent=state.shift?`${T("ກະ","Shift")} #0001 · ${T("ເປີດ","opened")} ${hhmm(state.shift.at)} ${T("ໂດຍ","by")} ${state.shift.by}`:`${T("ກະ","Shift")} #0001 · ${T("ຍັງບໍ່ໄດ້ເປີດກະ","not opened yet")}`;
-  $("#floatChip").innerHTML=`${icon("i-coins","xs")}${T("ເງິນທຶນເປີດກະ","Opening float")} ${kip(fl)}`;
-  $("#floatBox").innerHTML=`<div class="float-row"><span>${T("ເງິນທຶນເປີດກະ (ເງິນທອນ)","Opening float (change)")}<small>${T("ເງິນທຶນຂອງເຈົ້າຂອງຮ້ານ · ບໍ່ລວມໃນຍອດຂາຍ","Owner's capital · not part of sales")}</small></span><b class="num">${kip(fl)}</b></div>
-    <div class="float-row"><span>${T("ຫັກເງິນທຶນຕອນປິດກະ","Less float at closing")}<small>${T("ແຍກໄວ້ເປັນເງິນທອນມື້ຕໍ່ໄປ","kept aside as tomorrow's change")}</small></span><b class="num">−${kip(fl)}</b></div>
-    <div class="float-row total"><span>${T("ເງິນສົດຂາຍ (ກີບ) ທີ່ຕ້ອງນຳສົ່ງ","Kip cash sales to hand over")}</span><b class="num">${kip(cntOf("LAK",s)-fl)}</b></div>`;
-  $("#floatNote").textContent=`${T("ກີບທີ່ຄວນມີ","Expected kip")} = ${T("ເງິນທຶນເປີດກະ","opening float")} ${fmt(fl)} + ${T("ຂາຍເງິນສົດກີບ","kip cash sales")}`;
 }
 function receiptHTML(b,{part=null,payLines=""}={}){
   const t=totals(b), tb=tableOf(b.table); let lines=liveLines(b), partNote="";
