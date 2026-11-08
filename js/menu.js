@@ -87,6 +87,7 @@ async function addLine(p,qty,mods,unit,orig){
   if(!(await ensureEditable(b))) return;
   const ex=b.lines.find(l=>!l.sent&&!l.void&&l.pid===p.id&&l.unit===unit&&l.mods.join()===mods.join());
   if(ex) ex.qty+=qty; else b.lines.push({id:lineSeq++,pid:p.id,cat:p.cat,name:p.name,qty,unit,orig,mods,sent:false,void:false});
+  saveSession();
   renderTicket(); renderGrid(); renderNav();
   toast(`${T("ເພີ່ມ","Added")} ${qty} × ${p.name}`);
 }
@@ -141,7 +142,7 @@ $("#tkLines").addEventListener("click",async e=>{
   if(inc){ const l=b.lines.find(x=>x.id==inc.dataset.inc); if(l.sent){ addLine(prod(l.pid)||{id:l.pid,cat:l.cat,name:l.name},1,l.mods,l.unit,l.orig); return;} if(!(await ensureEditable(b)))return; l.qty++; }
   else if(dec){ const l=b.lines.find(x=>x.id==dec.dataset.dec); if(l.sent)return; l.qty--; if(l.qty<=0) b.lines=b.lines.filter(x=>x!==l); }
   else return;
-  renderTicket(); renderGrid(); renderNav();
+  saveSession(); renderTicket(); renderGrid(); renderNav();
 });
 $("#sendBtn").onclick=async()=>{
   const b=bill(); const pend=b.lines.filter(l=>!l.sent&&!l.void); let n=0;
@@ -170,7 +171,7 @@ $("#pickTableBtn").onclick=()=>{
     if(!value||value==="cancel") return;
     let b=state.bills.find(x=>x.table===value&&x.status!=="paid");
     if(!b){ b=mkBill(String(state.billSeq++).padStart(4,"0"),value,2,state.user.name,0,[]); state.bills.push(b); toast(`${T("ເປີດບິນໃໝ່","Opened new bill")} #${b.no} · ${T("ໂຕະ","Table")} ${tableOf(value).name}`,"i-receipt"); }
-    state.current=b.no; state.payPart=null; resetPay(); render();
+    state.current=b.no; state.payPart=null; resetPay(); saveSession(); render();
   });
 };
 

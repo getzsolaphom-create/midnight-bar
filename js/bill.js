@@ -220,14 +220,14 @@ $("#splitArea").addEventListener("click",e=>{
   const b=bill(), sp=b.split; if(!sp) return; const t=e.target;
   const pay=t.closest("[data-paypart]"); if(pay){ e.stopPropagation(); state.payPart=+pay.dataset.paypart; resetPay(); navTo("pay"); return; }
   const m=t.closest("[data-smode]"); if(m){ sp.mode=m.dataset.smode; sp.parts.forEach(p=>p.items={}); log("split",`${T("ບິນ","Bill")} #${b.no} ${T("ແຍກແບບ","split mode: ")}${sp.mode==="equal"?T("ຫານເທົ່າກັນ","Equally"):T("ເລືອກລາຍການ","by item")}`); renderBill(); return; }
-  const sn=t.closest("[data-sn]"); if(sn){ sp.n=Math.min(10,Math.max(2,sp.n+ +sn.dataset.sn)); sp.parts=makeParts(sp.n,sp.parts.slice(0,sp.n)); sp.active=Math.min(sp.active,sp.n-1); renderBill(); return; }
-  const un=t.closest("[data-unassign]"); if(un){ e.stopPropagation(); const [i,id]=un.dataset.unassign.split(":"); const p=sp.parts[i]; p.items[id]--; if(p.items[id]<=0) delete p.items[id]; renderBill(); return; }
-  const as=t.closest("[data-assign]"); if(as){ const p=sp.parts[sp.active]; if(!p||p.paid){ toast(T("ເລືອກບິນຍ່ອຍທີ່ຍັງບໍ່ຊຳລະກ່ອນ","Choose an unpaid sub-bill first"),"i-alert",true); return; } p.items[as.dataset.assign]=(p.items[as.dataset.assign]||0)+1; renderBill(); return; }
-  if(t.closest("[data-assign-all]")){ const p=sp.parts[sp.active]; Object.entries(unassigned(b)).forEach(([id,q])=>p.items[id]=(p.items[id]||0)+q); renderBill(); return; }
+  const sn=t.closest("[data-sn]"); if(sn){ sp.n=Math.min(10,Math.max(2,sp.n+ +sn.dataset.sn)); sp.parts=makeParts(sp.n,sp.parts.slice(0,sp.n)); sp.active=Math.min(sp.active,sp.n-1); saveSession(); renderBill(); return; }
+  const un=t.closest("[data-unassign]"); if(un){ e.stopPropagation(); const [i,id]=un.dataset.unassign.split(":"); const p=sp.parts[i]; p.items[id]--; if(p.items[id]<=0) delete p.items[id]; saveSession(); renderBill(); return; }
+  const as=t.closest("[data-assign]"); if(as){ const p=sp.parts[sp.active]; if(!p||p.paid){ toast(T("ເລືອກບິນຍ່ອຍທີ່ຍັງບໍ່ຊຳລະກ່ອນ","Choose an unpaid sub-bill first"),"i-alert",true); return; } p.items[as.dataset.assign]=(p.items[as.dataset.assign]||0)+1; saveSession(); renderBill(); return; }
+  if(t.closest("[data-assign-all]")){ const p=sp.parts[sp.active]; Object.entries(unassigned(b)).forEach(([id,q])=>p.items[id]=(p.items[id]||0)+q); saveSession(); renderBill(); return; }
   const ap=t.closest("[data-act-part]"); if(ap){ sp.active=+ap.dataset.actPart; renderBill(); }
 });
 $("#splitArea").addEventListener("keydown",e=>{ if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-act-part]")){ e.preventDefault(); e.target.click(); } });
-$("#billsList").addEventListener("click",e=>{const x=e.target.closest("[data-bill]"); if(!x)return; state.current=x.dataset.bill; state.payPart=null; resetPay(); render();});
+$("#billsList").addEventListener("click",e=>{const x=e.target.closest("[data-bill]"); if(!x)return; state.current=x.dataset.bill; state.payPart=null; resetPay(); saveSession(); render();});
 $("#discOpts").addEventListener("click",async e=>{
   const x=e.target.closest("[data-disc]"); if(!x)return; const b=bill();
   if(x.dataset.disc==="none"){ if(b.disc) log("discount",`${T("ຍົກເລີກສ່ວນຫຼຸດ · ບິນ","Removed discount · bill")} #${b.no}`); b.disc=null; resetPay(); render(); return; }

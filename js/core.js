@@ -164,7 +164,7 @@ let saveT;
 let afterSave=null;   /* js/sync.js ຕິດຟັງຊັນໄວ້ບ່ອນນີ້ — ສົ່ງການຕັ້ງຄ່າຂຶ້ນຊີດເມື່ອເຈົ້າຂອງແກ້ */
 function save(){
   clearTimeout(saveT);
-  saveT=setTimeout(()=>{ try{ localStorage.setItem(KEY,JSON.stringify({cfg,bottles,audit})); }catch(e){ toast(T("ພື້ນທີ່ເກັບໃນບຣາວເຊີເຕັມ — ຂໍ້ມູນບາງສ່ວນອາດບໍ່ຖືກບັນທຶກ","Browser storage is full — some data may not be saved"),"i-alert",true); } if(typeof afterSave==="function"){ try{ afterSave(); }catch(e){} } },200);
+  saveT=setTimeout(()=>{ try{ localStorage.setItem(KEY,JSON.stringify({cfg,bottles,audit})); }catch(e){ toast(T("ພື້ນທີ່ເກັບໃນບຣາວເຊີເຕັມ — ຂໍ້ມູນບາງສ່ວນອາດບໍ່ຖືກບັນທຶກ","Browser storage is full — some data may not be saved"),"i-alert",true); } if(typeof saveSession==="function") saveSession(); if(typeof afterSave==="function"){ try{ afterSave(); }catch(e){} } },200);
   const f=$("#savedFlag"); if(f){ f.classList.add("on"); clearTimeout(f._t); f._t=setTimeout(()=>f.classList.remove("on"),1600); }
 }
 load(); cfg.sheets=cfg.sheets||{url:"",token:""}; cfg.printer.mode=cfg.printer.mode||"save"; relang([cfg,bottles,audit],I18N.lang);
@@ -180,7 +180,7 @@ const tableOf = id => cfg.tables.find(t=>t.id===id) || {id,name:id,zone:"",seats
 const zoneName = id => cfg.zones.find(z=>z.id===id)?.name || "";
 const staffBy = id => cfg.staff.find(s=>s.id===id);
 
-/* ===================== Session state (resets on reload) ===================== */
+/* ===================== Session state ===================== */
 const now=Date.now(); let lineSeq=1;
 function L(pid,qty,mods=[]){ const p=prod(pid)||{id:pid,cat:"x",name:pid,price:0}; return {id:lineSeq++,pid,cat:p.cat,name:p.name,qty,unit:p.price,orig:p.price,mods,sent:true,void:false}; }
 function mkBill(no,table,guests,waiter,minsAgo,lines,status="open"){ return {no,table,guests,waiter,opened:Date.now()-minsAgo*60000,lines,disc:null,svc:cfg.shop.svcDefault,status,split:null}; }
@@ -196,6 +196,37 @@ const state={
 };
 const bill = () => state.bills.find(b=>b.no===state.current);
 const liveLines = b => b.lines.filter(l=>!l.void);
+
+/* ---------- ບິນທີ່ເປີດຄ້າງ: ເກັບໄວ້ໃນເຄື່ອງ ເປີດແອັບໃໝ່ກໍຍັງຢູ່ ----------
+   ເກັບສະເພາະງານຂອງກະນີ້ · ບໍ່ເກັບຜູ້ໃຊ້ທີ່ລັອກອິນ (ຕ້ອງໃສ່ PIN ໃໝ່ສະເໝີ)
+   ເກົ່າເກີນ 18 ຊົ່ວໂມງ = ຖືວ່າເປັນກະເກົ່າ ບໍ່ເອົາຄືນ */
+const SESS_KEY="midnight-bar-pos-session-v1";
+const SESS_MAXAGE=18*3600*1000;
+const SESS_FIELDS=["bills","current","billSeq","orderSeq","sales","shift","shiftClosed","counted","closeInfo"];
+let sessT;
+function writeSession(){
+  try{
+    const o={at:Date.now(),lineSeq};
+    SESS_FIELDS.forEach(k=>o[k]=state[k]);
+    localStorage.setItem(SESS_KEY,JSON.stringify(o));
+  }catch(e){}
+}
+function saveSession(){ clearTimeout(sessT); sessT=setTimeout(writeSession,300); }
+function loadSession(){
+  try{
+    const raw=localStorage.getItem(SESS_KEY); if(!raw) return;
+    const d=JSON.parse(raw);
+    if(!d||!d.at||Date.now()-d.at>SESS_MAXAGE){ localStorage.removeItem(SESS_KEY); return; }
+    SESS_FIELDS.forEach(k=>{ if(d[k]!==undefined) state[k]=d[k]; });
+    (state.sales||[]).forEach(x=>{ x.at=new Date(x.at); });   // Date ກາຍເປັນ string ຕອນເກັບ
+    if(d.lineSeq) lineSeq=d.lineSeq;
+    if(!state.bills.some(b=>b.no===state.current)) state.current=(state.bills[0]||{}).no||null;
+  }catch(e){ try{ localStorage.removeItem(SESS_KEY); }catch(e2){} }
+}
+loadSession();
+/* ເຄື່ອງເດັ້ງອອກ / ສະຫຼັບແອັບ: ຂຽນທັນທີ ບໍ່ລໍ debounce */
+addEventListener("pagehide",writeSession);
+addEventListener("visibilitychange",()=>{ if(document.hidden) writeSession(); });
 
 /* ===================== Permissions ===================== */
 function permOf(role,k){ if(role==="owner") return "yes"; const p=PERMS.find(x=>x.k===k); if(p?.ownerOnly) return "no"; return cfg.perms[k]?.[role]||"no"; }
