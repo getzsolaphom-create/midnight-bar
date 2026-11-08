@@ -1,0 +1,112 @@
+"use strict";
+/* ===================== ຊິງຄ໌ການຕັ້ງຄ່າຂ້າມເຄື່ອງ (Settings sync) =====================
+   ແນວຄິດ: ເຄື່ອງຂອງເຈົ້າຂອງຮ້ານ = ຕົ້ນສະບັບ (ສົ່ງຂຶ້ນ Google Sheet)
+           ເຄື່ອງອື່ນ = ອ່ານຢ່າງດຽວ (ດຶງລົງມາໃຊ້ຕອນເປີດແອັບ / ຕອນຢູ່ໜ້າເຂົ້າສູ່ລະບົບ)
+   ບໍ່ມີອິນເຕີເນັດ = ໃຊ້ຄ່າທີ່ດຶງໄວ້ຄັ້ງລ່າສຸດໃນເຄື່ອງ ລະບົບຍັງຂາຍໄດ້ຕາມປົກກະຕິ
+   ບໍ່ດຶງຄ່າໃໝ່ທັບ ຕອນມີຄົນກຳລັງຂາຍຢູ່ (ກັນເມນູປ່ຽນກາງຄັນ ແລ້ວບິນທີ່ເປີດຄ້າງຢູ່ເພ້ຍນ) */
+
+/* ລິງກ໌ Apps Script ບໍ່ໄດ້ຝັງໄວ້ໃນໂຄດ (ໂຄດຢູ່ GitHub ສາທາລະນະ — ຈະຮົ່ວ)
+   ເຄື່ອງພະນັກງານຮັບລິງກ໌ຜ່ານ "ລິງກ໌ຕິດຕັ້ງ" ເທື່ອດຽວ: ...github.io/midnight-bar/?s=<ລິງກ໌ exec>
+   ເປີດເທື່ອທຳອິດແລ້ວເຄື່ອງຈື່ໄວ້ເລີຍ ເທື່ອຕໍ່ໄປເປີດລິງກ໌ທຳມະດາກໍໄດ້ */
+const SYNC_URL_DEFAULT = "";
+const SYNC_READ_KEY    = "mb-read";
+
+/* ຄ່າທີ່ຊິງຄ໌ — ບໍ່ລວມ printer (ຕິດກັບເຄື່ອງ) ແລະ sheets (ລິງກ໌+token ຂອງເຈົ້າຂອງ) */
+const SYNC_KEYS = ["v","menuV","shop","perms","staff","cats","products","hh","cur","pay","zones","tables","security","shift"];
+
+const syncUrl = () => (cfg.sheets && cfg.sheets.url) || SYNC_URL_DEFAULT;
+const syncPick = () => { const o={}; SYNC_KEYS.forEach(k=>{ if(cfg[k]!==undefined) o[k]=cfg[k]; }); return o; };
+const syncSig  = () => { try{ return JSON.stringify(syncPick()).length+":"+JSON.stringify(syncPick()).slice(0,4000); }catch(e){ return ""; } };
+
+/* ເຄື່ອງນີ້ແມ່ນເຄື່ອງຂອງເຈົ້າຂອງບໍ? (ມີສິດສົ່ງຂຶ້ນ) — ຕ້ອງເຂົ້າສູ່ລະບົບເປັນເຈົ້າຂອງ ແລະ ມີ token */
+const canPushCfg = () => !!(state.user && state.user.role==="owner" && cfg.sheets && cfg.sheets.url && cfg.sheets.token);
+
+let syncLastSig = null, syncPushT = null, syncBusy = false;
+
+/* ---------- ດຶງຄ່າລົງ ---------- */
+async function pullConfig(opts){
+  const url = syncUrl(); if(!url || syncBusy) return false;
+  syncBusy = true;
+  try{
+    const r = await fetch(`${url}?action=config&k=${encodeURIComponent(SYNC_READ_KEY)}&t=${Date.now()}`,{method:"GET"});
+    const d = await r.json();
+    if(!d || !d.ok || !d.cfg) { if(opts&&opts.manual) toast(T("ຍັງບໍ່ມີການຕັ້ງຄ່າກາງໃນຊີດ","No shared settings on the sheet yet"),"i-alert",true); return false; }
+    const at = Number(d.at||0), mine = Number(cfg.cfgAt||0);
+    if(at && at <= mine && !(opts&&opts.force)){ if(opts&&opts.manual) toast(T("ການຕັ້ງຄ່າໃໝ່ສຸດແລ້ວ","Settings are already up to date"),"i-check"); return false; }
+    applyRemoteConfig(d.cfg, at);
+    if(opts&&opts.manual) toast(T("ດຶງການຕັ້ງຄ່າຈາກຮ້ານແລ້ວ","Pulled the shop settings"),"i-check");
+    return true;
+  }catch(e){
+    if(opts&&opts.manual) toast(T("ດຶງການຕັ້ງຄ່າບໍ່ໄດ້ — ກວດອິນເຕີເນັດ","Couldn't pull settings — check the internet"),"i-alert",true);
+    return false;
+  }finally{ syncBusy = false; }
+}
+
+function applyRemoteConfig(rc, at){
+  SYNC_KEYS.forEach(k=>{ if(rc[k]!==undefined) cfg[k]=rc[k]; });
+  cfg.cfgAt = at || Date.now();
+  /* ຄ່າທີ່ອາດຂາດ ຖ້າຊີດເກັບມາຈາກລຸ້ນເກົ່າ */
+  cfg.shift   = cfg.shift   || {float:300000};
+  cfg.sheets  = cfg.sheets  || {url:"",token:""};
+  cfg.printer = cfg.printer || {};
+  cfg.printer.mode = cfg.printer.mode || "save";
+  relang([cfg], I18N.lang);
+  syncLastSig = syncSig();
+  try{ localStorage.setItem(KEY, JSON.stringify({cfg,bottles,audit})); }catch(e){}
+  applyBrand(); renderLogin();
+  if(state.user) render();
+}
+
+/* ---------- ສົ່ງຄ່າຂຶ້ນ (ສະເພາະເຄື່ອງເຈົ້າຂອງ) ---------- */
+async function pushConfig(manual){
+  if(!canPushCfg()){
+    if(manual) toast(T("ສົ່ງໄດ້ສະເພາະເຄື່ອງເຈົ້າຂອງທີ່ຕັ້ງຄ່າ Google Sheets ແລ້ວ","Only the owner's device with Google Sheets set up can send"),"i-alert",true);
+    return false;
+  }
+  const at = Date.now(); cfg.cfgAt = at;
+  try{
+    await fetch(cfg.sheets.url,{
+      method:"POST", mode:"no-cors",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body: JSON.stringify({action:"saveConfig", token:cfg.sheets.token||"", at, cfg:syncPick()})
+    });
+    syncLastSig = syncSig();
+    try{ localStorage.setItem(KEY, JSON.stringify({cfg,bottles,audit})); }catch(e){}
+    if(manual) toast(T("ສົ່ງການຕັ້ງຄ່າໃຫ້ທຸກເຄື່ອງແລ້ວ","Settings sent to all devices"),"i-check");
+    return true;
+  }catch(e){
+    if(manual) toast(T("ສົ່ງການຕັ້ງຄ່າບໍ່ໄດ້ — ກວດອິນເຕີເນັດ","Couldn't send settings — check the internet"),"i-alert",true);
+    return false;
+  }
+}
+
+/* ---------- ຕິດກັບ save() — ເຈົ້າຂອງແກ້ການຕັ້ງຄ່າ ແລ້ວສົ່ງຂຶ້ນໃຫ້ເອງ ---------- */
+afterSave = function(){
+  if(!canPushCfg()) return;
+  const sig = syncSig();
+  if(syncLastSig === null){ syncLastSig = sig; return; }
+  if(sig === syncLastSig) return;          // ປ່ຽນແຕ່ບິນ/audit — ບໍ່ຕ້ອງສົ່ງ
+  syncLastSig = sig;
+  clearTimeout(syncPushT);
+  syncPushT = setTimeout(()=>pushConfig(false), 4000);   // ລວມການແກ້ຫຼາຍຢ່າງເປັນການສົ່ງເທື່ອດຽວ
+};
+
+/* ---------- ລິງກ໌ຕິດຕັ້ງເທື່ອດຽວ: ?s=<ລິງກ໌ exec> → ເຄື່ອງຈື່ໄວ້ ແລ້ວລຶບອອກຈາກແຖບທີ່ຢູ່ ---------- */
+(function adoptSetupLink(){
+  try{
+    const u = new URL(location.href), s = u.searchParams.get("s");
+    if(!s) return;
+    if(!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(s)) return;
+    cfg.sheets = cfg.sheets || {url:"",token:""};
+    if(cfg.sheets.url !== s){ cfg.sheets.url = s; save(); }
+    u.searchParams.delete("s");
+    history.replaceState(null,"",u.pathname+(u.search||"")+u.hash);
+  }catch(e){}
+})();
+
+/* ---------- ເວລາດຶງ: ຕອນເປີດແອັບ ແລະ ຕອນກັບມາໜ້າເຂົ້າສູ່ລະບົບ ---------- */
+const syncIdle = () => !state.user && !state.bills.some(b=>b.status!=="paid");
+
+pullConfig();
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden && syncIdle()) pullConfig(); });
+setInterval(()=>{ if(syncIdle()) pullConfig(); }, 120000);

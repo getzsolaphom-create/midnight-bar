@@ -1,6 +1,6 @@
 // Midnight Bar POS — service worker
 // เพิ่มเลขเวอร์ชันทุกครั้งที่แก้ไฟล์ เพื่อให้เครื่องดึงของใหม่
-const VERSION = 'mbpos-v1';
+const VERSION = 'mbpos-v2';
 const CACHE = VERSION;
 
 const APP_SHELL = [
@@ -18,7 +18,7 @@ const APP_SHELL = [
   './css/saved.css', './css/stars.css', './css/v2.css', './css/theme-holst.css',
   './js/i18n.js', './js/logo.js', './js/core.js', './js/auth.js', './js/menu.js',
   './js/bill.js', './js/payment.js', './js/summary.js', './js/bottles.js',
-  './js/access.js', './js/settings.js', './js/sheets.js', './js/main.js',
+  './js/access.js', './js/settings.js', './js/sheets.js', './js/main.js', './js/sync.js',
   './js/motion.js', './js/login-ghost.js', './js/saved.js'
 ];
 

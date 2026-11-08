@@ -162,9 +162,10 @@ function load(){
   cfg=defaults(); bottles=SEED_BOTTLES(); audit=SEED_AUDIT().sort((a,b)=>b.t-a.t);
 }
 let saveT;
+let afterSave=null;   /* js/sync.js ຕິດຟັງຊັນໄວ້ບ່ອນນີ້ — ສົ່ງການຕັ້ງຄ່າຂຶ້ນຊີດເມື່ອເຈົ້າຂອງແກ້ */
 function save(){
   clearTimeout(saveT);
-  saveT=setTimeout(()=>{ try{ localStorage.setItem(KEY,JSON.stringify({cfg,bottles,audit})); }catch(e){ toast(T("ພື້ນທີ່ເກັບໃນບຣາວເຊີເຕັມ — ຂໍ້ມູນບາງສ່ວນອາດບໍ່ຖືກບັນທຶກ","Browser storage is full — some data may not be saved"),"i-alert",true); } },200);
+  saveT=setTimeout(()=>{ try{ localStorage.setItem(KEY,JSON.stringify({cfg,bottles,audit})); }catch(e){ toast(T("ພື້ນທີ່ເກັບໃນບຣາວເຊີເຕັມ — ຂໍ້ມູນບາງສ່ວນອາດບໍ່ຖືກບັນທຶກ","Browser storage is full — some data may not be saved"),"i-alert",true); } if(typeof afterSave==="function"){ try{ afterSave(); }catch(e){} } },200);
   const f=$("#savedFlag"); if(f){ f.classList.add("on"); clearTimeout(f._t); f._t=setTimeout(()=>f.classList.remove("on"),1600); }
 }
 load(); cfg.shift=cfg.shift||{float:300000}; cfg.sheets=cfg.sheets||{url:"",token:""}; cfg.printer.mode=cfg.printer.mode||"save"; relang([cfg,bottles,audit],I18N.lang);
