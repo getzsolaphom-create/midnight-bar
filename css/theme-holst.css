@@ -438,3 +438,8 @@ b,strong,.item .name,.sb-card b,.part-h b,.method b,th{font-weight:600}
   .staff-card{padding:9px 8px}
   .staff-card .avatar{width:42px;height:42px;font-size:17px}
 }
+
+/* QR ໂອນເງິນໃນໃບບິນ ແລະ ໜ້າຊຳລະເງິນ — ຕ້ອງເປັນສີຂາວລ້ວນ ແລະ ຂອບຄົມ ຈຶ່ງສະແກນຕິດ */
+.qr-img{display:block;background:#FFFFFF;border-radius:8px;max-width:100%;height:auto;image-rendering:pixelated}
+.bill-qr{margin:10px 0}
+@media print{.bill-qr{break-inside:avoid}.qr-img{width:46mm;height:46mm}}

@@ -35,7 +35,7 @@ function renderPay(){
   $("#qrAmt").textContent=kip(due);
   $("#qrBank").innerHTML=bk?`${esc(bk.name)} · ${esc(bk.accName)}<br>${T("ເລກບັນຊີ","Account no.")} ${esc(bk.acc)} · ${T("ອ້າງອີງ","ref.")} #${b.no}`:T("ຍັງບໍ່ໄດ້ຕັ້ງຄ່າບັນຊີ","No account set up");
   $("#transferOk").checked=p.ok;
-  drawQR(b.no+(bk?.acc||"")+due);
+  drawQR(bk,due,b.no);
   if(p.method==="transfer") ready=p.ok&&!!bk;
   ready=ready&&due>0&&b.status!=="paid";
   $("#confirmPay").disabled=!ready;
@@ -44,12 +44,12 @@ function renderPay(){
   $("#payReceipt").className="receipt"+(+cfg.printer.paper===58?" p58":"");
   $("#payReceipt").innerHTML=receiptHTML(b,{part,payLines:pl});
 }
-function drawQR(seed){
-  let h=0; for(const ch of seed) h=(h*31+ch.charCodeAt(0))>>>0; h=h||1;
-  const rnd=()=>{h^=h<<13;h>>>=0;h^=h>>17;h^=h<<5;h>>>=0;return h/4294967296;};
-  let s=""; const N=29; const F=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#2C1F17"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#2C1F17"/>`;
-  for(let y=0;y<N;y++)for(let x=0;x<N;x++){ const f=(x<8&&y<8)||(x>N-9&&y<8)||(x<8&&y>N-9); if(!f&&rnd()>.52) s+=`<rect x="${x}" y="${y}" width="1" height="1"/>`; }
-  $("#qrSvg").innerHTML=`<g fill="#2C1F17">${s}</g>${F(0,0)}${F(N-7,0)}${F(0,N-7)}<rect x="11" y="11" width="7" height="7" rx="1.5" fill="var(--accent,#B8862B)"/><text x="14.5" y="16.3" font-size="4.6" text-anchor="middle" fill="#fff" font-family="Cormorant Garamond" font-weight="700">M</text>`;
+/* QR ຈິງຂອງທະນາຄານ ພ້ອມຍອດຂອງບິນນີ້ — ບໍ່ມີແມ່ແບບ QR ກໍສະແດງຄຳແນະນຳແທນ */
+function drawQR(bk,due,ref){
+  const box=$("#qrSvg");
+  const svg=bk&&bk.qr?laoQrSvg(bk.qr,due,ref,210):"";
+  if(svg){ box.outerHTML=svg.replace('class="qr-img"','class="qr-img" id="qrSvg"'); return; }
+  box.outerHTML=`<div class="qr-img" id="qrSvg" style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;border:1px dashed var(--line-strong);border-radius:12px;background:#fff"><span class="muted small">${T("ຍັງບໍ່ໄດ້ໃສ່ຂໍ້ຄວາມ QR ຂອງບັນຊີນີ້ — ໄປທີ່ ຕັ້ງຄ່າ › ຊຳລະເງິນ","No QR text for this account yet — go to Settings › Payment")}</span></div>`;
 }
 $("#methods").addEventListener("click",e=>{const m=e.target.closest("[data-method]"); if(!m)return; state.pay.method=m.dataset.method; renderPay();});
 $("#partSwitch").addEventListener("click",e=>{const m=e.target.closest("[data-pp]"); if(!m)return; state.payPart=+m.dataset.pp; resetPay(); renderPay();});

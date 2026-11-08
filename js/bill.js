@@ -109,6 +109,21 @@ async function showReport(){
     actions:[{label:T("ປິດ","Close"),value:"cancel"},{label:T("ພິມລາຍງານ","Print report"),value:"print",cls:"btn-gold",icon:"i-print",id:"reportPrintBtn"}]});
   if(r.value==="print"){ printHTML(shiftReportHTML(),"report"); log("shift",`${T("ພິມໃບສະຫຼຸບປິດກະ","Printed shift summary")} #0001`); toast(`${T("ພິມໃບສະຫຼຸບປິດກະ","Shift summary printed")} → ${cfg.printer.receipt}`,"i-print"); }
 }
+/* QR ໂອນເງິນໃນໃບບິນ — ສະແດງສະເພາະບິນທີ່ຍັງບໍ່ທັນຊຳລະ */
+function billQrHTML(b,part){
+  if(b.status==="paid") return "";
+  if(!cfg.pay.transfer) return "";
+  const bk=cfg.pay.banks.find(k=>k.on&&k.qr&&laoQrValid(k.qr));
+  if(!bk) return "";
+  const due=(b.split&&part!=null)?partAmounts(b)[part]:totals(b).total;
+  if(!(due>0)) return "";
+  const svg=laoQrSvg(bk.qr,due,b.no,196);
+  if(!svg) return "";
+  return `<hr><div class="bill-qr" style="text-align:center">
+    <div class="rs" style="font-weight:700">${T("ສະແກນເພື່ອໂອນ","Scan to pay")} · ${esc(bk.name)}</div>
+    <div style="display:flex;justify-content:center;margin:6px 0">${svg}</div>
+    <div class="rs">${T("ຍອດ","Amount")} ${fmt(due)} ₭ · ${T("ອ້າງອີງ","ref.")} #${b.no}</div></div>`;
+}
 function receiptHTML(b,{part=null,payLines=""}={}){
   const t=totals(b), tb=tableOf(b.table); let lines=liveLines(b), partNote="";
   if(b.split&&part!=null){
@@ -128,6 +143,7 @@ function receiptHTML(b,{part=null,payLines=""}={}){
   ${t.svc?`<div class="rr"><span>Service ${cfg.shop.svcPct}%</span><span>${fmt(t.svc)}</span></div>`:""}
   <div class="rr ${partNote?"":"big"}"><span>TOTAL</span><span>${fmt(t.total)} ₭</span></div>
   ${partNote}${payLines}
+  ${billQrHTML(b,part)}
   <hr><div class="thanks">${esc(cfg.shop.footer)}</div>`;
 }
 function renderBill(){
