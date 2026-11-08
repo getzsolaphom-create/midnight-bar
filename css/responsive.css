@@ -67,8 +67,14 @@
   .due .amt{font-size:46px}
   .change .v{font-size:36px}
   .menu-tools,.menu-tools .field{width:100%}
-  .form-grid{grid-template-columns:1fr}
-  .og-row{grid-template-columns:1fr 100px 40px}
+  .form-grid{grid-template-columns:minmax(0,1fr)}
+  .og-row{grid-template-columns:minmax(0,1fr) 100px 40px}
+  /* ກັນກ່ອງ input ລົ້ນອອກນອກຂອບກາດໃນມືຖື (ໂດຍສະເພາະ iPhone Safari
+     ທີ່ຊ່ອງເວລາ/ວັນທີມີຄວາມກວ້າງຂັ້ນຕ່ຳຂອງມັນເອງ ແລະ ບໍ່ຍອມຫົດ) */
+  .form-grid>*,.og-row>*,.adjust>*{min-width:0}
+  .inp,.form-grid input,.form-grid select,.form-grid textarea{max-width:100%;min-width:0}
+  input[type="time"],input[type="date"],input[type="datetime-local"]{
+    -webkit-appearance:none;appearance:none;width:100%;max-width:100%;min-width:0}
 }
 @media (max-width:560px){
   :root{--gutter:16px}
