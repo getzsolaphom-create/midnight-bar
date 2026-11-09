@@ -35,7 +35,7 @@ async function pullConfig(opts){
     const at = Number(d.at||0), mine = Number(cfg.cfgAt||0);
     if(at && at <= mine && !(opts&&opts.force)){ if(opts&&opts.manual) toast(T("ການຕັ້ງຄ່າໃໝ່ສຸດແລ້ວ","Settings are already up to date"),"i-check"); return false; }
     applyRemoteConfig(d.cfg, at);
-    if(opts&&opts.manual) toast(T("ດຶງການຕັ້ງຄ່າຈາກຮ້ານແລ້ວ","Pulled the shop settings"),"i-check");
+    if(opts&&opts.manual) toast(`${T("ດຶງການຕັ້ງຄ່າຈາກຮ້ານແລ້ວ","Pulled the shop settings")} · ${T("ພະນັກງານ","staff")} ${(cfg.staff||[]).length} ${T("ຄົນ","")}`,"i-check");
     return true;
   }catch(e){
     if(opts&&opts.manual) toast(T("ດຶງການຕັ້ງຄ່າບໍ່ໄດ້ — ກວດອິນເຕີເນັດ","Couldn't pull settings — check the internet"),"i-alert",true);
@@ -66,20 +66,39 @@ async function pushConfig(manual){
     return false;
   }
   const at = Date.now(); cfg.cfgAt = at;
+  const url = cfg.sheets.url;
   try{
-    await fetch(cfg.sheets.url,{
+    await fetch(url,{
       method:"POST", mode:"no-cors",
       headers:{"Content-Type":"text/plain;charset=utf-8"},
       body: JSON.stringify({action:"saveConfig", token:cfg.sheets.token||"", at, cfg:syncPick()})
     });
-    syncLastSig = syncSig();
-    try{ localStorage.setItem(KEY, JSON.stringify({cfg,bottles,audit})); }catch(e){}
-    if(manual) toast(T("ສົ່ງການຕັ້ງຄ່າໃຫ້ທຸກເຄື່ອງແລ້ວ","Settings sent to all devices"),"i-check");
-    return true;
   }catch(e){
-    if(manual) toast(T("ສົ່ງການຕັ້ງຄ່າບໍ່ໄດ້ — ກວດອິນເຕີເນັດ","Couldn't send settings — check the internet"),"i-alert",true);
+    toast(T("ສົ່ງການຕັ້ງຄ່າບໍ່ໄດ້ — ກວດອິນເຕີເນັດ","Couldn't send settings — check the internet"),"i-alert",true);
     return false;
   }
+  /* POST ແບບ no-cors ອ່ານຜົນບໍ່ໄດ້ (token ຜິດກໍເບິ່ງຄືສຳເລັດ) → ອ່ານກັບມາເບິ່ງວ່າຕູ້ເຊຟບັນທຶກແທ້ */
+  let seen = null;
+  try{
+    await new Promise(r=>setTimeout(r,1500));
+    const r = await fetch(`${url}?action=config&k=${encodeURIComponent(SYNC_READ_KEY)}&t=${Date.now()}`,{method:"GET"});
+    seen = await r.json();
+  }catch(e){ seen = null; }
+  const persist = () => { syncLastSig = syncSig(); try{ localStorage.setItem(KEY, JSON.stringify({cfg,bottles,audit})); }catch(e){} };
+  if(seen && seen.ok && Number(seen.at)===at){
+    persist();
+    const n = seen.cfg && Array.isArray(seen.cfg.staff) ? seen.cfg.staff.length : null;
+    if(manual) toast(`${T("ສົ່ງການຕັ້ງຄ່າໃຫ້ທຸກເຄື່ອງແລ້ວ","Settings sent to all devices")}${n!=null?` · ${T("ພະນັກງານ","staff")} ${n} ${T("ຄົນ","")}`:""}`,"i-check");
+    return true;
+  }
+  if(seen === null){   // ອ່ານກັບບໍ່ໄດ້ (ເນັດ/CORS) — ບອກຕາມຈິງວ່າຢືນຢັນບໍ່ໄດ້
+    persist();
+    toast(T("ສົ່ງແລ້ວ ແຕ່ຢືນຢັນບໍ່ໄດ້ວ່າຕູ້ເຊຟບັນທຶກ — ລອງກົດ ດຶງການຕັ້ງຄ່າ ຈາກເຄື່ອງອື່ນເພື່ອກວດ","Sent, but couldn't confirm the sheet saved it — pull from another device to check"),"i-alert",true);
+    return true;
+  }
+  // ຕູ້ເຊຟບໍ່ຮັບ — syncLastSig ບໍ່ອັບເດດ ການບັນທຶກຄັ້ງຕໍ່ໄປຈະສົ່ງຊ້ຳ
+  toast(T("ຕູ້ເຊຟບໍ່ໄດ້ຮັບການຕັ້ງຄ່າ — ກວດ TOKEN ແລະ URL ໃນ ຕັ້ງຄ່າ › ປິດກະ & ຄວາມປອດໄພ","The sheet did not accept the settings — check the TOKEN and URL in Settings › Closing & security"),"i-alert",true);
+  return false;
 }
 
 /* ---------- ຕິດກັບ save() — ເຈົ້າຂອງແກ້ການຕັ້ງຄ່າ ແລ້ວສົ່ງຂຶ້ນໃຫ້ເອງ ---------- */
