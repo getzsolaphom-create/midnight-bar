@@ -53,6 +53,8 @@ function lock(reason){
   state.user=null; state.grants={}; loginSel=null; loginPin="";
   $$("dialog[open]").forEach(d=>d.close("cancel"));
   closeSheet(); renderLogin(); $("#login").hidden=false; $("#app").inert=true;
+  /* ອອກຈາກລະບົບແລ້ວ → ດຶງການຕັ້ງຄ່າຈາກເຈົ້າຂອງທັນທີ (ຖ້າບໍ່ມີບິນຄ້າງ) ເພື່ອໃຫ້ login ໃໝ່ເຫັນຂໍ້ມູນລ່າສຸດ */
+  try{ if(typeof syncIdle==="function"&&typeof pullConfig==="function"&&syncIdle()) pullConfig(); }catch(e){}
 }
 ["pointerdown","keydown"].forEach(ev=>document.addEventListener(ev,()=>state.lastAct=Date.now(),{passive:true}));
 function tick(){
