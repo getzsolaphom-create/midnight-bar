@@ -112,6 +112,96 @@ function downloadFile(name,text,type="text/plain;charset=utf-8"){
   a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name;
   document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000);
 }
+
+/* ==================================================================
+   ບັນທຶກບິນຂອງກະລົງເຄື່ອງ (ຕອນປິດກະ)
+   ໄຟລ໌ດຽວ: ໃບສະຫຼຸບປິດກະ + ບິນທຸກໃບຂອງກະນີ້ — ເປີດອ່ານ ແລະ ພິມໄດ້ ບໍ່ຕ້ອງມີເນັດ
+   ເກັບໄວ້ເປັນຫຼັກຖານຂອງກະ ເຖິງບຣາວເຊີຖືກລ້າງ ຫຼື ປ່ຽນເຄື່ອງ ກໍຍັງມີໄຟລ໌
+   ================================================================== */
+function shiftSavedBills(){
+  const from = state.shift ? state.shift.at : dayStart(Date.now());
+  const list = savedBills.filter(x=>x.at>=from).slice().sort((a,b)=>a.at-b.at);
+  /* ບິນໃບດຽວອາດມີ 2 ລາຍການ (ຮ່າງ + ຊຳລະແລ້ວ) — ເອົາສະເພາະໃບທີ່ຊຳລະແລ້ວ */
+  const paid = new Set(list.filter(x=>x.paid).map(x=>x.no+"|"+x.label));
+  return list.filter(x=>x.paid||!paid.has(x.no+"|"+x.label));
+}
+function shiftFileStamp(){
+  const d=new Date(state.closeInfo?.at||Date.now());
+  const p=n=>String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}`;
+}
+/* ໂລໂກ້ເປັນຮູບຝັງ (~130 KB) ຖ້າປ່ອຍໃຫ້ຊ້ຳທຸກໃບ ໄຟລ໌ຄືນໜຶ່ງ 80 ໃບຈະໃຫຍ່ເປັນ 10 MB
+   ຈຶ່ງເກັບໄວ້ບ່ອນດຽວໃນ CSS ແລ້ວທຸກໃບອ້າງເຖິງອັນນັ້ນ */
+const BLANK_PX="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+function dedupeLogo(html){
+  const lg=cfg.shop&&cfg.shop.logo;
+  if(!lg||lg.length<2000) return {html,css:""};
+  return {html:html.split(lg).join(BLANK_PX),
+          css:`.receipt img{content:url("${lg}")}`};
+}
+function shiftDocHTML(){
+  const list=shiftSavedBills(), ci=state.closeInfo;
+  const paidN=list.filter(x=>x.paid).length, sum=list.filter(x=>x.paid).reduce((a,x)=>a+x.amount,0);
+  const head=`${T("ກະວັນທີ","Shift of")} ${dmy(ci?.at||Date.now())}${ci?` · ${T("ປິດກະ","closed")} ${hhmm(ci.at)} · ${esc(ci.by)}`:` · ${T("ຮ່າງ ຍັງບໍ່ປິດກະ","draft, shift still open")}`}`;
+  const body=dedupeLogo(`<div class="wrap">
+<div class="receipt report">${shiftReportHTML()}</div>
+${list.map(r=>`<div class="receipt${r.paid?"":" unpaid"}">${r.receipt}</div>`).join("")}
+</div>`);
+  return `<!doctype html><html lang="lo"><head><meta charset="utf-8">
+<title>${esc(cfg.shop.name)} · ${T("ບິນກະ","Shift bills")} ${dmy(ci?.at||Date.now())}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;padding:24px 16px;background:#EDE7DC;font:400 14px/1.5 "Noto Sans Lao",sans-serif;color:#2C1F17}
+.hd{max-width:980px;margin:0 auto 18px;text-align:center}
+.hd h1{margin:0;font-size:20px;letter-spacing:.06em}
+.hd p{margin:4px 0 0;font-size:12.5px;color:#6B5747}
+.wrap{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:flex-start;max-width:1200px;margin:0 auto}
+.receipt{width:80mm;box-sizing:border-box;padding:16px 18px;background:#FBF7EF;box-shadow:0 10px 30px rgba(0,0,0,.14)}
+.receipt img{display:block;width:54px;margin:0 auto 8px}
+.rh{text-align:center;font-weight:700;font-size:17px;letter-spacing:.06em}
+.rs{text-align:center;font-size:11px;color:#6B5747}
+.rs.l{text-align:left;padding-left:14px}
+hr{border:0;border-top:1px dashed #BFAE97;margin:8px 0}
+.rr{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:1px 0}
+.rr.big{font-weight:700;font-size:15px}
+.rr.sub{color:#6B5747}
+.rr span:last-child{font-family:"JetBrains Mono",monospace}
+.grp{font-weight:700;margin-top:8px;border-bottom:1px solid #BFAE97}
+.sig{display:flex;justify-content:space-between;gap:16px;margin-top:22px;text-align:center;font-size:11px}
+.sig span{flex:1;border-top:1px solid #8B7A66;padding-top:4px}
+.thanks{text-align:center;font-size:11px;color:#6B5747;margin-top:6px}
+.ordno{text-align:center}.ordno .ol{font-size:11px;color:#6B5747}.ordno .ov{font:500 22px "JetBrains Mono",monospace}
+.qr-img{display:block;background:#fff;border-radius:8px;max-width:100%;height:auto;image-rendering:pixelated}
+.bill-qr{text-align:center;margin-top:8px}
+.unpaid{outline:2px solid #B4452F}
+@media print{body{background:#fff;padding:0}.hd{display:none}.wrap{display:block}
+  .receipt{box-shadow:none;outline:0;width:auto;padding:0;break-after:page}}
+${body.css}
+</style></head><body>
+<div class="hd"><h1>${esc(cfg.shop.name).toUpperCase()}</h1>
+<p>${head}</p>
+<p>${T("ບິນ","Bills")} ${list.length} ${T("ໃບ","")} · ${T("ຊຳລະແລ້ວ","paid")} ${paidN} ${T("ໃບ","")} · ${T("ລວມ","total")} ${fmt(sum)} ₭</p></div>
+${body.html}</body></html>`;
+}
+function shiftCsv(){
+  const list=shiftSavedBills();
+  const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;
+  const head=["bill","part","date","time","table","guests","waiter","cashier","status","method","items","subtotal","discount","service","total","amount"];
+  const rows=list.map(r=>[r.no,r.label,dmy(r.at),hhmm(r.at),r.table,r.guests,r.waiter,r.by,r.paid?"paid":"unpaid",r.pay?.method||"",
+    r.items.map(i=>`${i.qty}x ${i.name}`).join(" | "),r.sub,r.disc,r.svc,r.total,r.amount].map(q).join(","));
+  return "﻿"+[head.join(","),...rows].join("\n");
+}
+/* ບັນທຶກລົງເຄື່ອງ: HTML ກ່ອນ ແລ້ວ CSV ຕາມມາ (ບາງບຣາວເຊີບລັອກການດາວໂຫຼດ 2 ໄຟລ໌ພ້ອມກັນ ຈຶ່ງຫ່າງກັນ) */
+function saveShiftToDevice(){
+  const list=shiftSavedBills();
+  if(!list.length){ toast(T("ກະນີ້ຍັງບໍ່ມີບິນໃຫ້ບັນທຶກ","No bills in this shift to save"),"i-alert",true); return false; }
+  const stamp=shiftFileStamp();
+  downloadFile(`midnight-bar-shift-${stamp}.html`,shiftDocHTML(),"text/html;charset=utf-8");
+  setTimeout(()=>downloadFile(`midnight-bar-shift-${stamp}.csv`,shiftCsv(),"text/csv;charset=utf-8"),900);
+  log("shift",`${T("ບັນທຶກບິນກະລົງເຄື່ອງ","Saved shift bills to the device")} · ${list.length} ${T("ໃບ","bills")}`);
+  toast(`${T("ບັນທຶກລົງເຄື່ອງແລ້ວ","Saved to this device")} · ${list.length} ${T("ໃບ","bills")} (HTML + CSV)`,"i-archive");
+  return true;
+}
 async function copyText(text){
   try{ await navigator.clipboard.writeText(text); toast(T("ສຳເນົາບິນແລ້ວ — ເອົາໄປວາງສົ່ງໃຫ້ລູກຄ້າໄດ້","Bill copied — paste it to send to the customer"),"i-check"); }
   catch(e){

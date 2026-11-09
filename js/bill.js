@@ -104,10 +104,18 @@ function shiftReportHTML(){
   <div class="sig"><span>${T("ຜູ້ປິດກະ","Closed by")}</span><span>${T("ເຈົ້າຂອງຮ້ານ","Owner")}</span></div>`;
 }
 async function showReport(){
-  const r=await openDyn({cls:"w-sm",eyebrow:state.shiftClosed?T("ປິດກະແລ້ວ","Shift closed"):T("ຮ່າງ · ຍັງບໍ່ປິດກະ","Draft · shift still open"),title:T("ໃບສະຫຼຸບປິດກະ","Shift close summary"),
-    body:`<div class="receipt-wrap" style="position:static"><div class="receipt report ${+cfg.printer.paper===58?"p58":""}" id="reportPreview">${shiftReportHTML()}</div></div>`,
-    actions:[{label:T("ປິດ","Close"),value:"cancel"},{label:T("ພິມລາຍງານ","Print report"),value:"print",cls:"btn-gold",icon:"i-print",id:"reportPrintBtn"}]});
-  if(r.value==="print"){ printHTML(shiftReportHTML(),"report"); log("shift",`${T("ພິມໃບສະຫຼຸບປິດກະ","Printed shift summary")} #0001`); toast(`${T("ພິມໃບສະຫຼຸບປິດກະ","Shift summary printed")} → ${cfg.printer.receipt}`,"i-print"); }
+  /* ວົນຮອບ: ກົດ "ບັນທຶກລົງເຄື່ອງ" ແລ້ວກ່ອງເປີດຄືນ ຈະໄດ້ພິມຕໍ່ໄດ້ໂດຍບໍ່ຕ້ອງເປີດໃໝ່ເອງ */
+  for(;;){
+    const n=(typeof shiftSavedBills==="function"?shiftSavedBills().length:0);
+    const r=await openDyn({cls:"w-sm",eyebrow:state.shiftClosed?T("ປິດກະແລ້ວ","Shift closed"):T("ຮ່າງ · ຍັງບໍ່ປິດກະ","Draft · shift still open"),title:T("ໃບສະຫຼຸບປິດກະ","Shift close summary"),
+      body:`<div class="receipt-wrap" style="position:static"><div class="receipt report ${+cfg.printer.paper===58?"p58":""}" id="reportPreview">${shiftReportHTML()}</div></div>`,
+      actions:[{label:T("ປິດ","Close"),value:"cancel"},
+               {label:`${T("ບັນທຶກບິນລົງເຄື່ອງ","Save bills to device")}${n?` (${n})`:""}`,value:"savefile",icon:"i-archive",id:"reportSaveBtn"},
+               {label:T("ພິມລາຍງານ","Print report"),value:"print",cls:"btn-gold",icon:"i-print",id:"reportPrintBtn"}]});
+    if(r.value==="savefile"){ saveShiftToDevice(); continue; }
+    if(r.value==="print"){ printHTML(shiftReportHTML(),"report"); log("shift",`${T("ພິມໃບສະຫຼຸບປິດກະ","Printed shift summary")} #0001`); toast(`${T("ພິມໃບສະຫຼຸບປິດກະ","Shift summary printed")} → ${cfg.printer.receipt}`,"i-print"); }
+    return;
+  }
 }
 /* QR ໂອນເງິນໃນໃບບິນ — ສະແດງສະເພາະບິນທີ່ພະນັກງານເລືອກ "ລູກຄ້າໂອນ" ແລະຍັງບໍ່ທັນຊຳລະ; ບິນເງິນສົດບໍ່ມີ QR */
 const qrBanks=()=>cfg.pay.transfer?cfg.pay.banks.filter(k=>k.on&&k.qr&&laoQrValid(k.qr)):[];

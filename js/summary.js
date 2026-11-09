@@ -76,6 +76,7 @@ $("#hourTableBtn").onclick=e=>{const t=$("#hourTable"); t.hidden=!t.hidden; $("#
 $("#countRows").addEventListener("change",e=>{const c=e.target.dataset.cnt; if(!c)return; const v=Number(e.target.value.replace(/[^\d]/g,""))||0; state.counted[c]=v; e.target.value=fmt(v); renderSummary();});
 $("#printReport").onclick=()=>showReport();
 $("#sendSheetsBtn").onclick=()=>pushDayToSheets(true);
+$("#saveShiftBtn").onclick=()=>saveShiftToDevice();
 $("#closeShiftBtn").onclick=async()=>{
   const g=await guard("closeShift",T("ປິດກະ","Close shift"),(T("ຢືນຢັນຍອດເງິນສົດ ແລະ ປິດກະ","Confirm cash and close shift")+" #0001")); if(!g.ok) return;
   let reason="";
