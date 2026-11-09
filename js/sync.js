@@ -14,6 +14,9 @@ const SYNC_READ_KEY    = "mb-read";
 /* ຄ່າທີ່ຊິງຄ໌ — ບໍ່ລວມ printer (ຕິດກັບເຄື່ອງ) ແລະ sheets (ລິງກ໌+token ຂອງເຈົ້າຂອງ) */
 const SYNC_KEYS = ["v","menuV","shop","perms","staff","cats","products","hh","cur","pay","zones","tables","security"];
 
+/* ບອກສະຖານະຊິງຄ໌ຢູ່ໜ້າເຂົ້າສູ່ລະບົບ — ໃຫ້ເຫັນທັນທີວ່າເຄື່ອງນີ້ດຶງໄດ້ຫຼືບໍ່ ແລະເພາະຫຍັງ */
+const setSyncStatus = msg => { const el=document.getElementById("syncStatus"); if(el) el.textContent=msg; };
+const syncStaffN = () => (cfg.staff||[]).filter(x=>x.active).length;
 const syncUrl = () => (cfg.sheets && cfg.sheets.url) || SYNC_URL_DEFAULT;
 /* ໂລໂກ້ຮ້ານເປັນຮູບໃຫຍ່ (~130 KB) ບໍ່ສົ່ງຂຶ້ນຊີດ — ຖ້າສົ່ງ ທຸກເຄື່ອງຈະດຶງ 150 KB ທຸກ 2 ນາທີ ແລະເກີນໂຄຕ້າ Apps Script */
 const syncPick = () => { const o={}; SYNC_KEYS.forEach(k=>{ if(cfg[k]!==undefined) o[k]=cfg[k]; }); if(o.shop){ const {logo,...rest}=o.shop; o.shop=rest; } return o; };
@@ -26,18 +29,25 @@ let syncLastSig = null, syncPushT = null, syncBusy = false;
 
 /* ---------- ດຶງຄ່າລົງ ---------- */
 async function pullConfig(opts){
-  const url = syncUrl(); if(!url || syncBusy) return false;
+  const url = syncUrl();
+  if(!url){ setSyncStatus(T("ຍັງບໍ່ໄດ້ຕັ້ງລິງກ໌ຊິງຄ໌ — ເປີດລິງກ໌ຕິດຕັ້ງ ຫຼື ສະແກນ QR","Sync link not set — open the setup link or scan the QR")); return false; }
+  if(syncBusy) return false;
   syncBusy = true;
   try{
     const r = await fetch(`${url}?action=config&k=${encodeURIComponent(SYNC_READ_KEY)}&t=${Date.now()}`,{method:"GET"});
     const d = await r.json();
-    if(!d || !d.ok || !d.cfg) { if(opts&&opts.manual) toast(T("ຍັງບໍ່ມີການຕັ້ງຄ່າກາງໃນຊີດ","No shared settings on the sheet yet"),"i-alert",true); return false; }
+    if(!d || !d.ok || !d.cfg) {
+      setSyncStatus(d&&d.error==="no config yet" ? T("ຕູ້ເຊຟຍັງບໍ່ມີການຕັ້ງຄ່າ — ເຈົ້າຂອງຍັງບໍ່ໄດ້ສົ່ງ","The sheet has no settings yet — the owner hasn't sent any")
+                                                   : `${T("ຕູ້ເຊຟຕອບກັບບໍ່ຖືກ","Unexpected sheet reply")}: ${d&&d.error||"?"}`);
+      if(opts&&opts.manual) toast(T("ຍັງບໍ່ມີການຕັ້ງຄ່າກາງໃນຊີດ","No shared settings on the sheet yet"),"i-alert",true); return false; }
     const at = Number(d.at||0), mine = Number(cfg.cfgAt||0);
-    if(at && at <= mine && !(opts&&opts.force)){ if(opts&&opts.manual) toast(T("ການຕັ້ງຄ່າໃໝ່ສຸດແລ້ວ","Settings are already up to date"),"i-check"); return false; }
+    if(at && at <= mine && !(opts&&opts.force)){ setSyncStatus(`${T("ຊິງຄ໌ກັບຮ້ານແລ້ວ · ໃໝ່ສຸດ","Synced with the shop · up to date")} ${hhmm(Date.now())} · ${T("ພະນັກງານ","staff")} ${syncStaffN()} ${T("ຄົນ","")}`); if(opts&&opts.manual) toast(T("ການຕັ້ງຄ່າໃໝ່ສຸດແລ້ວ","Settings are already up to date"),"i-check"); return false; }
     applyRemoteConfig(d.cfg, at);
+    setSyncStatus(`${T("ຊິງຄ໌ຈາກຮ້ານແລ້ວ","Synced from the shop")} ${hhmm(Date.now())} · ${T("ພະນັກງານ","staff")} ${syncStaffN()} ${T("ຄົນ","")}`);
     if(opts&&opts.manual) toast(`${T("ດຶງການຕັ້ງຄ່າຈາກຮ້ານແລ້ວ","Pulled the shop settings")} · ${T("ພະນັກງານ","staff")} ${(cfg.staff||[]).length} ${T("ຄົນ","")}`,"i-check");
     return true;
   }catch(e){
+    setSyncStatus(`${T("ດຶງການຕັ້ງຄ່າບໍ່ໄດ້","Couldn't pull settings")}: ${(e&&e.message)||e}`);
     if(opts&&opts.manual) toast(T("ດຶງການຕັ້ງຄ່າບໍ່ໄດ້ — ກວດອິນເຕີເນັດ","Couldn't pull settings — check the internet"),"i-alert",true);
     return false;
   }finally{ syncBusy = false; }
