@@ -12,6 +12,8 @@ const SYM={LAK:"₭",THB:T("฿","฿"),USD:"$"}, CURNAME={LAK:T("ກີບ","ki
 const dueIn=(d,c)=>c==="LAK"?d:Math.ceil(d/RATE(c)/cfg.cur.foreignRound)*cfg.cur.foreignRound;
 function renderPay(){
   const {b,part,due}=payCtx(); const p=state.pay; const tb=tableOf(b.table);
+  const pk=b.no+":"+part;
+  if(p.forBill!==pk){ p.forBill=pk; p.method=b.payBy==="transfer"?"transfer":"cash"; if(b.payBank) p.bank=b.payBank; }
   if(!cfg.pay.cash&&p.method==="cash") p.method="transfer";
   if(!cfg.pay.transfer&&p.method==="transfer") p.method="cash";
   if(!curs().includes(p.cur)) p.cur="LAK";
@@ -42,7 +44,7 @@ function renderPay(){
   $("#confirmLabel").textContent=ready?`${T("ຢືນຢັນຮັບຊຳລະ","Confirm payment")} ${kip(due)}`:T("ຢືນຢັນຮັບຊຳລະ","Confirm payment");
   const pl=p.method==="cash"?`<div class="rr"><span>Cash ${p.cur}</span><span>${p.cur==="LAK"?fmt(due)+" ₭":SYM[p.cur]+fmt(dueIn(due,p.cur))}</span></div>`:p.method==="transfer"&&bk?`<div class="rr"><span>Transfer</span><span>${esc(bk.name)}</span></div>`:"";
   $("#payReceipt").className="receipt"+(+cfg.printer.paper===58?" p58":"");
-  $("#payReceipt").innerHTML=receiptHTML(b,{part,payLines:pl});
+  $("#payReceipt").innerHTML=receiptHTML(b,{part,payLines:pl,qr:p.method==="transfer"?(bk||true):false});
 }
 /* QR ຈິງຂອງທະນາຄານ ພ້ອມຍອດຂອງບິນນີ້ — ບໍ່ມີແມ່ແບບ QR ກໍສະແດງຄຳແນະນຳແທນ */
 function drawQR(bk,due,ref){
@@ -51,10 +53,10 @@ function drawQR(bk,due,ref){
   if(svg){ box.outerHTML=svg.replace('class="qr-img"','class="qr-img" id="qrSvg"'); return; }
   box.outerHTML=`<div class="qr-img" id="qrSvg" style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;border:1px dashed var(--line-strong);border-radius:12px;background:#fff"><span class="muted small">${T("ຍັງບໍ່ໄດ້ໃສ່ຂໍ້ຄວາມ QR ຂອງບັນຊີນີ້ — ໄປທີ່ ຕັ້ງຄ່າ › ຊຳລະເງິນ","No QR text for this account yet — go to Settings › Payment")}</span></div>`;
 }
-$("#methods").addEventListener("click",e=>{const m=e.target.closest("[data-method]"); if(!m)return; state.pay.method=m.dataset.method; renderPay();});
+$("#methods").addEventListener("click",e=>{const m=e.target.closest("[data-method]"); if(!m)return; state.pay.method=m.dataset.method; bill().payBy=m.dataset.method==="transfer"?"transfer":"cash"; saveSession(); renderPay();});
 $("#partSwitch").addEventListener("click",e=>{const m=e.target.closest("[data-pp]"); if(!m)return; state.payPart=+m.dataset.pp; resetPay(); renderPay();});
 $("#curOpts").addEventListener("click",e=>{const x=e.target.closest("[data-cur]"); if(!x)return; state.pay.cur=x.dataset.cur; renderPay();});
-$("#bankOpts").addEventListener("click",e=>{const x=e.target.closest("[data-bank]"); if(!x)return; state.pay.bank=x.dataset.bank; state.pay.ok=false; renderPay();});
+$("#bankOpts").addEventListener("click",e=>{const x=e.target.closest("[data-bank]"); if(!x)return; state.pay.bank=x.dataset.bank; bill().payBank=x.dataset.bank; saveSession(); state.pay.ok=false; renderPay();});
 $("#transferOk").onchange=e=>{state.pay.ok=e.target.checked; renderPay();};
 $("#confirmPay").onclick=async()=>{
   const {b,part,due}=payCtx(); const p=state.pay; const t=totals(b);

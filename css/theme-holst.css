@@ -443,3 +443,19 @@ b,strong,.item .name,.sb-card b,.part-h b,.method b,th{font-weight:600}
 .qr-img{display:block;background:#FFFFFF;border-radius:8px;max-width:100%;height:auto;image-rendering:pixelated}
 .bill-qr{margin:10px 0}
 @media print{.bill-qr{break-inside:avoid}.qr-img{width:46mm;height:46mm}}
+
+/* ===== ບັນຊີທະນາຄານ: ການ໌ດຕໍ່ທະນາຄານ (ຈັດເປັນລະບຽບໃນມືຖື) ===== */
+.bank-list{display:grid;gap:14px}
+.bank-card{display:grid;gap:12px;padding:16px;border:1px solid var(--hs-line);border-radius:18px;background:#FFFFFF}
+.bank-card.off{background:var(--hs-cream-hi)}
+.bank-card.off .bank-f{opacity:.72}
+.bank-h{display:grid;grid-template-columns:minmax(0,1fr) auto 40px;gap:10px;align-items:center}
+.bank-h .bank-name{font-weight:600;min-width:0}
+.bank-sw{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--hs-ink);cursor:pointer;white-space:nowrap}
+.bank-f{display:grid;gap:6px;min-width:0}
+.bank-f .label{margin:0}
+.bank-f .inp{width:100%;max-width:100%;min-width:0;text-overflow:ellipsis}
+.bank-f .help{margin:0;overflow-wrap:anywhere}
+.payhint{margin:14px 0 4px}
+.payhint .opt-group{display:flex;flex-wrap:wrap;gap:8px}
+@media(min-width:900px){ .bank-list{grid-template-columns:repeat(2,minmax(0,1fr))} }

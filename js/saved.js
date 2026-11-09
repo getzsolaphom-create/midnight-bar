@@ -43,7 +43,7 @@ function billSnapshot(b,{part=null,pay=null,kind="saved"}={}){
     amount, paid:kind==="paid",
     pay:pay||null,
     shop:{name:cfg.shop.name,address:cfg.shop.address,phone:cfg.shop.phone,footer:cfg.shop.footer},
-    receipt:receiptHTML(b,{part,payLines:pay?.lines||""}),
+    receipt:receiptHTML(b,{part,payLines:pay?.lines||"",qr:b.payBy==="transfer"&&kind!=="paid"}),
   };
 }
 function pushSaved(rec){

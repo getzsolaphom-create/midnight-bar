@@ -109,11 +109,12 @@ async function showReport(){
     actions:[{label:T("ປິດ","Close"),value:"cancel"},{label:T("ພິມລາຍງານ","Print report"),value:"print",cls:"btn-gold",icon:"i-print",id:"reportPrintBtn"}]});
   if(r.value==="print"){ printHTML(shiftReportHTML(),"report"); log("shift",`${T("ພິມໃບສະຫຼຸບປິດກະ","Printed shift summary")} #0001`); toast(`${T("ພິມໃບສະຫຼຸບປິດກະ","Shift summary printed")} → ${cfg.printer.receipt}`,"i-print"); }
 }
-/* QR ໂອນເງິນໃນໃບບິນ — ສະແດງສະເພາະບິນທີ່ຍັງບໍ່ທັນຊຳລະ */
-function billQrHTML(b,part){
+/* QR ໂອນເງິນໃນໃບບິນ — ສະແດງສະເພາະບິນທີ່ພະນັກງານເລືອກ "ລູກຄ້າໂອນ" ແລະຍັງບໍ່ທັນຊຳລະ; ບິນເງິນສົດບໍ່ມີ QR */
+const qrBanks=()=>cfg.pay.transfer?cfg.pay.banks.filter(k=>k.on&&k.qr&&laoQrValid(k.qr)):[];
+const qrBankOf=b=>{ const l=qrBanks(); return l.find(k=>k.id===b.payBank)||l[0]||null; };
+function billQrHTML(b,part,pick){
   if(b.status==="paid") return "";
-  if(!cfg.pay.transfer) return "";
-  const bk=cfg.pay.banks.find(k=>k.on&&k.qr&&laoQrValid(k.qr));
+  const bk=(pick&&pick.qr&&laoQrValid(pick.qr))?pick:qrBankOf(b);
   if(!bk) return "";
   const due=(b.split&&part!=null)?partAmounts(b)[part]:totals(b).total;
   if(!(due>0)) return "";
@@ -124,7 +125,7 @@ function billQrHTML(b,part){
     <div style="display:flex;justify-content:center;margin:6px 0">${svg}</div>
     <div class="rs">${T("ຍອດ","Amount")} ${fmt(due)} ₭ · ${T("ອ້າງອີງ","ref.")} #${b.no}</div></div>`;
 }
-function receiptHTML(b,{part=null,payLines=""}={}){
+function receiptHTML(b,{part=null,payLines="",qr=false}={}){
   const t=totals(b), tb=tableOf(b.table); let lines=liveLines(b), partNote="";
   if(b.split&&part!=null){
     const p=b.split.parts[part];
@@ -143,7 +144,7 @@ function receiptHTML(b,{part=null,payLines=""}={}){
   ${t.svc?`<div class="rr"><span>Service ${cfg.shop.svcPct}%</span><span>${fmt(t.svc)}</span></div>`:""}
   <div class="rr ${partNote?"":"big"}"><span>TOTAL</span><span>${fmt(t.total)} ₭</span></div>
   ${partNote}${payLines}
-  ${billQrHTML(b,part)}
+  ${qr?billQrHTML(b,part,typeof qr==="object"?qr:null):""}
   <hr><div class="thanks">${esc(cfg.shop.footer)}</div>`;
 }
 function renderBill(){
@@ -194,8 +195,30 @@ function renderBill(){
   $("#goPayBtn").disabled=!t.items||b.status==="paid";
   $("#goPayBtn").classList.toggle("btn-gold",pc!=="no");
   $("#billReceipt").className="receipt"+(+cfg.printer.paper===58?" p58":"");
-  $("#billReceipt").innerHTML=receiptHTML(b); renderSlips(b);
+  renderPayHint(b);
+  $("#billReceipt").innerHTML=receiptHTML(b,{qr:b.payBy==="transfer"}); renderSlips(b);
 }
+/* ເລືອກວິທີຈ່າຍໃນໜ້າບິນ: ເງິນສົດ = ບໍ່ມີ QR · ໂອນ = ມີ QR ລັອກຍອດໃນບິນ */
+function renderPayHint(b){
+  const el=$("#payHintOpts"); if(!el) return;
+  const off=b.status==="paid"?"disabled":"";
+  const isT=b.payBy==="transfer", qb=qrBanks();
+  let h="";
+  if(cfg.pay.cash) h+=`<button class="opt" data-ph="cash" aria-pressed="${!isT}" ${off}>${T("ເງິນສົດ","Cash")}</button>`;
+  if(cfg.pay.transfer) h+=`<button class="opt" data-ph="transfer" aria-pressed="${isT}" ${off}>${T("ໂອນເງິນ","Transfer")}</button>`;
+  if(isT&&qb.length>1){ const cur=qrBankOf(b); h+=qb.map(k=>`<button class="opt" data-phbank="${k.id}" aria-pressed="${cur&&cur.id===k.id}" ${off}>${esc(k.name)}</button>`).join(""); }
+  el.innerHTML=h;
+  const note=$("#payHintNote");
+  if(note) note.textContent=isT?(qb.length?"":T("ຍັງບໍ່ໄດ້ໃສ່ຂໍ້ຄວາມ QR ຂອງບັນຊີ — ໄປທີ່ ຕັ້ງຄ່າ › ຊຳລະເງິນ","No QR text set yet — go to Settings › Payment")):"";
+}
+$("#payHintOpts").addEventListener("click",e=>{
+  const b=bill(); if(b.status==="paid") return;
+  const m=e.target.closest("[data-ph]"), k=e.target.closest("[data-phbank]");
+  if(m){ b.payBy=m.dataset.ph==="transfer"?"transfer":"cash"; }
+  else if(k){ b.payBank=k.dataset.phbank; }
+  else return;
+  saveSession(); render();
+});
 function renderSplit(b){
   const el=$("#splitArea");
   if(!b.split){ el.innerHTML=""; return; }
@@ -271,7 +294,7 @@ $("#printBillBtn").onclick=()=>{
     render(); toast(`${T("ບັນທຶກບິນ","Saved bill")} #${b.no} ${T("ແລ້ວ — ເບິ່ງໄດ້ໃນໜ້າ “ບິນທີ່ບັນທຶກ”","— see it on the Saved bills page")}`,"i-archive");
     openSaved(rec.id); return;
   }
-  b.status="printed"; log("bill",`${T("ພິມບິນ","Print bill")} #${b.no} (${cfg.printer.copies} ${T("ຊຸດ)","copies)")}`); render(); toast(`${T("ພິມບິນ","Print bill")} #${b.no} → ${cfg.printer.receipt}`,"i-print"); printHTML(receiptHTML(b));
+  b.status="printed"; log("bill",`${T("ພິມບິນ","Print bill")} #${b.no} (${cfg.printer.copies} ${T("ຊຸດ)","copies)")}`); render(); toast(`${T("ພິມບິນ","Print bill")} #${b.no} → ${cfg.printer.receipt}`,"i-print"); printHTML(receiptHTML(b,{qr:b.payBy==="transfer"}));
 };
 $("#goPayBtn").onclick=()=>{ const b=bill(); state.payPart=b.split?b.split.parts.findIndex(p=>!p.paid):null; if(state.payPart<0) state.payPart=null; resetPay(); navTo("pay"); };
 const REASONS=[T("ລູກຄ້າປ່ຽນໃຈ","Customer changed mind"),T("ສັ່ງຜິດ","Wrong order"),T("ຂອງເສຍ / ຫົກ","Spoiled / spilled"),T("ລໍຖ້າດົນເກີນໄປ","Waited too long"),T("ຂວດແຕກ","Broken bottle")];

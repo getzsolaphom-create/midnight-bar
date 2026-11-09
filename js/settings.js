@@ -99,14 +99,22 @@ function renderSettings(){
   case "pay":
     h=sec(T("ຊ່ອງທາງຊຳລະເງິນ","Payment channels"),T("ປິດຊ່ອງທາງແລ້ວຈະຫາຍຈາກໜ້າຊຳລະເງິນທັນທີ","A channel you turn off disappears from the payment page at once"),`<div class="form-grid">${F(T("ຮັບເງິນສົດ","Accept cash"),"pay.cash",{type:"bool"})}${F(T("ຮັບໂອນເງິນ (QR)","Accept transfers (QR)"),"pay.transfer",{type:"bool"})}</div>`)
     +sec((T("ບັນຊີທະນາຄານສຳລັບ","Bank accounts for")+" QR"),T("ເລກບັນຊີ ແລະ ຊື່ບັນຊີສະແດງໃຕ້ QR ໃນໜ້າຊຳລະເງິນ","The account number and name appear under the QR on the payment page"),`
-      <div class="scroll-x"><table class="data-table"><thead><tr><th>${T("ທະນາຄານ","Bank")}</th><th>${T("ເລກບັນຊີ","Account no.")}</th><th>${T("ຊື່ບັນຊີ","Account name")}</th><th class="c">${T("ໃຊ້ງານ","Active")}</th><th></th></tr></thead><tbody>
-      ${cfg.pay.banks.map((k,i)=>`<tr><td><input class="inp sm" style="min-width:110px" data-path="pay.banks.${i}.name" data-type="str" data-label="${T("ຊື່ທະນາຄານ","Bank name")}" value="${esc(k.name)}" aria-label="${T("ທະນາຄານ","Bank")}"></td><td><input class="inp sm" style="min-width:170px" data-path="pay.banks.${i}.acc" data-type="str" data-label="${T("ເລກບັນຊີ","Account no.")} ${esc(k.name)}" value="${esc(k.acc)}" aria-label="${T("ເລກບັນຊີ","Account no.")}"></td><td><input class="inp sm" style="min-width:170px" data-path="pay.banks.${i}.accName" data-type="str" data-label="${T("ຊື່ບັນຊີ","Account name")} ${esc(k.name)}" value="${esc(k.accName)}" aria-label="${T("ຊື່ບັນຊີ","Account name")}"></td>
-      <td class="c"><input type="checkbox" class="tog" data-path="pay.banks.${i}.on" data-type="bool" data-label="${T("ເປີດໃຊ້","Enable")} ${esc(k.name)}" ${k.on?"checked":""} aria-label="${T("ເປີດໃຊ້","Enable")} ${esc(k.name)}"></td>
-      <td class="r"><button class="btn btn-ghost icon-btn sm" data-act="delBank" data-i="${i}" aria-label="${T("ລຶບບັນຊີ","Delete account")}">${icon("i-trash","sm")}</button></td></tr>
-      <tr><td colspan="5" style="padding-top:0"><label class="label" for="qrtpl${i}">${T("ຂໍ້ຄວາມ QR ຂອງບັນຊີນີ້ (Lao QR) — ວາງແລ້ວລະບົບຈະອອກ QR ທີ່ລັອກຍອດໃຫ້ແຕ່ລະບິນ","This account's Lao QR text — paste it and each bill gets a QR with the amount locked in")}</label>
-        <input class="inp sm" id="qrtpl${i}" style="width:100%" data-path="pay.banks.${i}.qr" data-type="str" data-label="QR ${esc(k.name)}" value="${esc(k.qr||"")}" placeholder="000201010211...6304XXXX">
-        <div class="help">${k.qr?(laoQrValid(k.qr)?`<span style="color:var(--ok)">${icon("i-check","xs")}${T("ຂໍ້ຄວາມ QR ຖືກຕ້ອງ","QR text is valid")}</span>`:`<span style="color:var(--danger)">${icon("i-alert","xs")}${T("ຂໍ້ຄວາມ QR ບໍ່ຖືກຕ້ອງ — ກວດເບິ່ງວ່າສຳເນົາມາຄົບບໍ","QR text is not valid — check that it was copied in full")}</span>`):T("ເວັ້ນວ່າງ = ບິນຈະບໍ່ມີ QR ຂອງບັນຊີນີ້","Leave empty and bills show no QR for this account")}</div></td></tr>`).join("")}
-      </tbody></table></div>`,`<button class="btn" data-act="addBank">${icon("i-plus","sm")}${T("ເພີ່ມບັນຊີ","Add account")}</button>`);
+      <div class="bank-list">
+      ${cfg.pay.banks.map((k,i)=>`<div class="bank-card${k.on?"":" off"}">
+        <div class="bank-h">
+          <input class="inp bank-name" data-path="pay.banks.${i}.name" data-type="str" data-label="${T("ຊື່ທະນາຄານ","Bank name")}" value="${esc(k.name)}" placeholder="${T("ຊື່ທະນາຄານ","Bank name")}" aria-label="${T("ທະນາຄານ","Bank")}">
+          <label class="bank-sw"><span>${T("ໃຊ້ງານ","Active")}</span><input type="checkbox" class="tog" data-path="pay.banks.${i}.on" data-type="bool" data-label="${T("ເປີດໃຊ້","Enable")} ${esc(k.name)}" ${k.on?"checked":""} aria-label="${T("ເປີດໃຊ້","Enable")} ${esc(k.name)}"></label>
+          <button class="btn btn-ghost icon-btn sm" data-act="delBank" data-i="${i}" aria-label="${T("ລຶບບັນຊີ","Delete account")}">${icon("i-trash","sm")}</button>
+        </div>
+        <div class="bank-f"><label class="label" for="bkacc${i}">${T("ເລກບັນຊີ","Account no.")}</label>
+          <input class="inp" id="bkacc${i}" inputmode="numeric" data-path="pay.banks.${i}.acc" data-type="str" data-label="${T("ເລກບັນຊີ","Account no.")} ${esc(k.name)}" value="${esc(k.acc)}"></div>
+        <div class="bank-f"><label class="label" for="bknm${i}">${T("ຊື່ບັນຊີ","Account name")}</label>
+          <input class="inp" id="bknm${i}" data-path="pay.banks.${i}.accName" data-type="str" data-label="${T("ຊື່ບັນຊີ","Account name")} ${esc(k.name)}" value="${esc(k.accName)}"></div>
+        <div class="bank-f"><label class="label" for="qrtpl${i}">${T("ຂໍ້ຄວາມ QR (Lao QR)","Lao QR text")}</label>
+          <input class="inp" id="qrtpl${i}" data-path="pay.banks.${i}.qr" data-type="str" data-label="QR ${esc(k.name)}" value="${esc(k.qr||"")}" placeholder="000201010211...6304XXXX" autocomplete="off" spellcheck="false">
+          <div class="help">${k.qr?(laoQrValid(k.qr)?`<span style="color:var(--ok)">${icon("i-check","xs")}${T("ຂໍ້ຄວາມ QR ຖືກຕ້ອງ","QR text is valid")}</span>`:`<span style="color:var(--danger)">${icon("i-alert","xs")}${T("ຂໍ້ຄວາມ QR ບໍ່ຖືກຕ້ອງ — ກວດເບິ່ງວ່າສຳເນົາມາຄົບບໍ","QR text is not valid — check that it was copied in full")}</span>`):T("ວາງຂໍ້ຄວາມ QR ແລ້ວລະບົບຈະອອກ QR ລັອກຍອດໃຫ້ແຕ່ລະບິນໂອນ · ເວັ້ນວ່າງ = ບໍ່ມີ QR","Paste it and each transfer bill gets a QR with the amount locked · leave empty = no QR")}</div></div>
+      </div>`).join("")}
+      </div>`,`<button class="btn" data-act="addBank">${icon("i-plus","sm")}${T("ເພີ່ມບັນຊີ","Add account")}</button>`);
     break;
   case "tables":
     h=sec(T("ໂຊນ","Zones"),"",`<div class="scroll-x"><table class="data-table"><thead><tr><th>${T("ຊື່ໂຊນ","Zone name")}</th><th class="r">${T("ໂຕະ","Table")}</th><th></th></tr></thead><tbody>
