@@ -15,7 +15,8 @@ const SYNC_READ_KEY    = "mb-read";
 const SYNC_KEYS = ["v","menuV","shop","perms","staff","cats","products","hh","cur","pay","zones","tables","security"];
 
 const syncUrl = () => (cfg.sheets && cfg.sheets.url) || SYNC_URL_DEFAULT;
-const syncPick = () => { const o={}; SYNC_KEYS.forEach(k=>{ if(cfg[k]!==undefined) o[k]=cfg[k]; }); return o; };
+/* ໂລໂກ້ຮ້ານເປັນຮູບໃຫຍ່ (~130 KB) ບໍ່ສົ່ງຂຶ້ນຊີດ — ຖ້າສົ່ງ ທຸກເຄື່ອງຈະດຶງ 150 KB ທຸກ 2 ນາທີ ແລະເກີນໂຄຕ້າ Apps Script */
+const syncPick = () => { const o={}; SYNC_KEYS.forEach(k=>{ if(cfg[k]!==undefined) o[k]=cfg[k]; }); if(o.shop){ const {logo,...rest}=o.shop; o.shop=rest; } return o; };
 const syncSig  = () => { try{ return JSON.stringify(syncPick()).length+":"+JSON.stringify(syncPick()).slice(0,4000); }catch(e){ return ""; } };
 
 /* ເຄື່ອງນີ້ແມ່ນເຄື່ອງຂອງເຈົ້າຂອງບໍ? (ມີສິດສົ່ງຂຶ້ນ) — ຕ້ອງເຂົ້າສູ່ລະບົບເປັນເຈົ້າຂອງ ແລະ ມີ token */
@@ -43,7 +44,9 @@ async function pullConfig(opts){
 }
 
 function applyRemoteConfig(rc, at){
+  const keepLogo = cfg.shop && cfg.shop.logo;
   SYNC_KEYS.forEach(k=>{ if(rc[k]!==undefined) cfg[k]=rc[k]; });
+  if(cfg.shop && keepLogo) cfg.shop.logo = keepLogo;   // ໂລໂກ້ຢູ່ກັບເຄື່ອງ ບໍ່ຖືກທັບ
   cfg.cfgAt = at || Date.now();
   /* ຄ່າທີ່ອາດຂາດ ຖ້າຊີດເກັບມາຈາກລຸ້ນເກົ່າ */
   cfg.sheets  = cfg.sheets  || {url:"",token:""};
