@@ -25,7 +25,7 @@ const syncSig  = () => { try{ return JSON.stringify(syncPick()).length+":"+JSON.
 /* ເຄື່ອງນີ້ແມ່ນເຄື່ອງຂອງເຈົ້າຂອງບໍ? (ມີສິດສົ່ງຂຶ້ນ) — ຕ້ອງເຂົ້າສູ່ລະບົບເປັນເຈົ້າຂອງ ແລະ ມີ token */
 const canPushCfg = () => !!(state.user && state.user.role==="owner" && cfg.sheets && cfg.sheets.url && cfg.sheets.token);
 
-let syncLastSig = null, syncPushT = null, syncBusy = false;
+let syncLastSig = syncSig(), syncPushT = null, syncBusy = false;   // ຖານຕັ້ງຕົ້ນຕອນໂຫຼດ — ບໍ່ດັ່ງນັ້ນການແກ້ໄຂຄັ້ງທຳອິດຫຼັງເປີດແອັບຈະບໍ່ຖືກສົ່ງ
 
 /* ---------- ດຶງຄ່າລົງ ---------- */
 async function pullConfig(opts){
