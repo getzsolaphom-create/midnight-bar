@@ -459,3 +459,10 @@ b,strong,.item .name,.sb-card b,.part-h b,.method b,th{font-weight:600}
 .payhint{margin:14px 0 4px}
 .payhint .opt-group{display:flex;flex-wrap:wrap;gap:8px}
 @media(min-width:900px){ .bank-list{grid-template-columns:repeat(2,minmax(0,1fr))} }
+
+/* ===== iPad / ແທັບເລັດ: ກັນຊ່ອງຊົນກັນ (ຊ່ອງເວລາ/ວັນທີຂອງ Safari ມີຄວາມກວ້າງຂັ້ນຕ່ຳຂອງມັນເອງ) ===== */
+.form-grid>*,.og-row>*,.adjust>*{min-width:0}
+.og-row{grid-template-columns:minmax(0,1fr) 130px 40px}
+.inp,.form-grid input,.form-grid select,.form-grid textarea{max-width:100%;min-width:0}
+input[type="time"],input[type="date"],input[type="datetime-local"]{
+  -webkit-appearance:none;appearance:none;width:100%;max-width:100%;min-width:0;box-sizing:border-box;min-height:48px}
