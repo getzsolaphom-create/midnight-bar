@@ -433,6 +433,14 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   window.addEventListener('load', function () {
     navigator.serviceWorker.register('sw.js').catch(function () {});
   });
+  /* ມີເວີຊັນໃໝ່ມາແທນ (ບໍ່ແມ່ນຕິດຕັ້ງຄັ້ງທຳອິດ) → ໂຫຼດໃໝ່ຄັ້ງດຽວ ເພື່ອບໍ່ໃຫ້ຄ້າງໃຊ້ໂຄດເກົ່າຈາກແຄຊ
+     ບໍ່ໂຫຼດຕອນມີຄົນເຂົ້າລະບົບ/ມີບິນຄ້າງ ເພື່ອບໍ່ໃຫ້ຂັດຈັງຫວະຂາຍ */
+  var hadSW = !!navigator.serviceWorker.controller, reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', function () {
+    if (!hadSW || reloaded) return;
+    try { if (typeof syncIdle === 'function' && !syncIdle()) return; } catch (e) { return; }
+    reloaded = true; location.reload();
+  });
 }
 </script>
 </body>
