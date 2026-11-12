@@ -26,7 +26,7 @@ function buildDayPayload(){
     return g.rows.map(([name,qty,amt])=>({date,cat:g.th,name,qty,amt}));
   });
   const transferTotal=Object.entries(s.methods).filter(([k])=>!isCash(k)).reduce((a,[,v])=>a+v,0);
-  return {date, shift:"0001", by:state.closeInfo?.by||state.user?.name||"",
+  return {date, dev:(typeof LIVE!=="undefined"&&LIVE.dev)||"", shift:"0001", by:state.closeInfo?.by||state.user?.name||"",
     net:s.net, disc:s.disc, bills:s.bills,
     cashLAK:s.methods["cash-LAK"]||0, cashTHB:s.methods["cash-THB"]||0, cashUSD:s.methods["cash-USD"]||0,
     cashTotal:s.cash, transferTotal, items, products};
