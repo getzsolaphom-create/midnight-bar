@@ -3,6 +3,9 @@
 .live-h small{margin-left:auto;font-weight:400}
 .bill-pick.live{border-style:dashed}
 .bill-pick.live[data-stale="1"]{opacity:.55}
+.bill-pick.live .bmeta.who{white-space:normal;overflow:visible;line-height:1.25}
+.bill-pick.live .who b{color:var(--gold-ink);font-weight:600}
+.bill-pick.live .who em{display:block;font-style:normal;font-size:12px}
 .tbl small.live-tag{display:block;color:var(--gold-ink);font-weight:600}
 @media (max-width:720px){
   .live-h{min-width:max-content;align-self:center}

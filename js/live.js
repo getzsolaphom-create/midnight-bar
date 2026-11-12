@@ -19,6 +19,17 @@ const LIVE = { dev: "", supported: null, remote: [], sig: "", rsig: "", lastPush
   } catch (e) { LIVE.dev = Math.random().toString(36).slice(2, 8); }
 })();
 
+/* ແກ້ຄ່າທີ່ວາງຜິດ: ຖ້າໃນຊ່ອງ URL ເຄີຍວາງ "ລິງກ໌ຕິດຕັ້ງ" (…/midnightbar/?s=<exec>) ໃຫ້ດຶງສະເພາະ URL exec ອອກມາ */
+(function liveRepairUrl() {
+  try {
+    const u = cfg.sheets && cfg.sheets.url;
+    if (u && u.indexOf("?s=") > -1) {
+      const s = new URL(u).searchParams.get("s");
+      if (s && /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(s.trim())) { cfg.sheets.url = s.trim(); save(); }
+    }
+  } catch (e) {}
+})();
+
 const liveUrl = () => (cfg.sheets && cfg.sheets.url) || "";
 
 /* ພາບຖ່າຍບິນທີ່ຍັງບໍ່ໄດ້ຊຳລະ — ຕ້ອງນ້ອຍກວ່າ ~8 KB (ຂີດຈຳກັດຂອງ Apps Script Properties) */
@@ -56,7 +67,7 @@ async function livePoll() {
     LIVE.supported = true;
     const srvNow = Number(d.now) || Date.now();
     LIVE.remote = d.devices.filter(x => x && x.id !== LIVE.dev).flatMap(x =>
-      (x.bills || []).map(b => ({ ...b, dev: x.id, by: x.user || b.w || "", seen: x.at, stale: srvNow - x.at > LIVE_STALE_MS })));
+      (x.bills || []).map(b => ({ ...b, dev: x.id, by: x.user || "", seen: x.at, stale: srvNow - x.at > LIVE_STALE_MS })));   // by = ຜູ້ທີ່ລັອກອິນຢູ່ໃນເຄື່ອງນັ້ນ (ວ່າງ = ລັອກໜ້າຈໍ)
     liveRefreshUI();
   } catch (e) { LIVE.err = String((e && e.message) || e); }
   finally { LIVE.busy = false; }
@@ -65,19 +76,35 @@ async function livePoll() {
 const liveForTable = id => (LIVE.supported === true ? LIVE.remote.filter(b => b.t === id && !b.stale) : []);
 const liveSorted = () => LIVE.remote.slice().sort((a, c) => String(a.tn).localeCompare(String(c.tn), undefined, { numeric: true }));
 
+/* ຊື່ + ຕຳແໜ່ງ ຂອງຄົນທີ່ກຳລັງປ້ອນ
+   ຊື່ = ຜູ້ທີ່ລັອກອິນຢູ່ໃນເຄື່ອງນັ້ນ (ຊື່ໃດໃນລະບົບເຂົ້າສູ່ລະບົບ ກໍສະແດງຊື່ນັ້ນ) · ຕຳແໜ່ງຫາຈາກລາຍຊື່ພະນັກງານ (ຊິງຄ໌ຖືກກັນທຸກເຄື່ອງ)
+   ຖ້າເຄື່ອງນັ້ນລັອກໜ້າຈໍຢູ່ ໃຊ້ຊື່ຄົນທີ່ເປີດບິນແທນ ແລະ ບອກວ່າ "ລັອກໜ້າຈໍ" */
+function liveWho(b) {
+  const name = b.by || b.w || "";
+  const s = (cfg.staff || []).find(x => x.name === name);
+  return { name, role: s && ROLES[s.role] ? ROLES[s.role] : "", on: !!b.by };
+}
+const liveWhoText = b => { const w = liveWho(b); return w.name + (w.role ? ` · ${w.role}` : ""); };
+
 /* ບັດບິນຂອງເຄື່ອງອື່ນ — ວາງຕໍ່ທ້າຍລາຍການບິນໃນໜ້າ "ບິນ" */
 function liveCardsHTML() {
   if (LIVE.supported !== true || !LIVE.remote.length) return "";
   const list = liveSorted();
-  return `<div class="live-h">${icon("i-users", "sm")}<span>${T("ບິນຈາກເຄື່ອງອື່ນ", "Bills on other devices")} · ${list.length}</span><small>${T("ເບິ່ງຢ່າງດຽວ", "view only")}</small></div>`
-    + list.map((b, i) => `
+  return `<div class="live-h">${icon("i-users", "sm")}<span>${T("ກຳລັງປ້ອນບິນຢູ່ເຄື່ອງອື່ນ", "Being keyed on other devices")} · ${list.length}</span><small>${T("ເບິ່ງຢ່າງດຽວ", "view only")}</small></div>`
+    + list.map((b, i) => {
+      const w = liveWho(b);
+      const st = b.stale ? `<span class="muted">${T("ບໍ່ອັບເດດ", "no update")}</span>`
+        : !w.on ? `<span class="muted">${T("ລັອກໜ້າຈໍ", "Locked")}</span>`
+        : `<span style="color:var(--gold-ink)">● ${T("ກຳລັງປ້ອນ", "Keying")}</span>`;
+      return `
     <button class="bill-pick live" data-live="${i}" ${b.stale ? 'data-stale="1"' : ""} aria-label="${T("ເບິ່ງບິນໂຕະ", "View bill for table")} ${esc(b.tn)}">
       <span class="tno">${esc(b.tn)}</span>
-      <span class="bmeta">#${esc(b.no)} · ${b.g} ${T("ຄົນ", "guests")}</span>
+      <span class="bmeta">#${esc(b.no)} · ${b.n} ${T("ລາຍການ", "items")}</span>
       <span class="bamt num">${fmt(b.amt)}</span>
-      <span class="bmeta">${esc(b.w)} · ${minsSince(b.o)}</span>
-      <span class="bst">${b.stale ? `<span class="muted">${T("ບໍ່ອັບເດດ", "no update")}</span>` : `<span style="color:var(--gold-ink)">● ${b.n} ${T("ລາຍການ", "items")}</span>`}</span>
-    </button>`).join("");
+      <span class="bmeta who"><b>${esc(w.name)}</b>${w.role ? `<em>${esc(w.role)}</em>` : ""}</span>
+      <span class="bst">${st}</span>
+    </button>`;
+    }).join("");
 }
 
 /* ກົດເບິ່ງລາຍການໃນບິນຂອງເຄື່ອງອື່ນ (ອ່ານຢ່າງດຽວ) */
@@ -89,7 +116,7 @@ function liveShow(i) {
   openDyn({
     cls: "w-sm", eyebrow: `${T("ເບິ່ງຢ່າງດຽວ · ເຄື່ອງອື່ນ", "View only · other device")}`,
     title: `${T("ໂຕະ", "Table")} ${esc(b.tn)} · #${esc(b.no)}`,
-    sub: `${esc(b.w)} · ${b.g} ${T("ຄົນ", "guests")} · ${minsSince(b.o)}${b.stale ? " · " + T("ເຄື່ອງນັ້ນງຽບໄປແລ້ວ", "that device has gone quiet") : ""}`,
+    sub: `${T("ກຳລັງປ້ອນໂດຍ", "Keyed by")} <b>${esc(liveWhoText(b))}</b>${liveWho(b).on ? "" : " (" + T("ລັອກໜ້າຈໍ", "locked") + ")"} · ${b.g} ${T("ຄົນ", "guests")} · ${minsSince(b.o)}${b.stale ? " · " + T("ເຄື່ອງນັ້ນງຽບໄປແລ້ວ", "that device has gone quiet") : ""}`,
     body: `<div class="scroll-x"><table class="data-table"><thead><tr><th>${T("ລາຍການ", "Item")}</th><th class="c">${T("ຈຳນວນ", "Qty")}</th><th class="r">${T("ລວມ", "Total")}</th></tr></thead><tbody>${rows}</tbody></table></div>
       <p class="muted small" style="margin:10px 0 0">${T("ຍອດຕາມທີ່ເຄື່ອງນັ້ນຄິດ (ລວມສ່ວນຫຼຸດ/ຄ່າບໍລິການ)", "Total as computed on that device (incl. discount/service)")}: <b>${fmt(b.amt)} ₭</b></p>`,
     actions: [{ label: T("ປິດ", "Close"), value: "cancel" }]
@@ -97,7 +124,7 @@ function liveShow(i) {
 }
 
 function liveRefreshUI() {
-  const sig = JSON.stringify([LIVE.supported, LIVE.remote.map(b => [b.dev, b.no, b.n, b.amt, b.stale])]);
+  const sig = JSON.stringify([LIVE.supported, LIVE.remote.map(b => [b.dev, b.no, b.n, b.amt, b.stale, b.by])]);
   if (sig === LIVE.rsig) return;
   LIVE.rsig = sig;
   if (state.user && state.route === "bill" && !document.querySelector("dialog[open]")) renderBill();

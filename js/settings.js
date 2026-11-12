@@ -166,6 +166,12 @@ $("#setBody").addEventListener("change",e=>{
   if(el.dataset.path){
     const path=el.dataset.path, type=el.dataset.type, old=getPath(cfg,path);
     let v=type==="bool"?el.checked:type==="num"?Number(String(el.value).replace(/[^\d.]/g,""))||0:el.value.trim();
+    if(path==="sheets.url"&&v){
+      /* ຍອມຮັບທັງ "ລິງກ໌ຕິດຕັ້ງ" (…/midnightbar/?s=<exec>) ແລະ URL exec ກົງໆ — ວາງຜິດກໍບໍ່ເຮັດໃຫ້ຊິງຄ໌ງຽບໄປ */
+      try{ const s=new URL(v).searchParams.get("s"); if(s) v=s.trim(); }catch(e){}
+      if(!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(v)){
+        el.value=old||""; toast(T("URL ບໍ່ຖືກຮູບແບບ — ຕ້ອງເປັນ https://script.google.com/macros/s/…/exec","Invalid URL — it must look like https://script.google.com/macros/s/…/exec"),"i-alert",true); return; }
+    }
     if(type==="str"&&!v&&!/footer|address|acc|sheets/.test(path)){ el.value=old; toast(T("ຊ່ອງນີ້ວ່າງບໍ່ໄດ້","This field can't be empty"),"i-alert",true); return; }
     if(old===v) return;
     setPath(cfg,path,v);

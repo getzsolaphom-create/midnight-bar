@@ -166,7 +166,7 @@ $("#pickTableBtn").onclick=()=>{
       return `<div><p class="label">${esc(z.name)}</p><div class="tables-grid">${ts.map(t=>{
         const b=state.bills.find(x=>x.table===t.id&&x.status!=="paid");
         const rb=(!b&&typeof liveForTable==="function")?liveForTable(t.id):[];   /* ບິນຂອງເຄື່ອງອື່ນ (js/live.js) */
-        const st=!t.on?`<small class="muted">${T("ປິດຊົ່ວຄາວ","Closed")}</small>`:b?(b.status==="printed"?`<small style="color:var(--danger)">● ${T("ພິມບິນແລ້ວ","Bill printed")}</small>`:`<small style="color:var(--gold-ink)">● ${T("ມີລູກຄ້າ","Occupied")}</small>`):rb.length?`<small class="live-tag">● ${esc(rb[0].w)} · #${esc(rb[0].no)}</small>`:`<small style="color:var(--ok)">● ${T("ວ່າງ","Free")}</small>`;
+        const st=!t.on?`<small class="muted">${T("ປິດຊົ່ວຄາວ","Closed")}</small>`:b?(b.status==="printed"?`<small style="color:var(--danger)">● ${T("ພິມບິນແລ້ວ","Bill printed")}</small>`:`<small style="color:var(--gold-ink)">● ${T("ມີລູກຄ້າ","Occupied")}</small>`):rb.length?`<small class="live-tag">● ${esc(liveWhoText(rb[0]))}</small>`:`<small style="color:var(--ok)">● ${T("ວ່າງ","Free")}</small>`;
         return `<button class="tbl" value="${t.id}" ${!t.on?"disabled":""} aria-current="${!!b&&b.no===state.current}"><b>${esc(t.name)}</b>${st}<small class="muted">${b?kip(totals(b).total):rb.length?kip(rb[0].amt):t.on?`${t.seats} ${T("ບ່ອນນັ່ງ · ເປີດບິນໃໝ່","seats · open new bill")}`:""}</small></button>`;}).join("")}</div></div>`; }).join("")
   }).then(async ({value})=>{
     if(!value||value==="cancel") return;
@@ -177,7 +177,7 @@ $("#pickTableBtn").onclick=()=>{
       if(rb.length){
         const r0=rb[0];
         const go=await confirmBox(`${T("ໂຕະ","Table")} ${esc(tableOf(value).name)} ${T("ມີຄົນຮັບອໍເດີແລ້ວ","already has an order")}`,
-          `${T("ເຄື່ອງອື່ນເປີດບິນໄວ້ແລ້ວ","Another device already opened a bill")}: <b>#${esc(r0.no)}</b> · ${esc(r0.w)} · ${r0.n} ${T("ລາຍການ","items")} · ${kip(r0.amt)} · ${minsSince(r0.o)}<br>${T("ຢາກເປີດບິນໃໝ່ຊ້ຳໂຕະນີ້ແທ້ບໍ?","Open another bill for this table anyway?")}`,
+          `<b>${esc(liveWhoText(r0))}</b> ${T("ກຳລັງປ້ອນບິນໂຕະນີ້ຢູ່ໃນເຄື່ອງອື່ນ","is keying this table on another device")}: <b>#${esc(r0.no)}</b> · ${r0.n} ${T("ລາຍການ","items")} · ${kip(r0.amt)} · ${minsSince(r0.o)}<br>${T("ຢາກເປີດບິນໃໝ່ຊ້ຳໂຕະນີ້ແທ້ບໍ?","Open another bill for this table anyway?")}`,
           T("ເປີດບິນໃໝ່ຢູ່ດີ","Open a new bill anyway"));
         if(!go) return;
       }
