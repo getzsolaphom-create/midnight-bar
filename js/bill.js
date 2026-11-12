@@ -126,7 +126,7 @@ function billQrHTML(b,part,pick){
   if(!bk) return "";
   const due=(b.split&&part!=null)?partAmounts(b)[part]:totals(b).total;
   if(!(due>0)) return "";
-  const svg=laoQrSvg(bk.qr,due,b.no,196);
+  const svg=laoQrSvg(bk.qr,due,billRef(b.no),196);
   if(!svg) return "";
   return `<hr><div class="bill-qr" style="text-align:center">
     <div class="rs" style="font-weight:700">${T("ສະແກນເພື່ອໂອນ","Scan to pay")} · ${esc(bk.name)}</div>

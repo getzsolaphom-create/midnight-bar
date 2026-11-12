@@ -181,7 +181,7 @@ $("#pickTableBtn").onclick=()=>{
           T("ເປີດບິນໃໝ່ຢູ່ດີ","Open a new bill anyway"));
         if(!go) return;
       }
-      b=mkBill(String(state.billSeq++).padStart(4,"0"),value,2,state.user.name,0,[]); state.bills.push(b); toast(`${T("ເປີດບິນໃໝ່","Opened new bill")} #${b.no} · ${T("ໂຕະ","Table")} ${tableOf(value).name}`,"i-receipt"); }
+      b=mkBill(newBillNo(value),value,2,state.user.name,0,[]); state.bills.push(b); toast(`${T("ເປີດບິນໃໝ່","Opened new bill")} #${b.no} · ${T("ໂຕະ","Table")} ${tableOf(value).name}`,"i-receipt"); }
     state.current=b.no; state.payPart=null; resetPay(); saveSession(); render();
   });
 };

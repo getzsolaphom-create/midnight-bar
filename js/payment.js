@@ -37,7 +37,7 @@ function renderPay(){
   $("#qrAmt").textContent=kip(due);
   $("#qrBank").innerHTML=bk?`${esc(bk.name)} · ${esc(bk.accName)}<br>${T("ເລກບັນຊີ","Account no.")} ${esc(bk.acc)} · ${T("ອ້າງອີງ","ref.")} #${b.no}`:T("ຍັງບໍ່ໄດ້ຕັ້ງຄ່າບັນຊີ","No account set up");
   $("#transferOk").checked=p.ok;
-  drawQR(bk,due,b.no);
+  drawQR(bk,due,billRef(b.no));
   if(p.method==="transfer") ready=p.ok&&!!bk;
   ready=ready&&due>0&&b.status!=="paid";
   $("#confirmPay").disabled=!ready;
@@ -88,7 +88,7 @@ $("#confirmPay").onclick=async()=>{
     actions:[cfg.printer.mode==="print"?{label:T("ພິມໃບຮັບເງິນ","Print receipt"),value:"print",icon:"i-print"}:{label:T("ເບິ່ງບິນທີ່ບັນທຶກ","View saved bill"),value:"view",icon:"i-archive"},{label:last?T("ຮັບອໍເດີໂຕະຖັດໄປ","Next table"):T("ຊຳລະບິນຍ່ອຍຖັດໄປ","Pay next sub-bill"),value:"next",cls:"btn-gold",icon:"i-right"}]});
   if(r.value==="print") printNow();
   if(r.value==="view") openSaved(savedRec.id);
-  if(last){ const nx=state.bills.find(x=>x.status!=="paid"); if(nx) state.current=nx.no; else { const nb=mkBill(String(state.billSeq++).padStart(4,"0"),cfg.tables[0].id,2,state.user.name,0,[]); state.bills.push(nb); state.current=nb.no; } state.payPart=null; location.hash=r.value==="next"&&can("order")!=="no"?"#/menu":"#/bill"; }
+  if(last){ const nx=state.bills.find(x=>x.status!=="paid"); if(nx) state.current=nx.no; else { const nb=mkBill(newBillNo(cfg.tables[0].id),cfg.tables[0].id,2,state.user.name,0,[]); state.bills.push(nb); state.current=nb.no; } state.payPart=null; location.hash=r.value==="next"&&can("order")!=="no"?"#/menu":"#/bill"; }
   else state.payPart=b.split.parts.findIndex(x=>!x.paid);
   render();
 };

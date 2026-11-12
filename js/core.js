@@ -184,6 +184,20 @@ const staffBy = id => cfg.staff.find(s=>s.id===id);
 const now=Date.now(); let lineSeq=1;
 function L(pid,qty,mods=[]){ const p=prod(pid)||{id:pid,cat:"x",name:pid,price:0}; return {id:lineSeq++,pid,cat:p.cat,name:p.name,qty,unit:p.price,orig:p.price,mods,sent:true,void:false}; }
 function mkBill(no,table,guests,waiter,minsAgo,lines,status="open"){ return {no,table,guests,waiter,opened:Date.now()-minsAgo*60000,lines,disc:null,svc:cfg.shop.svcDefault,status,split:null}; }
+/* ເລກບິນ = ຊື່ໂຕະ + "-" + ເລກລຳດັບຂອງເຄື່ອງ (ນັບລວມທຸກໂຕະ) ເຊັ່ນ T1-0001 · T4-0002
+   ກັນຊ້ຳ: ຖ້າເລກນີ້ມີແລ້ວໃນເຄື່ອງນີ້ ຫຼື ເປັນບິນທີ່ເຫັນຈາກເຄື່ອງອື່ນ (js/live.js) ຈະຂ້າມໄປເລກຖັດໄປ */
+function billNoTaken(no){
+  if(state.bills.some(b=>b.no===no)||state.sales.some(x=>x.no===no)) return true;
+  try{ return typeof LIVE!=="undefined"&&LIVE.remote.some(b=>b.no===no); }catch(e){ return false; }
+}
+function newBillNo(tableId){
+  const pre=String(tableOf(tableId).name||tableId).replace(/[\s\/\\|:]+/g,"");
+  let no, n=0;
+  do { no=`${pre}-${String(state.billSeq++).padStart(4,"0")}`; n++; } while(n<200&&billNoTaken(no));
+  return no;
+}
+/* ຂໍ້ມູນອ້າງອີງໃນ QR ໂອນເງິນ: ເອົາສະເພາະຕົວອັກສອນ/ຕົວເລກ (ກັນແອັບທະນາຄານບໍ່ຮັບເຄື່ອງໝາຍ "-") */
+const billRef = no => String(no).replace(/[^A-Za-z0-9]/g,"").slice(0,25);
 const state={
   user:null, route:null, cat:"all", q:"", tries:0, lockUntil:0, lastAct:Date.now(), grants:{},
   bills:[],

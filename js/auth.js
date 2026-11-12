@@ -34,7 +34,7 @@ function doLogin(s){
   state.user={id:s.id,name:s.name,role:s.role}; state.grants={}; state.lastAct=Date.now();
   log("login",`${T("ເຂົ້າສູ່ລະບົບ","Signed in")} (${ROLES[s.role]})`);
   $("#login").hidden=true; $("#app").inert=false; loginSel=null; loginPin="";
-  if(!state.bills.length){ const tb=cfg.tables.find(t=>t.on)||cfg.tables[0]; const nb=mkBill(String(state.billSeq++).padStart(4,"0"),tb.id,2,s.name,0,[]); state.bills.push(nb); state.current=nb.no; }
+  if(!state.bills.length){ const tb=cfg.tables.find(t=>t.on)||cfg.tables[0]; const nb=mkBill(newBillNo(tb.id),tb.id,2,s.name,0,[]); state.bills.push(nb); state.current=nb.no; }
   const home = s.role==="cashier" ? "bill" : "menu";
   state.route=null;
   if(location.hash!=="#/"+home) location.hash="#/"+home; else go();

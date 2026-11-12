@@ -10,3 +10,5 @@
 @media (max-width:720px){
   .live-h{min-width:max-content;align-self:center}
 }
+/* เລກບິນແບບ T1-0001 ຍາວຂຶ້ນ — ໃຫ້ຂຶ້ນບັນທັດໃໝ່ແທນການຕັດດ້ວຍ … */
+.bill-pick .bmeta{white-space:normal;overflow-wrap:anywhere;line-height:1.25}
