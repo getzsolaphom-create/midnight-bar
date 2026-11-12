@@ -1,6 +1,6 @@
 // Midnight Bar POS — service worker
 // เพิ่มเลขเวอร์ชันทุกครั้งที่แก้ไฟล์ เพื่อให้เครื่องดึงของใหม่
-const VERSION = 'mbpos-v17';
+const VERSION = 'mbpos-v18';
 const CACHE = VERSION;
 
 const APP_SHELL = [
