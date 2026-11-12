@@ -1,6 +1,6 @@
 // Midnight Bar POS — service worker
 // เพิ่มเลขเวอร์ชันทุกครั้งที่แก้ไฟล์ เพื่อให้เครื่องดึงของใหม่
-const VERSION = 'mbpos-v15';
+const VERSION = 'mbpos-v16';
 const CACHE = VERSION;
 
 const APP_SHELL = [
@@ -15,10 +15,10 @@ const APP_SHELL = [
   './css/payment.css', './css/summary.css', './css/bottles.css', './css/settings.css',
   './css/dialogs.css', './css/responsive.css', './css/motion.css', './css/theme-velvet.css',
   './css/login-galaxy.css', './css/palette.css', './css/lang.css', './css/login-final.css',
-  './css/saved.css', './css/stars.css', './css/v2.css', './css/theme-holst.css',
+  './css/saved.css', './css/stars.css', './css/v2.css', './css/theme-holst.css', './css/live.css',
   './js/i18n.js', './js/logo.js', './js/qr.js', './js/core.js', './js/auth.js', './js/menu.js',
   './js/bill.js', './js/payment.js', './js/summary.js', './js/bottles.js',
-  './js/access.js', './js/settings.js', './js/sheets.js', './js/main.js', './js/sync.js',
+  './js/access.js', './js/settings.js', './js/sheets.js', './js/main.js', './js/sync.js', './js/live.js',
   './js/motion.js', './js/login-ghost.js', './js/saved.js'
 ];
 

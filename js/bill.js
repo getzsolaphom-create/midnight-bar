@@ -159,14 +159,14 @@ function renderBill(){
   const b=bill(); const t=totals(b); const tb=tableOf(b.table);
   const open=state.bills.filter(x=>x.status!=="paid");
   $("#openCount").innerHTML=`${icon("i-receipt","sm")}<span>${T("ເປີດຢູ່","Open")} ${open.length} ${T("ບິນ","Bill")} · ${kip(open.reduce((s,x)=>s+totals(x).total,0))}</span>`;
-  $("#billsList").innerHTML=open.sort((a,c)=>tableOf(a.table).name.localeCompare(tableOf(c.table).name,undefined,{numeric:true})).map(x=>{const xt=totals(x);return `
+  $("#billsList").innerHTML=(open.sort((a,c)=>tableOf(a.table).name.localeCompare(tableOf(c.table).name,undefined,{numeric:true})).map(x=>{const xt=totals(x);return `
     <button class="bill-pick" data-bill="${x.no}" aria-current="${x.no===state.current}">
       <span class="tno">${esc(tableOf(x.table).name)}</span>
       <span class="bmeta">#${x.no} · ${x.guests} ${T("ຄົນ","guests")}${x.split?` · ${T("ແຍກ","split")} ${x.split.n}`:""}</span>
       <span class="bamt num">${fmt(xt.total)}</span>
       <span class="bmeta">${esc(x.waiter)} · ${minsSince(x.opened)}</span>
       <span class="bst">${x.status==="printed"?`<span style="color:var(--danger)">● ${cfg.printer.mode==="save"?T("ບັນທຶກແລ້ວ","Saved"):T("ພິມແລ້ວ","Printed")}</span>`:`<span style="color:var(--gold-ink)">● ${T("ເປີດ","Open")}</span>`}</span>
-    </button>`;}).join("")||`<div class="empty">${T("ບໍ່ມີບິນຄ້າງ","No open bills")}</div>`;
+    </button>`;}).join("")||`<div class="empty">${T("ບໍ່ມີບິນຄ້າງ","No open bills")}</div>`)+(typeof liveCardsHTML==="function"?liveCardsHTML():"");
   $("#billsList [aria-current=true]")?.scrollIntoView({block:"nearest",inline:"center"});
   $("#billEyebrow").textContent=`${T("ບິນ","Bill")} #${b.no} · ${T("ໂຕະ","Table")} ${tb.name}`;
   $("#bdTitle").textContent=`${T("ໂຕະ","Table")} ${tb.name}`;

@@ -1,8 +1,11 @@
 "use strict";
 /* ===================== SETTINGS (owner only) ===================== */
+/* ຕາຕະລາງ "ສິດຂອງແຕ່ລະຕຳແໜ່ງ" ຖືກເຊື່ອງຈາກແທັບພະນັກງານ ເພື່ອບໍ່ໃຫ້ຮົກ — ຄ່າສິດທີ່ຕັ້ງໄວ້ຍັງໃຊ້ງານຕາມເດີມ
+   ຖ້າຢາກສະແດງຄືນ ໃຫ້ປ່ຽນເປັນ true */
+const SHOW_PERMS_EDITOR=false;
 const SET_TABS=[
   {id:"shop",t:T("ຂໍ້ມູນຮ້ານ","Shop info"),i:"i-store"},
-  {id:"staff",t:T("ພະນັກງານ ແລະ ສິດ","Staff & permissions"),i:"i-users"},
+  {id:"staff",t:T("ພະນັກງານ","Staff"),i:"i-users"},
   {id:"menu",t:T("ເມນູ ແລະ ສິນຄ້າ","Menu & products"),i:"i-menu"},
   {id:"promo",t:T("ໂປຣໂມຊັນ ແລະ ສ່ວນຫຼຸດ","Promotions & discounts"),i:"i-tag"},
   {id:"cur",t:T("ສະກຸນເງິນ & ອັດຕາແລກປ່ຽນ","Currencies & exchange rates"),i:"i-coins"},
@@ -46,10 +49,10 @@ function renderSettings(){
         <td class="c"><input type="checkbox" class="tog" data-staffon="${i}" ${s.active?"checked":""} aria-label="${T("ເປີດໃຊ້ງານ","Enable")} ${esc(s.name)}"></td>
         <td class="r"><button class="btn btn-ghost icon-btn sm" data-act="delStaff" data-i="${i}" aria-label="${T("ລຶບ","Delete")} ${esc(s.name)}">${icon("i-trash","sm")}</button></td></tr>`).join("")}
       </tbody></table></div>`,`<button class="btn btn-gold" data-act="addStaff">${icon("i-plus","sm")}${T("ເພີ່ມພະນັກງານ","Add staff")}</button>`)
-    +sec(T("ສິດຂອງແຕ່ລະຕຳແໜ່ງ","Permissions by role"),T("ແຕະຊ່ອງເພື່ອສະຫຼັບ: ໄດ້ → PIN ເຈົ້າຂອງ → ບໍ່ໄດ້ · ເຈົ້າຂອງໄດ້ທຸກຢ່າງສະເໝີ · ມີຜົນທັນທີກັບທຸກປຸ່ມ ແລະ ທຸກໜ້າ","Tap a cell to cycle: Yes → Owner PIN → No · the owner can always do everything · takes effect on every button and page right away"),`
+    +(!SHOW_PERMS_EDITOR?"":sec(T("ສິດຂອງແຕ່ລະຕຳແໜ່ງ","Permissions by role"),T("ແຕະຊ່ອງເພື່ອສະຫຼັບ: ໄດ້ → PIN ເຈົ້າຂອງ → ບໍ່ໄດ້ · ເຈົ້າຂອງໄດ້ທຸກຢ່າງສະເໝີ · ມີຜົນທັນທີກັບທຸກປຸ່ມ ແລະ ທຸກໜ້າ","Tap a cell to cycle: Yes → Owner PIN → No · the owner can always do everything · takes effect on every button and page right away"),`
       <div class="scroll-x"><table class="data-table"><thead><tr><th>${T("ການເຮັດວຽກ","Action")}</th><th class="c">${T("ເຈົ້າຂອງ","Owner")}</th><th class="c">${T("ແຄັດເຊຍ","Cashier")}</th><th class="c">${T("ພະນັກງານບໍລິການ","Server")}</th></tr></thead><tbody>
       ${PERMS.map(p=>`<tr><td><b>${esc(p.t)}</b><div class="help" style="margin:0">${esc(p.d)}</div></td><td class="c">${cell("yes")}</td>${["cashier","waiter"].map(r=>{const v=permOf(r,p.k); return `<td class="c">${p.ownerOnly?cell("no"):`<button class="perm-cell ${v}" data-perm="${p.k}" data-role="${r}" aria-label="${esc(p.t)} ${ROLES[r]}: ${PERM_LABEL[v]} — ${T("ແຕະເພື່ອປ່ຽນ","tap to change")}">${v==="yes"?icon("i-check","xs")+T("ໄດ້","Yes"):v==="pin"?icon("i-key","xs")+"PIN":"—"}</button>`}</td>`;}).join("")}</tr>`).join("")}
-      </tbody></table></div>`);
+      </tbody></table></div>`));
     break;
   case "menu":{
     const cnt=id=>cfg.products.filter(p=>p.cat===id).length;

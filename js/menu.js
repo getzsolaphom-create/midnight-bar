@@ -165,12 +165,23 @@ $("#pickTableBtn").onclick=()=>{
     body:cfg.zones.map(z=>{ const ts=cfg.tables.filter(t=>t.zone===z.id); if(!ts.length) return "";
       return `<div><p class="label">${esc(z.name)}</p><div class="tables-grid">${ts.map(t=>{
         const b=state.bills.find(x=>x.table===t.id&&x.status!=="paid");
-        const st=!t.on?`<small class="muted">${T("ປິດຊົ່ວຄາວ","Closed")}</small>`:b?(b.status==="printed"?`<small style="color:var(--danger)">● ${T("ພິມບິນແລ້ວ","Bill printed")}</small>`:`<small style="color:var(--gold-ink)">● ${T("ມີລູກຄ້າ","Occupied")}</small>`):`<small style="color:var(--ok)">● ${T("ວ່າງ","Free")}</small>`;
-        return `<button class="tbl" value="${t.id}" ${!t.on?"disabled":""} aria-current="${!!b&&b.no===state.current}"><b>${esc(t.name)}</b>${st}<small class="muted">${b?kip(totals(b).total):t.on?`${t.seats} ${T("ບ່ອນນັ່ງ · ເປີດບິນໃໝ່","seats · open new bill")}`:""}</small></button>`;}).join("")}</div></div>`; }).join("")
-  }).then(({value})=>{
+        const rb=(!b&&typeof liveForTable==="function")?liveForTable(t.id):[];   /* ບິນຂອງເຄື່ອງອື່ນ (js/live.js) */
+        const st=!t.on?`<small class="muted">${T("ປິດຊົ່ວຄາວ","Closed")}</small>`:b?(b.status==="printed"?`<small style="color:var(--danger)">● ${T("ພິມບິນແລ້ວ","Bill printed")}</small>`:`<small style="color:var(--gold-ink)">● ${T("ມີລູກຄ້າ","Occupied")}</small>`):rb.length?`<small class="live-tag">● ${esc(rb[0].w)} · #${esc(rb[0].no)}</small>`:`<small style="color:var(--ok)">● ${T("ວ່າງ","Free")}</small>`;
+        return `<button class="tbl" value="${t.id}" ${!t.on?"disabled":""} aria-current="${!!b&&b.no===state.current}"><b>${esc(t.name)}</b>${st}<small class="muted">${b?kip(totals(b).total):rb.length?kip(rb[0].amt):t.on?`${t.seats} ${T("ບ່ອນນັ່ງ · ເປີດບິນໃໝ່","seats · open new bill")}`:""}</small></button>`;}).join("")}</div></div>`; }).join("")
+  }).then(async ({value})=>{
     if(!value||value==="cancel") return;
     let b=state.bills.find(x=>x.table===value&&x.status!=="paid");
-    if(!b){ b=mkBill(String(state.billSeq++).padStart(4,"0"),value,2,state.user.name,0,[]); state.bills.push(b); toast(`${T("ເປີດບິນໃໝ່","Opened new bill")} #${b.no} · ${T("ໂຕະ","Table")} ${tableOf(value).name}`,"i-receipt"); }
+    if(!b){
+      /* ໂຕະນີ້ມີຄົນເປີດບິນໄວ້ແລ້ວໃນເຄື່ອງອື່ນ → ຖາມກ່ອນເປີດຊ້ຳ (ກັນຄີບິນຊ້ຳກັນ) */
+      const rb=typeof liveForTable==="function"?liveForTable(value):[];
+      if(rb.length){
+        const r0=rb[0];
+        const go=await confirmBox(`${T("ໂຕະ","Table")} ${esc(tableOf(value).name)} ${T("ມີຄົນຮັບອໍເດີແລ້ວ","already has an order")}`,
+          `${T("ເຄື່ອງອື່ນເປີດບິນໄວ້ແລ້ວ","Another device already opened a bill")}: <b>#${esc(r0.no)}</b> · ${esc(r0.w)} · ${r0.n} ${T("ລາຍການ","items")} · ${kip(r0.amt)} · ${minsSince(r0.o)}<br>${T("ຢາກເປີດບິນໃໝ່ຊ້ຳໂຕະນີ້ແທ້ບໍ?","Open another bill for this table anyway?")}`,
+          T("ເປີດບິນໃໝ່ຢູ່ດີ","Open a new bill anyway"));
+        if(!go) return;
+      }
+      b=mkBill(String(state.billSeq++).padStart(4,"0"),value,2,state.user.name,0,[]); state.bills.push(b); toast(`${T("ເປີດບິນໃໝ່","Opened new bill")} #${b.no} · ${T("ໂຕະ","Table")} ${tableOf(value).name}`,"i-receipt"); }
     state.current=b.no; state.payPart=null; resetPay(); saveSession(); render();
   });
 };
